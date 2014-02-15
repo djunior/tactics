@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "utils/t_error.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -16,6 +17,8 @@ public:
 	Board(int width, int length);
 	T_ERROR moveUnit(Unit* u, unsigned int x, unsigned int y);
 	T_ERROR addUnit(Unit* u, unsigned int x, unsigned int y);
+	T_ERROR addUnit(Unit* u);
+	void debug_showMap();
 	vector<Unit*> checkUnitsInVicinity(Unit* u, unsigned int range);
 };
 

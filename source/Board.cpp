@@ -38,6 +38,26 @@ T_ERROR Board::addUnit(Unit * u, unsigned int x, unsigned int y){
 	return T_SUCCESS;
 }
 
+T_ERROR Board::addUnit(Unit *u){
+	std::cout << "Board::addUnit Adicionando unidade " << u << std::endl;
+	unsigned int ix = 0, iy = 0;
+
+	while(boardMap[ix][iy] != 0) {
+		ix++;
+		if (ix == maxBoardWidth) {
+			ix = 0;
+			iy++;
+		}
+		if (iy == maxBoardLength)
+			return T_ERROR_MAP_FULL;
+
+	};
+
+	addUnit(u,ix,iy);
+
+	return T_SUCCESS;
+}
+
 T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 	if (!u)
 		return T_ERROR_INVALID_UNIT;
@@ -74,4 +94,18 @@ vector<Unit*> Board::checkUnitsInVicinity(Unit *u, unsigned int range){
 	}
 
 	return unitList;
+}
+
+void Board::debug_showMap(){
+	std::cout << "Dump do tabuleiro:" << std::endl;
+	for (int x = 0; x < maxBoardWidth; x++){
+		for (int y = 0; y < maxBoardLength; y++){
+
+			if (boardMap[x][y] == 0)
+				std::cout << " . ";
+			else
+				std::cout << " U ";
+		}
+		std::cout << std::endl;
+	}
 }

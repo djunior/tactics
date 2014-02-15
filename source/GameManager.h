@@ -3,6 +3,7 @@
 #include "Board.h"
 #include "Unit.h"
 #include <vector>
+#include "utils/t_team.h"
 
 #define GAMEMANAGER_INITIAL_TURN 0;
 
@@ -15,7 +16,7 @@ private:
 public:
 	GameManager(Board* newBoard);
 
-	void addUnit();
+	void createUnit(string unitClass,T_TEAM team);
 	void startTurn();
 	void startGame();
 	unsigned int getTurn();

@@ -24,6 +24,16 @@ int main(){
 	cout << "Criando GameManager!" << endl;
 	GameManager gm(&gameBoard);
 
+	cout << "Criando unidade 1!" << endl;
+	gm.createUnit("Unit",TEAM_A);
+
+	cout << "Criando unidade 2!" << endl;
+	gm.createUnit("Unit",TEAM_A);
+
+	gameBoard.debug_showMap();
+
+	gm.startGame();
+
 	return 0;
 }
 

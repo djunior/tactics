@@ -82,5 +82,10 @@ bool Unit::takeDamage(unsigned int rawDamage){
 	return isDead();
 }
 
+unsigned int Unit::attack(){
+	// Essa função deve calcular o dano que essa unidade causa ao atacar, eventualmente, podemos implementar
+	// criticos ou outros modificadores de dano que seriam calculados aqui
+	return attackDamage;
+}
 
 

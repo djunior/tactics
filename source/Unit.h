@@ -34,6 +34,7 @@ public:
 	unsigned int getMove();
 	unsigned int getHp();
 	unsigned int getRange();
+	unsigned int attack();
 };
 
 #endif
