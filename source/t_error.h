@@ -1,0 +1,16 @@
+#ifndef __T_ERROR_H__
+#define __T_ERROR_H__
+
+struct T_ERROR {
+	T_SUCCESS;
+	T_ERROR_OUT_OF_BOUNDS;
+	T_ERROR_OUT_OF_RANGE;
+	T_ERROR_INVALID_PLAYER;
+	T_ERROR_INVALID_TARGET;
+	T_ERROR_UNKNOWN;
+};
+
+typedef struct T_ERROR T_ERROR;
+
+
+#endif
