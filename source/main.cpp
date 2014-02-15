@@ -9,8 +9,21 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "Board.h"
+#include "GameManager.h"
+#include "Unit.h"
+
+using namespace std;
+
 int main(){
-	std::cout << "Iniciando jogo Tactics!" << std::endl;
+	cout << "Iniciando jogo Tactics!" << endl;
+
+	cout << "Criando tabuleiro!" << endl;
+	Board gameBoard(8,8);
+
+	cout << "Criando GameManager!" << endl;
+	GameManager gm(&gameBoard);
+
 	return 0;
 }
 

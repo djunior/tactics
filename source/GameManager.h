@@ -4,10 +4,12 @@
 #include "Unit.h"
 #include <vector>
 
+#define GAMEMANAGER_INITIAL_TURN 0;
+
 class GameManager{
 private:
 	vector<Unit> unitList;
-	Board* b;
+	Board* board;
 	unsigned int turn;
 
 public:
