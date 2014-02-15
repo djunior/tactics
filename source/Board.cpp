@@ -64,10 +64,13 @@ T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 
 	if ((x > maxBoardWidth) || (y > maxBoardLength))
 		return T_ERROR_OUT_OF_BOUNDS;
+	std::cout << "BoardMap na posicao (" << x << "," << y << ") = " << boardMap[x][y] << std::endl;
 
 	if (boardMap[x][y] != 0)
 		return T_ERROR_INVALID_LOCATION;
 
+	if (boardMap[u->getX()][u->getY()] != u)
+		return T_ERROR_INVALID_UNIT;
 
 	boardMap[u->getX()][u->getY()] = 0;
 	boardMap[x][y] = u;

@@ -31,6 +31,7 @@ unsigned int Unit::getY(){
 }
 
 void Unit::setX(unsigned int _x){
+	std::cout << "Unit(" << this << ") x= " << _x << std::endl;
 	x = _x;
 }
 

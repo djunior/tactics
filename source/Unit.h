@@ -2,6 +2,7 @@
 #define __UNIT_H__
 
 #include "utils/t_team.h"
+#include <iostream>
 
 #define UNIT_DEFAULT_HP 50
 #define UNIT_DEFAULT_DAMAGE 10

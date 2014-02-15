@@ -9,7 +9,7 @@
 
 class GameManager{
 private:
-	vector<Unit> unitList;
+	vector<Unit *> unitList;
 	Board* board;
 	unsigned int turn;
 
