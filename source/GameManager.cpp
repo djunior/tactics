@@ -35,7 +35,7 @@ void  GameManager::startTurn(){
 
 	for (std::vector<Unit>::iterator unit = unitList.begin(); unit != unitList.end(); ++unit) {
 		// Do stuff that affect the unit
-
+		std::cout << "Unidade: " << (&*unit) << std::endl;
 		std::cout << "Varrendo lista de unidades: " << (unit-unitList.begin()) << std::endl;
 		std::cout << "Movendo unidade de (" << unit->getX() << "," << unit->getY() << ") para: " << unit->getX() << "," << (unit->getY()+1) << std::endl;
 		T_ERROR e = board->moveUnit(&*unit,unit->getX(),unit->getY()+1);
