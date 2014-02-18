@@ -2,6 +2,8 @@
 #define __GAME_MANAGER_H__
 #include "Board.h"
 #include "Unit.h"
+#include "Knight.h"
+#include "Wizard.h"
 #include <vector>
 #include "utils/t_team.h"
 
@@ -15,7 +17,7 @@ private:
 
 public:
 	GameManager(Board* newBoard);
-
+	~GameManager();
 	void createUnit(string unitClass,T_TEAM team);
 	void startTurn();
 	void startGame();

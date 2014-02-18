@@ -3,6 +3,8 @@
 
 #include "utils/t_team.h"
 #include <iostream>
+#include <vector>
+#include "Spell.h"
 
 #define UNIT_DEFAULT_HP 50
 #define UNIT_DEFAULT_DAMAGE 10
@@ -11,14 +13,16 @@
 #define UNIT_DEFAULT_MOVE 1
 #define UNIT_DEFAULT_SPEED 1
 #define UNIT_DEFAULT_RANGE 1
+#define UNIT_DEFAULT_ACTION_PER_TURN 1
 
 class Unit {
 
 protected:
-	unsigned int x, y, hp, attackDamage, armor, level, move, range;
+	unsigned int x, y, hp, attackDamage, armor, level, move, range, actionPerTurn;
 	int speed;
 	bool dead;
 	T_TEAM team;
+	std::vector<Spell *> spellList;
 
 public:
 	Unit (T_TEAM t);
@@ -35,7 +39,10 @@ public:
 	unsigned int getMove();
 	unsigned int getHp();
 	unsigned int getRange();
-	unsigned int attack();
+	unsigned int getAttackDamage();
+	unsigned int getActionsPerTurn();
+
+	void debug_showStats();
 };
 
 #endif

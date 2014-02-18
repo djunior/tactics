@@ -18,6 +18,7 @@ Unit::Unit (T_TEAM t){
 	move = UNIT_DEFAULT_MOVE;
 	speed = UNIT_DEFAULT_SPEED;
 	range = UNIT_DEFAULT_RANGE;
+	actionPerTurn = UNIT_DEFAULT_ACTION_PER_TURN;
 	dead = false;
 	team = t;
 }
@@ -83,10 +84,29 @@ bool Unit::takeDamage(unsigned int rawDamage){
 	return isDead();
 }
 
-unsigned int Unit::attack(){
+unsigned int Unit::getAttackDamage(){
 	// Essa função deve calcular o dano que essa unidade causa ao atacar, eventualmente, podemos implementar
 	// criticos ou outros modificadores de dano que seriam calculados aqui
 	return attackDamage;
+}
+
+unsigned int Unit::getActionsPerTurn(){
+	return actionPerTurn;
+}
+
+void Unit::debug_showStats(){
+	std::cout << "Unit (" << this << ") stats:" << std::endl;
+	std::cout << "Unit (" << this << ") x: " << x << std::endl;
+	std::cout << "Unit (" << this << ") y: " << y << std::endl;
+	std::cout << "Unit (" << this << ") hp: " << hp << std::endl;
+	std::cout << "Unit (" << this << ") attackDamage: " << attackDamage << std::endl;
+	std::cout << "Unit (" << this << ") armor: " << armor << std::endl;
+	std::cout << "Unit (" << this << ") level: " << level << std::endl;
+	std::cout << "Unit (" << this << ") move: " << move << std::endl;
+	std::cout << "Unit (" << this << ") range: " << range << std::endl;
+	std::cout << "Unit (" << this << ") speed: " << speed << std::endl;
+	std::cout << "Unit (" << this << ") dead: " << dead << std::endl;
+	std::cout << "Unit (" << this << ") team: " << team << std::endl;
 }
 
 

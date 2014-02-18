@@ -25,10 +25,10 @@ int main(){
 	GameManager gm(&gameBoard);
 
 	cout << "Criando unidade 1!" << endl;
-	gm.createUnit("Unit",TEAM_A);
+	gm.createUnit("knight",TEAM_A);
 
 	cout << "Criando unidade 2!" << endl;
-	gm.createUnit("Unit",TEAM_A);
+	gm.createUnit("wizard",TEAM_A);
 
 	gameBoard.debug_showMap();
 
