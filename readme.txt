@@ -52,7 +52,7 @@ E o que mais nós pensarmos ao longo do caminho
 3. Dados técnicos:
 
 Linguagem primária (core): C++
-Ambiente gráfico: ?? (não definido ainda, mas possivelmente utilizaremos Lua com alguma biblioteca gráfica)
+Ambiente gráfico: SDL (C++) - http://www.libsdl.org/
 
 
 
