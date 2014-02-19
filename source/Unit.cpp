@@ -78,7 +78,7 @@ bool Unit::takeDamage(unsigned int rawDamage){
 	// stats defensivos, como armor, armor class, etc
 	hp -= rawDamage;
 
-	if (hp < 0)
+	if (hp <= 0)
 		kill();
 
 	return isDead();

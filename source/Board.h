@@ -20,6 +20,8 @@ public:
 	T_ERROR addUnit(Unit* u);
 	void debug_showMap();
 	vector<Unit*> checkUnitsInVicinity(Unit* u, unsigned int range);
+	Unit* getUnitAt(unsigned int x, unsigned int y);
+	T_ERROR removeUnit(Unit* unit);
 };
 
 

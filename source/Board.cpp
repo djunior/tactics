@@ -99,6 +99,29 @@ vector<Unit*> Board::checkUnitsInVicinity(Unit *u, unsigned int range){
 	return unitList;
 }
 
+Unit* Board::getUnitAt(unsigned int x, unsigned int y){
+	if (x > maxBoardWidth || y > maxBoardLength)
+		return 0;
+
+	// Isso vai ser ou uma unidade ou 0
+	return boardMap[x][y];
+}
+
+T_ERROR Board::removeUnit(Unit * unit){
+	if (unit == 0)
+		return T_ERROR_INVALID_UNIT;
+
+	if (unit->getX() > maxBoardWidth || unit->getY() > maxBoardLength)
+		return T_ERROR_OUT_OF_BOUNDS;
+
+	if (boardMap[unit->getX()][unit->getY()] == 0 || boardMap[unit->getX()][unit->getY()] != unit)
+		return T_ERROR_INVALID_UNIT;
+
+	boardMap[unit->getX()][unit->getY()] = 0;
+
+	return T_SUCCESS;
+}
+
 void Board::debug_showMap(){
 	std::cout << "Dump do tabuleiro:" << std::endl;
 	for (int x = 0; x < maxBoardWidth; x++){

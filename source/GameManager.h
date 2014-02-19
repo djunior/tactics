@@ -1,7 +1,6 @@
 #ifndef __GAME_MANAGER_H__
 #define __GAME_MANAGER_H__
 #include "Board.h"
-#include "Unit.h"
 #include "Knight.h"
 #include "Wizard.h"
 #include <vector>
