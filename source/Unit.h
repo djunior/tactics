@@ -42,6 +42,7 @@ public:
 	unsigned int getAttackDamage();
 	unsigned int getActionsPerTurn();
 
+	int combat(std::vector<Unit *> targetList);
 	void debug_showStats();
 };
 

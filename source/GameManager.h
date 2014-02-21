@@ -13,6 +13,7 @@ private:
 	vector<Unit *> unitList;
 	Board* board;
 	unsigned int turn;
+	int teamABodyCount, teamBBodyCount;
 
 public:
 	GameManager(Board* newBoard);

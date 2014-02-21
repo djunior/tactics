@@ -8,7 +8,6 @@
 #include "Board.h"
 #include "utils/t_error.h"
 
-
 Board::Board(int width, int length){
 	// Por enquanto, o tamanho do tabuleiro sera fixo em 8 x 8
 	maxBoardWidth = width;
@@ -80,23 +79,23 @@ T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 	return T_SUCCESS;
 }
 
-vector<Unit*> Board::checkUnitsInVicinity(Unit *u, unsigned int range){
-
-	vector<Unit*> unitList;
+T_ERROR Board::checkUnitsInVicinity(Unit *u, unsigned int range, vector<Unit*> *targetList){
+	if (u == 0)
+		return T_ERROR_INVALID_UNIT;
 
 	for (int x=u->getX()-range; x <= u->getX()+range; x++) {
 		if (x >=0 && x < maxBoardWidth) {
 			for (int y=u->getY()-range; y <= u->getY()+range; y++) {
 				if (y >= 0 && y < maxBoardLength) {
 					if (x != u->getX() && y != u->getY() && boardMap[x][y] != 0){
-						unitList.push_back(boardMap[x][y]);
+						targetList->push_back(boardMap[x][y]);
 					}
 				}
 			}
 		}
 	}
 
-	return unitList;
+	return T_SUCCESS;
 }
 
 Unit* Board::getUnitAt(unsigned int x, unsigned int y){
@@ -118,6 +117,34 @@ T_ERROR Board::removeUnit(Unit * unit){
 		return T_ERROR_INVALID_UNIT;
 
 	boardMap[unit->getX()][unit->getY()] = 0;
+
+	return T_SUCCESS;
+}
+
+T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAPE shape, vector<Unit *> *targetList){
+
+	if (shape == AOE_SHAPE_LINE) {
+
+		if (axis == BOARD_AXIS_X_MINUS)
+			x-=range;
+		else if (axis == BOARD_AXIS_Y_MINUS)
+			y-=range;
+
+		if (axis == BOARD_AXIS_X || axis == BOARD_AXIS_X_MINUS) {
+			for (int i=x;i<x+range;i++) {
+				if (boardMap[i][y] != 0)
+					targetList->push_back(boardMap[i][y]);
+			}
+		} else if (axis == BOARD_AXIS_Y || axis == BOARD_AXIS_Y_MINUS) {
+			for (int i=y;i<y+range;i++) {
+				if (boardMap[x][i] != 0)
+					targetList->push_back(boardMap[x][i]);
+			}
+		}
+
+		if (axis == BOARD_AXIS_X_MINUS || axis == BOARD_AXIS_Y_MINUS)
+			std::reverse(targetList->begin(),targetList->end());
+	}
 
 	return T_SUCCESS;
 }

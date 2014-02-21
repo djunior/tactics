@@ -11,6 +11,8 @@
 GameManager::GameManager(Board* newBoard){
 	turn = GAMEMANAGER_INITIAL_TURN;
 	board = newBoard;
+	teamABodyCount = 0;
+	teamBBodyCount = 0;
 }
 
 GameManager::~GameManager(){
@@ -37,7 +39,10 @@ void GameManager::createUnit(string unitClass, T_TEAM team){
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
 	}
 
-
+	if (team == TEAM_A)
+		teamABodyCount++;
+	else
+		teamBBodyCount++;
 }
 
 
