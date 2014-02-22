@@ -12,7 +12,7 @@ using namespace std;
 class Board {
 private:
 	 Unit* boardMap[8][8];
-	 unsigned int maxBoardWidth,maxBoardLength;
+	 unsigned int maxBoardX,maxBoardY;
 
 public:
 	Board(int width, int length);

@@ -10,11 +10,11 @@
 
 Board::Board(int width, int length){
 	// Por enquanto, o tamanho do tabuleiro sera fixo em 8 x 8
-	maxBoardWidth = width;
-	maxBoardLength = length;
+	maxBoardX = width;
+	maxBoardY = length;
 
-	for (int x = 0; x < maxBoardWidth; x++){
-		for (int y = 0; y < maxBoardLength; y++){
+	for (int x = 0; x < maxBoardX; x++){
+		for (int y = 0; y < maxBoardY; y++){
 			boardMap[x][y] = 0;
 		}
 	}
@@ -24,7 +24,7 @@ T_ERROR Board::addUnit(Unit * u, unsigned int x, unsigned int y){
 	if (!u)
 		return T_ERROR_INVALID_UNIT;
 
-	if ((x > maxBoardWidth) || (y > maxBoardLength))
+	if ((x > maxBoardX) || (y > maxBoardY))
 		return T_ERROR_OUT_OF_BOUNDS;
 
 	if (boardMap[x][y] != 0)
@@ -43,11 +43,11 @@ T_ERROR Board::addUnit(Unit *u){
 
 	while(boardMap[ix][iy] != 0) {
 		ix++;
-		if (ix == maxBoardWidth) {
+		if (ix == maxBoardX) {
 			ix = 0;
 			iy++;
 		}
-		if (iy == maxBoardLength)
+		if (iy == maxBoardY)
 			return T_ERROR_MAP_FULL;
 
 	};
@@ -61,7 +61,7 @@ T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 	if (!u)
 		return T_ERROR_INVALID_UNIT;
 
-	if ((x > maxBoardWidth) || (y > maxBoardLength))
+	if ((x > maxBoardX) || (y > maxBoardY))
 		return T_ERROR_OUT_OF_BOUNDS;
 	std::cout << "BoardMap na posicao (" << x << "," << y << ") = " << boardMap[x][y] << std::endl;
 
@@ -84,9 +84,9 @@ T_ERROR Board::checkUnitsInVicinity(Unit *u, unsigned int range, vector<Unit*> *
 		return T_ERROR_INVALID_UNIT;
 
 	for (int x=u->getX()-range; x <= u->getX()+range; x++) {
-		if (x >=0 && x < maxBoardWidth) {
+		if (x >=0 && x < maxBoardX) {
 			for (int y=u->getY()-range; y <= u->getY()+range; y++) {
-				if (y >= 0 && y < maxBoardLength) {
+				if (y >= 0 && y < maxBoardY) {
 					if (x != u->getX() && y != u->getY() && boardMap[x][y] != 0){
 						targetList->push_back(boardMap[x][y]);
 					}
@@ -99,7 +99,7 @@ T_ERROR Board::checkUnitsInVicinity(Unit *u, unsigned int range, vector<Unit*> *
 }
 
 Unit* Board::getUnitAt(unsigned int x, unsigned int y){
-	if (x > maxBoardWidth || y > maxBoardLength)
+	if (x > maxBoardX || y > maxBoardY)
 		return 0;
 
 	// Isso vai ser ou uma unidade ou 0
@@ -110,7 +110,7 @@ T_ERROR Board::removeUnit(Unit * unit){
 	if (unit == 0)
 		return T_ERROR_INVALID_UNIT;
 
-	if (unit->getX() > maxBoardWidth || unit->getY() > maxBoardLength)
+	if (unit->getX() > maxBoardX || unit->getY() > maxBoardY)
 		return T_ERROR_OUT_OF_BOUNDS;
 
 	if (boardMap[unit->getX()][unit->getY()] == 0 || boardMap[unit->getX()][unit->getY()] != unit)
@@ -123,7 +123,7 @@ T_ERROR Board::removeUnit(Unit * unit){
 
 T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAPE shape, vector<Unit *> *targetList){
 
-	if (x < 0 || x > maxBoardWidth || y < 0 || y > maxBoardLength)
+	if (x < 0 || x > maxBoardX || y < 0 || y > maxBoardY)
 		return T_ERROR_OUT_OF_BOUNDS;
 
 	if (shape == AOE_SHAPE_POINT) {
@@ -161,8 +161,8 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 
 void Board::debug_showMap(){
 	std::cout << "Dump do tabuleiro:" << std::endl;
-	for (int x = 0; x < maxBoardWidth; x++){
-		for (int y = 0; y < maxBoardLength; y++){
+	for (int x = 0; x < maxBoardX; x++){
+		for (int y = 0; y < maxBoardY; y++){
 
 			if (boardMap[x][y] == 0)
 				std::cout << " . ";
