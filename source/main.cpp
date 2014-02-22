@@ -28,7 +28,7 @@ int main(){
 	gm.createUnit("knight",TEAM_A);
 
 	cout << "Criando unidade 2!" << endl;
-	gm.createUnit("wizard",TEAM_A);
+	gm.createUnit("wizard",TEAM_B);
 
 	gameBoard.debug_showMap();
 

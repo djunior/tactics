@@ -123,7 +123,17 @@ T_ERROR Board::removeUnit(Unit * unit){
 
 T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAPE shape, vector<Unit *> *targetList){
 
-	if (shape == AOE_SHAPE_LINE) {
+	if (x < 0 || x > maxBoardWidth || y < 0 || y > maxBoardLength)
+		return T_ERROR_OUT_OF_BOUNDS;
+
+	if (shape == AOE_SHAPE_POINT) {
+
+		if (boardMap[x][y] == 0)
+			return T_ERROR_INVALID_UNIT;
+
+		targetList->push_back(boardMap[x][y]);
+
+	} else if (shape == AOE_SHAPE_LINE) {
 
 		if (axis == BOARD_AXIS_X_MINUS)
 			x-=range;

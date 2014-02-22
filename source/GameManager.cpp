@@ -16,8 +16,12 @@ GameManager::GameManager(Board* newBoard){
 }
 
 GameManager::~GameManager(){
+	cleanup();
+}
+
+void GameManager::cleanup(){
 	for (std::vector<Unit *>::iterator unit = unitList.begin(); unit != unitList.end(); unit++) {
-			delete (*unit);
+		delete (*unit);
 	}
 }
 
@@ -56,10 +60,11 @@ void GameManager::startGame(){
 void  GameManager::startTurn(){
 	turn++;
 
-	for (std::vector<Unit *>::iterator unit = unitList.begin(); unit != unitList.end(); unit++) {
-		if (!(*unit)->isDead()) {
-			int movePerTurn = (*unit)->getMove();
-			int actionPerTurn = (*unit)->getActionsPerTurn();
+	for (std::vector<Unit *>::iterator it = unitList.begin(); it != unitList.end(); it++) {
+		Unit *unit = (*it);
+		if (!unit->isDead()) {
+			int movePerTurn = unit->getMove();
+			int actionPerTurn = unit->getActionsPerTurn();
 			bool endUnitTurn = false;
 			while (endUnitTurn == false ) {
 				char input;
@@ -68,41 +73,37 @@ void  GameManager::startTurn(){
 					std::cout << "Pressione M para mover, e A para atacar" << std::endl;
 					std::cin >> input;
 					if (input == 'a') {
+
+						vector<Unit *> targets;
+						T_ERROR e;
 						// Tratar combate
 						std::cout << "Pressione W, A, S, D para selecionar o alvo" << std::endl;
 						board->debug_showMap();
 						std::cin >> input;
 
-						unsigned int target_x = (*unit)->getX();
-						unsigned int target_y = (*unit)->getY();
-
 						if (input == 'w')
-							target_x -= (*unit)->getRange();
+							e = board->checkUnitsInAOE(unit->getX()-1,unit->getY(),unit->getRange(),BOARD_AXIS_X_MINUS,unit->getAttackArea(),&targets);
 						else if (input == 'a')
-							target_y -= (*unit)->getRange();
+							e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,unit->getRange(),BOARD_AXIS_Y_MINUS,unit->getAttackArea(),&targets);
 						else if (input == 's')
-							target_x += (*unit)->getRange();
+							e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
 						else if (input == 'd')
-							target_y += (*unit)->getRange();
+							e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
 
-						Unit* target = board->getUnitAt(target_x,target_y);
-						if (target != 0) {
-							target->takeDamage((*unit)->getAttackDamage());
-							target->debug_showStats();
+						if (e == T_SUCCESS)
+							if (unit->getTeam() == TEAM_A)
+								e = unit->combat(&targets,&teamBBodyCount);
+							else
+								e = unit->combat(&targets,&teamABodyCount);
 
-							if (target->isDead()) {
-								T_ERROR e=board->removeUnit(target);
-								if (e == T_SUCCESS)
-									std::cout << "A unidade morreu!" << std::endl;
-								else
-									std::cout << "Unidade invalida! Falha ao remover unidade do tabuleiro" << std::endl;
-							}
+						if (e == T_SUCCESS) {
 							actionPerTurn--;
-						} else {
-							// mostrar mensagem de erro
-							std::cout << "Unidade invalida!" << std::endl;
-						}
 
+							if (getOtherTeamBodyCount(unit->getTeam()) == 0){
+								endGame();
+								return;
+							}
+						}
 					} else if (input == 'm') {
 						std::cout << "Pressione W, A, S, D para mover" << std::endl;
 						board->debug_showMap();
@@ -110,13 +111,13 @@ void  GameManager::startTurn(){
 						T_ERROR e;
 
 						if (input == 'w')
-							e = board->moveUnit(*unit,(*unit)->getX()-1,(*unit)->getY());
+							e = board->moveUnit(unit,unit->getX()-1,unit->getY());
 						else if (input == 'a')
-							e = board->moveUnit(*unit,(*unit)->getX(),(*unit)->getY()-1);
+							e = board->moveUnit(unit,unit->getX(),unit->getY()-1);
 						else if (input == 's')
-							e = board->moveUnit(*unit,(*unit)->getX()+1,(*unit)->getY());
+							e = board->moveUnit(unit,unit->getX()+1,unit->getY());
 						else if (input == 'd')
-							e = board->moveUnit(*unit,(*unit)->getX(),(*unit)->getY()+1);
+							e = board->moveUnit(unit,unit->getX(),unit->getY()+1);
 
 						if (e == T_SUCCESS) {
 							board->debug_showMap();
@@ -133,6 +134,27 @@ void  GameManager::startTurn(){
 				}
 			}
 		}
+
+		if (teamABodyCount == 0 || teamBBodyCount == 0){
+			endGame();
+			return;
+		}
 	}
 
+}
+
+int GameManager::getOtherTeamBodyCount(T_TEAM team) {
+	if (team == TEAM_A)
+		return teamBBodyCount;
+	else
+		return teamABodyCount;
+}
+
+void GameManager::endGame(){
+	if (teamABodyCount == 0)
+		std::cout << "Time B venceu no turno " << turn << std::endl;
+	else
+		std::cout << "Time A venceu no turno " << turn << std::endl;
+
+	cleanup();
 }

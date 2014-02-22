@@ -15,12 +15,16 @@ private:
 	unsigned int turn;
 	int teamABodyCount, teamBBodyCount;
 
+	void cleanup();
+	int getOtherTeamBodyCount(T_TEAM team);
+
 public:
 	GameManager(Board* newBoard);
 	~GameManager();
 	void createUnit(string unitClass,T_TEAM team);
 	void startTurn();
 	void startGame();
+	void endGame();
 	unsigned int getTurn();
 };
 

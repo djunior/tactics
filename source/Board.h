@@ -6,25 +6,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-
+#include "utils/board_utils.h"
 using namespace std;
-
-enum AOE_SHAPE {
-	AOE_SHAPE_LINE,
-	AOE_SHAPE_CONE,
-	AOE_SHAPE_SQUARE,
-	AOE_SHAPE_CROSS,
-};
-
-enum BOARD_AXIS {
-	BOARD_AXIS_X,
-	BOARD_AXIS_Y,
-	BOARD_AXIS_X_MINUS,
-	BOARD_AXIS_Y_MINUS,
-};
-
-typedef enum BOARD_AXIS BOARD_AXIS;
-typedef enum AOE_SHAPE AOE_SHAPE;
 
 class Board {
 private:

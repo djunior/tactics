@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include "Spell.h"
+#include "utils/t_error.h"
+#include "utils/board_utils.h"
 
 #define UNIT_DEFAULT_HP 50
 #define UNIT_DEFAULT_DAMAGE 10
@@ -22,6 +24,7 @@ protected:
 	int speed;
 	bool dead;
 	T_TEAM team;
+	AOE_SHAPE attackArea;
 	std::vector<Spell *> spellList;
 
 public:
@@ -41,8 +44,9 @@ public:
 	unsigned int getRange();
 	unsigned int getAttackDamage();
 	unsigned int getActionsPerTurn();
-
-	int combat(std::vector<Unit *> targetList);
+	AOE_SHAPE getAttackArea();
+	int combat(std::vector<Unit *> *targetList);
+	T_ERROR combat(std::vector<Unit *> *targetList, int *bodyCount);
 	void debug_showStats();
 };
 

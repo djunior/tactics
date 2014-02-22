@@ -19,6 +19,7 @@ Unit::Unit (T_TEAM t){
 	speed = UNIT_DEFAULT_SPEED;
 	range = UNIT_DEFAULT_RANGE;
 	actionPerTurn = UNIT_DEFAULT_ACTION_PER_TURN;
+	attackArea = AOE_SHAPE_POINT;
 	dead = false;
 	team = t;
 }
@@ -43,6 +44,10 @@ void Unit::setY(unsigned int _y){
 void Unit::setOrigin(unsigned int x, unsigned int y){
 	setX(x);
 	setY(y);
+}
+
+AOE_SHAPE Unit::getAttackArea(){
+	return attackArea;
 }
 
 void Unit::kill(){
@@ -74,10 +79,11 @@ unsigned int Unit::getRange(){
 }
 
 bool Unit::takeDamage(unsigned int rawDamage){
+	std::cout << "Unidade: " << this << " com " << hp << " de hp recebendo " << rawDamage << " de dano" << std::endl;
 	// Essa formula de dano pode ser alterada caso seja implementado
 	// stats defensivos, como armor, armor class, etc
 	hp -= rawDamage;
-
+	std::cout << "Unidade " << this << " com " << hp << " de hp apos o combate" << std::endl;
 	if (hp <= 0)
 		kill();
 
@@ -88,6 +94,21 @@ unsigned int Unit::getAttackDamage(){
 	// Essa função deve calcular o dano que essa unidade causa ao atacar, eventualmente, podemos implementar
 	// criticos ou outros modificadores de dano que seriam calculados aqui
 	return attackDamage;
+}
+
+T_ERROR Unit::combat(std::vector<Unit *> *targetList,int *bodyCount){
+
+	Unit *target = targetList->front();
+
+	std::cout << "Unidade: " << this << " atacando unidade: " << target << " com " << getAttackDamage() << " de dano" << std::endl;
+
+	if (target->getTeam() == getTeam())
+		return T_ERROR_INVALID_UNIT;
+
+	if (target->takeDamage(getAttackDamage()))
+		(*bodyCount)--;
+
+	return T_SUCCESS;
 }
 
 unsigned int Unit::getActionsPerTurn(){
