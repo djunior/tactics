@@ -49,14 +49,14 @@ int main(int argc, char *argv[]){
 
     //Load Content
     int w=0,h=0;
-    Track = IMG_LoadTexture(renderer,"mapa.jpg");
+    Track = IMG_LoadTexture(renderer,"images\\mapa.jpg");
     SDL_QueryTexture(Track, NULL, NULL, &w, &h);
     rectTrack.x = 0;
     rectTrack.y = 0;
     rectTrack.w = w;
     rectTrack.h = h;
 
-    Car = IMG_LoadTexture(renderer, "char_lanca.png");
+    Car = IMG_LoadTexture(renderer, "images\\char_lanca.png");
     SDL_QueryTexture(Car, NULL, NULL, &w, &h);
     rectCar.x = 350;
     rectCar.y = 200;
