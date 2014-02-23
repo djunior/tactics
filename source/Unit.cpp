@@ -21,6 +21,8 @@ Unit::Unit (T_TEAM t){
 	actionPerTurn = UNIT_DEFAULT_ACTION_PER_TURN;
 	unitClassName = "UnitBase";
 	attackArea = AOE_SHAPE_POINT;
+	mana = UNIT_DEFAULT_MANA_POOL;
+	manaPool = UNIT_DEFAULT_MANA_POOL;
 	dead = false;
 	team = t;
 }
@@ -151,4 +153,14 @@ void Unit::debug_showStats(){
 
 std::vector<Spell *> *Unit::getSpellList(){
 	return &spellList;
+}
+
+unsigned int Unit::getMana(){
+	return mana;
+}
+
+void Unit::setMana(int amount){
+	mana = amount;
+	if (mana > manaPool)
+		mana = manaPool;
 }

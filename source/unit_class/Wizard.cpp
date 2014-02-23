@@ -18,6 +18,8 @@ Wizard::Wizard(T_TEAM t) : Unit(t) {
 	unitClassName = "Wizard";
 	Fireball *fireball = new Fireball(this);
 	spellList.push_back(fireball);
+	mana = WIZARD_MANA_POOL;
+	manaPool = WIZARD_MANA_POOL;
 }
 
 Wizard::~Wizard() {

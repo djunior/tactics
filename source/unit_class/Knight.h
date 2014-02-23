@@ -15,6 +15,7 @@
 #define KNIGHT_RANGE 1
 #define KNIGHT_MOVE 2
 #define KNIGHT_ARMOR 5
+#define KNIGHT_MANA_POOL 10
 
 class Knight : public Unit {
 public:

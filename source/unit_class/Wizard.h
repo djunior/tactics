@@ -17,6 +17,7 @@
 #define WIZARD_RANGE 2
 #define WIZARD_MOVE 1
 #define WIZARD_ARMOR 1
+#define WIZARD_MANA_POOL 20
 
 class Wizard : public Unit{
 public:
