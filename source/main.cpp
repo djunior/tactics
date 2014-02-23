@@ -8,6 +8,7 @@
  */
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "Board.h"
 #include "GameManager.h"
@@ -25,7 +26,7 @@ int main(){
 	GameManager gm(&gameBoard);
 
 	cout << "Criando unidade 1!" << endl;
-	gm.createUnit("knight",TEAM_A);
+	gm.createUnit("wizard",TEAM_A);
 
 	cout << "Criando unidade 2!" << endl;
 	gm.createUnit("wizard",TEAM_B);
@@ -34,6 +35,6 @@ int main(){
 
 	gm.startGame();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

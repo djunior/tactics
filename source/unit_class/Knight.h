@@ -7,8 +7,8 @@
 
 #ifndef KNIGHT_H_
 #define KNIGHT_H_
-#include "Unit.h"
-#include "utils/t_team.h"
+#include "../Unit.h"
+#include "../utils/t_team.h"
 
 #define KNIGHT_HP 80
 #define KNIGHT_DAMAGE 20

@@ -19,9 +19,16 @@ Unit::Unit (T_TEAM t){
 	speed = UNIT_DEFAULT_SPEED;
 	range = UNIT_DEFAULT_RANGE;
 	actionPerTurn = UNIT_DEFAULT_ACTION_PER_TURN;
+	unitClassName = "UnitBase";
 	attackArea = AOE_SHAPE_POINT;
 	dead = false;
 	team = t;
+}
+
+Unit::~Unit(){
+	for (std::vector<Spell*>::iterator it=spellList.begin(); it != spellList.end(); it++){
+		delete (*it);
+	}
 }
 
 unsigned int Unit::getX(){
@@ -98,12 +105,15 @@ unsigned int Unit::getAttackDamage(){
 
 T_ERROR Unit::combat(std::vector<Unit *> *targetList,int *bodyCount){
 
+	if (targetList->empty())
+		return T_ERROR_INVALID_TARGET;
+
 	Unit *target = targetList->front();
 
 	std::cout << "Unidade: " << this << " atacando unidade: " << target << " com " << getAttackDamage() << " de dano" << std::endl;
 
 	if (target->getTeam() == getTeam())
-		return T_ERROR_INVALID_UNIT;
+		return T_ERROR_INVALID_TARGET;
 
 	if (target->takeDamage(getAttackDamage()))
 		(*bodyCount)--;
@@ -115,19 +125,30 @@ unsigned int Unit::getActionsPerTurn(){
 	return actionPerTurn;
 }
 
-void Unit::debug_showStats(){
-	std::cout << "Unit (" << this << ") stats:" << std::endl;
-	std::cout << "Unit (" << this << ") x: " << x << std::endl;
-	std::cout << "Unit (" << this << ") y: " << y << std::endl;
-	std::cout << "Unit (" << this << ") hp: " << hp << std::endl;
-	std::cout << "Unit (" << this << ") attackDamage: " << attackDamage << std::endl;
-	std::cout << "Unit (" << this << ") armor: " << armor << std::endl;
-	std::cout << "Unit (" << this << ") level: " << level << std::endl;
-	std::cout << "Unit (" << this << ") move: " << move << std::endl;
-	std::cout << "Unit (" << this << ") range: " << range << std::endl;
-	std::cout << "Unit (" << this << ") speed: " << speed << std::endl;
-	std::cout << "Unit (" << this << ") dead: " << dead << std::endl;
-	std::cout << "Unit (" << this << ") team: " << team << std::endl;
+void Unit::debug_showStats(bool verbose){
+	std::cout << "Unit (" << unitClassName << "," << this << ") stats:" << std::endl;
+	std::cout << "Unit (" << unitClassName << "," << this << ") x: " << x << " y: " << y << std::endl;
+	std::cout << "Unit (" << unitClassName << "," << this << ") hp: " << hp << std::endl;
+	std::cout << "Unit (" << unitClassName << "," << this << ") team: " << team << std::endl;
+	if (verbose) {
+		std::cout << "Unit (" << unitClassName << "," << this << ") attackDamage: " << attackDamage << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") armor: " << armor << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") level: " << level << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") move: " << move << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") range: " << range << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") speed: " << speed << std::endl;
+		std::cout << "Unit (" << unitClassName << "," << this << ") dead: " << dead << std::endl;
+	}
 }
 
+std::string Unit::getClassName(){
+	return unitClassName;
+}
 
+void Unit::debug_showStats(){
+	debug_showStats(false);
+}
+
+std::vector<Spell *> *Unit::getSpellList(){
+	return &spellList;
+}

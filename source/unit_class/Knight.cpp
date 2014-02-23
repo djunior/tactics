@@ -13,6 +13,7 @@ Knight::Knight(T_TEAM t)  : Unit (t) {
 	armor = KNIGHT_ARMOR;
 	move = KNIGHT_MOVE;
 	range = KNIGHT_RANGE;
+	unitClassName = "Knight";
 }
 
 Knight::~Knight() {

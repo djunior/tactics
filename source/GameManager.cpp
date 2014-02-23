@@ -7,6 +7,8 @@
 
 #include "GameManager.h"
 #include <typeinfo>
+#include "unit_class/Knight.h"
+#include "unit_class/Wizard.h"
 
 GameManager::GameManager(Board* newBoard){
 	turn = GAMEMANAGER_INITIAL_TURN;
@@ -53,26 +55,30 @@ void GameManager::createUnit(string unitClass, T_TEAM team){
 void GameManager::startGame(){
 	std::cout << "GameManager::startGame()" << std::endl;
 	board->debug_showMap();
-	startTurn();
-	board->debug_showMap();
+	do {
+		startTurn();
+	} while (teamABodyCount > 0 && teamBBodyCount > 0);
+	endGame();
 }
 
 void  GameManager::startTurn(){
 	turn++;
-
+	bool forceEnd = false;
 	for (std::vector<Unit *>::iterator it = unitList.begin(); it != unitList.end(); it++) {
 		Unit *unit = (*it);
-		if (!unit->isDead()) {
+		if (forceEnd == false && !unit->isDead()) {
+			std::cout << "Iniciando turno da unidade: " << unit << std::endl;
+			unit->debug_showStats();
 			int movePerTurn = unit->getMove();
 			int actionPerTurn = unit->getActionsPerTurn();
 			bool endUnitTurn = false;
-			while (endUnitTurn == false ) {
+			while (forceEnd == false && endUnitTurn == false ) {
 				char input;
 				if (movePerTurn > 0 || actionPerTurn > 0) {
 					board->debug_showMap();
-					std::cout << "Pressione M para mover, e A para atacar" << std::endl;
+					std::cout << "Pressione M para mover, A para atacar, S para utilizar uma magia, e P para pular" << std::endl;
 					std::cin >> input;
-					if (input == 'a') {
+					if (input == 'a' && actionPerTurn > 0) {
 
 						vector<Unit *> targets;
 						T_ERROR e;
@@ -88,23 +94,66 @@ void  GameManager::startTurn(){
 						else if (input == 's')
 							e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
 						else if (input == 'd')
-							e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
+							e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
 
-						if (e == T_SUCCESS)
+						if (e == T_SUCCESS) {
 							if (unit->getTeam() == TEAM_A)
 								e = unit->combat(&targets,&teamBBodyCount);
 							else
 								e = unit->combat(&targets,&teamABodyCount);
+						} else {
+							std::cout << "Alvo invalido!" << std::endl;
+						}
 
 						if (e == T_SUCCESS) {
 							actionPerTurn--;
 
 							if (getOtherTeamBodyCount(unit->getTeam()) == 0){
-								endGame();
-								return;
+								std::cout << "O outro time todo morreu" << std::endl;
+								forceEnd = true;
 							}
 						}
-					} else if (input == 'm') {
+					} else if (input == 's' && actionPerTurn > 0) {
+						vector<Spell *> *spellList = unit->getSpellList();
+						std::cout << "Pressione o numero correspondente da spell desejada:" << std::endl;
+						for (std::vector<Spell *>::iterator it = spellList->begin(); it != spellList->end(); it++){
+							Spell* spell = (*it);
+							std::cout << "(" << it - spellList->begin() + 1 << "): " << spell->getName() << std::endl;
+						}
+						Spell *spell = 0;
+						std::cin >> input;
+						int index = input - '0' - 1;
+						std::cout << "INPUT=" << input << " INDEX =" << index << std::endl;
+						if (input == '1') {
+							 spell = spellList->at(index);
+						}
+						T_ERROR e;
+						vector<Unit *> targets;
+						if (spell != 0) {
+							std::cout << "Pressione W, A, S, D para selecionar o alvo" << std::endl;
+							board->debug_showMap();
+							std::cin >> input;
+
+							if (input == 'w')
+								e = board->checkUnitsInAOE(unit->getX()-1,unit->getY(),spell->getRange(),BOARD_AXIS_X_MINUS,spell->getAreaOfEffect(),&targets);
+							else if (input == 'a')
+								e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,spell->getRange(),BOARD_AXIS_Y_MINUS,spell->getAreaOfEffect(),&targets);
+							else if (input == 's')
+								e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),spell->getRange(),BOARD_AXIS_X,spell->getAreaOfEffect(),&targets);
+							else if (input == 'd')
+								e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),spell->getRange(),BOARD_AXIS_X,spell->getAreaOfEffect(),&targets);
+
+							if (e == T_SUCCESS) {
+								if (spell->perform(this, &targets) == T_SUCCESS){
+									actionPerTurn--;
+									if (getOtherTeamBodyCount(unit->getTeam()) == 0){
+										std::cout << "Um time morreu. Escapando turno..." << std::endl;
+										forceEnd = true;
+									}
+								}
+							}
+						}
+					} else if (input == 'm' && movePerTurn > 0) {
 						std::cout << "Pressione W, A, S, D para mover" << std::endl;
 						board->debug_showMap();
 						std::cin >> input;
@@ -125,22 +174,21 @@ void  GameManager::startTurn(){
 						} else {
 							std::cout << "Posicao invalida!" << std::endl;
 						}
+					}	else if (input == 'p') {
+						endUnitTurn = true;
 					}
 
 				} else {
-					std::cout << "Pressione alguma tecla para terminar turno..." << std::endl;
-					std::cin >> input;
 					endUnitTurn = true;
 				}
 			}
 		}
 
 		if (teamABodyCount == 0 || teamBBodyCount == 0){
-			endGame();
-			return;
+			forceEnd = true;
 		}
 	}
-
+	std::cout << "Fim do turno " << turn << std::endl;
 }
 
 int GameManager::getOtherTeamBodyCount(T_TEAM team) {
@@ -153,8 +201,16 @@ int GameManager::getOtherTeamBodyCount(T_TEAM team) {
 void GameManager::endGame(){
 	if (teamABodyCount == 0)
 		std::cout << "Time B venceu no turno " << turn << std::endl;
-	else
+	else if (teamBBodyCount == 0)
 		std::cout << "Time A venceu no turno " << turn << std::endl;
 
 	cleanup();
+}
+
+void GameManager::notifyDeath(T_TEAM team, int casualties){
+	if (team == TEAM_A) {
+		teamABodyCount-=casualties;
+	} else {
+		teamBBodyCount-=casualties;
+	}
 }
