@@ -132,10 +132,18 @@ int main(int argc, char *argv[]){
 
         //FPS END
 
+    	cout << "Criando unidade 1!" << endl;
+    	gm.createUnit("wizard",TEAM_A);
+
+    	cout << "Criando unidade 2!" << endl;
+    	gm.createUnit("wizard",TEAM_B);
+
+        //FPS END
+
 		SDL_RenderPresent(renderer);
     }
 
 	SDL_Quit();
-	return 0;
+	return EXIT_SUCCESS;
 }
 

@@ -19,6 +19,14 @@ Disciplina: Linguagens de Programação
 UFRJ - 2014-1
 
 
+Tópicos:
+1. Versões
+2. Sobre o projeto
+3. Dados técnicos
+4. Dependências
+
+
+
 
 1. Versões:
 0.1a - Primeiro commit da aplicação
@@ -51,8 +59,19 @@ E o que mais nós pensarmos ao longo do caminho
 
 3. Dados técnicos:
 
-Linguagem primária (core): C++
+Linguagem primária: C++
 Ambiente gráfico: SDL (C++) - http://www.libsdl.org/
 
 
+
+
+4. Dependências do projeto 
+
+As dependência do projeto podem ser baixadas em: https://www.dropbox.com/sh/m8gio9t7vgqpxuv/-j3ClIq_uj
+
+Nesse link estão as principais dependências do projeto, que são:
+- Compilador C/C++ (MinGW e MSYS)
+- Lib SDL2
+
+Além disso, encontra-se no link o Sublime e o Eclipse, dois SDK's que podem ser usados para o desenvolvimento do projeto.
 
