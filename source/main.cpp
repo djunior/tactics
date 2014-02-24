@@ -6,11 +6,7 @@
  *  Created on: Feb 12, 2014
  *      Author: djunior
  */
-#include <iostream>
-#include <stdio.h>
-#include <string>
-
-using namespace std;
+#include "basic_includes.h"
 
 #include "animation.h"
 
@@ -20,7 +16,7 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-    sldInit();
+    sdlInit();
     textInit();
 
     bool Running = true;
@@ -28,13 +24,14 @@ int main(int argc, char *argv[]){
     SDL_Renderer* renderer;
     SDL_Event Event;
 
-    SDL_Texture *Track,*Car;
-    SDL_Rect rectTrack,rectCar;
+    SDL_Texture *Map,*Char;
+    SDL_Rect rectMap,rectChar;
 
     TTF_Font *font;
     SDL_Surface *tSurface;
     SDL_Texture *tTexture;
-    SDL_Color text_color;
+    SDL_Rect rectText;
+    SDL_Color text_color = {255, 255, 255}; //white
     string text;
 
     // OnInit
@@ -53,19 +50,19 @@ int main(int argc, char *argv[]){
 
     //Load Content
     int w=0,h=0;
-    Track = IMG_LoadTexture(renderer,"images\\mapa.jpg");
-    SDL_QueryTexture(Track, NULL, NULL, &w, &h);
-    rectTrack.x = 0;
-    rectTrack.y = 0;
-    rectTrack.w = w;
-    rectTrack.h = h;
+    Map = IMG_LoadTexture(renderer,"images\\mapa.jpg");
+    SDL_QueryTexture(Map, NULL, NULL, &w, &h);
+    rectMap.x = 0;
+    rectMap.y = 0;
+    rectMap.w = w;
+    rectMap.h = h;
 
-    Car = IMG_LoadTexture(renderer, "images\\char_lanca.png");
-    SDL_QueryTexture(Car, NULL, NULL, &w, &h);
-    rectCar.x = 350;
-    rectCar.y = 200;
-    rectCar.w = w/2;
-    rectCar.h = h;
+    Char = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+    SDL_QueryTexture(Char, NULL, NULL, &w, &h);
+    rectChar.x = 350;
+    rectChar.y = 200;
+    rectChar.w = w/2;
+    rectChar.h = h;
 
     SDL_Rect src;
     src.x=0;
@@ -74,12 +71,16 @@ int main(int argc, char *argv[]){
     src.h=h/2;
 
     // Font & Write Setup
+    text = "FPS bolado";
 
-    text_color = {255, 255, 255};
-    loadFont(*font);
-    textContent(*font,text,text_color,*tSurface);
+    loadFont(font);
+    textContent(font,text,text_color,tSurface);
     tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(Car, NULL, NULL, &w, &h);
+    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
+    rectText.x = 0;
+    rectText.y = 0;
+    rectText.w = w;
+    rectText.h = h;
 
 
 
@@ -100,10 +101,10 @@ int main(int argc, char *argv[]){
 							Running = false;
 							break;
 						case SDLK_RIGHT:
-							rectCar.x+=10;
+							rectChar.x+=10;
 							break;
 						case SDLK_LEFT:
-							rectCar.x-=10;
+							rectChar.x-=10;
 							break;
 					}
 					break;
@@ -112,8 +113,9 @@ int main(int argc, char *argv[]){
         }
 
 		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, Track, NULL, &rectTrack);
-		SDL_RenderCopy(renderer, Car, &src, &rectCar);
+		SDL_RenderCopy(renderer, Map, NULL, &rectMap);
+		SDL_RenderCopy(renderer, Char, &src, &rectChar);
+        SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
 		SDL_RenderPresent(renderer);
     }
 

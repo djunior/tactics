@@ -8,7 +8,7 @@ void sdlInit()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
 		cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return 1;
+		exit(1);
 	}
 };
 
@@ -38,34 +38,27 @@ void loadFont(TTF_Font *font)
    }
 };
 
-SDL_Surface textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface)
+void textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface)
 {
+	char cStrText[10];  // std::string to char *
+    strncpy(cStrText, text.c_str(), sizeof(cStrText));
+
 	textSurface = TTF_RenderText_Solid(font,
-   	text,
+   	cStrText,
    	text_color);
 
    	if (textSurface == NULL)
    	{
-      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << endl;
+      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << "\nVendo o erro:\nstring = " << text << "\nchar[]" << cStrText;
       	TTF_Quit();
       	SDL_Quit();
       	exit(1);
    	}
-   	return text;
-};
-
-void write(SDL_Surface *textSurface)
-{
-      if (SDL_BlitSurface(textSurface, NULL, display, NULL) != 0)
-      {
-         cerr << "SDL_BlitSurface() Failed: " << SDL_GetError() << endl;
-         break;
-      }	
 };
 
 /*=============================
 FPS
-==============================*/
+==============================
 class framesPerSecond
 {
 	private:
@@ -112,4 +105,5 @@ class framesPerSecond
 			_end = 0;
 			_frames = 0;
 		};
-};
+};*/
+

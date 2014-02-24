@@ -1,9 +1,11 @@
 #ifndef animation_h
 #define animation_h
 
-#include <ctime>
-#include "SDL2/SDL_ttf.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL.h"
+#include "basic_includes.h"
+
+void sdlInit();
+void textInit();
+void loadFont(TTF_Font *font);
+void textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface);
 
 #endif
