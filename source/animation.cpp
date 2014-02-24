@@ -26,34 +26,35 @@ void textInit()
    }
 };
 
-void loadFont(TTF_Font *font)
+TTF_Font *loadFont()
 {
-   font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
-   if (font == NULL)
-   {
-      cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
-      TTF_Quit();
-      SDL_Quit();
-      exit(1);
-   }
+	TTF_Font *font;
+    font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
+    if (font == NULL)
+    {
+	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
+	    TTF_Quit();
+	    SDL_Quit();
+	    exit(1);
+    }
+    return font;
 };
 
-void textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface)
+SDL_Surface *textContent(TTF_Font *font,const char *text,SDL_Color text_color)
 {
-	char cStrText[10];  // std::string to char *
-    strncpy(cStrText, text.c_str(), sizeof(cStrText));
-
+	SDL_Surface *textSurface;
 	textSurface = TTF_RenderText_Solid(font,
-   	cStrText,
+   	text,
    	text_color);
 
    	if (textSurface == NULL)
    	{
-      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << "\nVendo o erro:\nstring = " << text << "\nchar[]" << cStrText;
+      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << "\nVendo o erro:\nstring = " << text << endl;
       	TTF_Quit();
       	SDL_Quit();
       	exit(1);
    	}
+   	return textSurface;
 };
 
 /*=============================

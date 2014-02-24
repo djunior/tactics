@@ -5,7 +5,7 @@
 
 void sdlInit();
 void textInit();
-void loadFont(TTF_Font *font);
-void textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface);
+TTF_Font *loadFont();
+SDL_Surface *textContent(TTF_Font *font,const char *text,SDL_Color text_color);
 
 #endif

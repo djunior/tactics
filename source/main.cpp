@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
     SDL_Texture *tTexture;
     SDL_Rect rectText;
     SDL_Color text_color = {255, 255, 255}; //white
-    string text;
+    const char *cStrText = "FPS bolado";
 
     // OnInit
 
@@ -71,10 +71,10 @@ int main(int argc, char *argv[]){
     src.h=h/2;
 
     // Font & Write Setup
-    text = "FPS bolado";
+    //text = "FPS bolado";
 
-    loadFont(font);
-    textContent(font,text,text_color,tSurface);
+    font = loadFont();    
+    tSurface = textContent(font,cStrText,text_color);
     tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
     SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
     rectText.x = 0;
