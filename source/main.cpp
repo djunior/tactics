@@ -8,22 +8,20 @@
  */
 #include <iostream>
 #include <stdio.h>
+#include <string>
+
+using namespace std;
+
+#include "animation.h"
 
 #include "Board.h"
 #include "GameManager.h"
 #include "Unit.h"
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-
-using namespace std;
-
 int main(int argc, char *argv[]){
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
-		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return 1;
-	}
+    sldInit();
+    textInit();
 
     bool Running = true;
     SDL_Window* window;
@@ -33,17 +31,23 @@ int main(int argc, char *argv[]){
     SDL_Texture *Track,*Car;
     SDL_Rect rectTrack,rectCar;
 
+    TTF_Font *font;
+    SDL_Surface *tSurface;
+    SDL_Texture *tTexture;
+    SDL_Color text_color;
+    string text;
+
     // OnInit
 
-    window = SDL_CreateWindow("Image Loading", 100, 100, 1280, 720, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
+    window = SDL_CreateWindow("Tactics", 100, 100, 1280, 720, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
 	if (window == 0){
-		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+		cout << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
 		SDL_Quit();
 		return 1;
 	}
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED );
     if (renderer == NULL){
-        std::cout << SDL_GetError() << std::endl;
+        cout << SDL_GetError() << endl;
         return 1;
     }
 
@@ -69,8 +73,20 @@ int main(int argc, char *argv[]){
     src.w=w/4;
     src.h=h/2;
 
-    while (Running) {
-        while(SDL_PollEvent(&Event)) {
+    // Font & Write Setup
+
+    text_color = {255, 255, 255};
+    loadFont(*font);
+    textContent(*font,text,text_color,*tSurface);
+    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
+    SDL_QueryTexture(Car, NULL, NULL, &w, &h);
+
+
+
+    while (Running) 
+    {
+        while(SDL_PollEvent(&Event)) 
+        {
         	switch(Event.type)
 			{
 				case SDL_QUIT:

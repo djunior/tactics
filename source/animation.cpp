@@ -1,7 +1,22 @@
-/*#include "animation.h"
+#include "animation.h"
 
+/*=============================
+DRAW
+==============================*/
 
-void textInit();
+void sdlInit()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+		cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+};
+
+/*=============================
+WRITE
+==============================*/
+
+void textInit()
 {
 	if (TTF_Init() != 0)
    {
@@ -9,8 +24,48 @@ void textInit();
       SDL_Quit();
       exit(1);
    }
-}
+};
 
+void loadFont(TTF_Font *font)
+{
+   font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
+   if (font == NULL)
+   {
+      cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
+      TTF_Quit();
+      SDL_Quit();
+      exit(1);
+   }
+};
+
+SDL_Surface textContent(TTF_Font *font,string text,SDL_Color text_color, SDL_Surface *textSurface)
+{
+	textSurface = TTF_RenderText_Solid(font,
+   	text,
+   	text_color);
+
+   	if (textSurface == NULL)
+   	{
+      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << endl;
+      	TTF_Quit();
+      	SDL_Quit();
+      	exit(1);
+   	}
+   	return text;
+};
+
+void write(SDL_Surface *textSurface)
+{
+      if (SDL_BlitSurface(textSurface, NULL, display, NULL) != 0)
+      {
+         cerr << "SDL_BlitSurface() Failed: " << SDL_GetError() << endl;
+         break;
+      }	
+};
+
+/*=============================
+FPS
+==============================*/
 class framesPerSecond
 {
 	private:
@@ -38,7 +93,7 @@ class framesPerSecond
 		void plus()
 		{
 			_frames++;
-		}
+		};
 
 		int calculate()
 		{
@@ -57,4 +112,4 @@ class framesPerSecond
 			_end = 0;
 			_frames = 0;
 		};
-};*/
+};
