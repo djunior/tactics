@@ -28,11 +28,10 @@ int main(int argc, char *argv[]){
     SDL_Rect rectMap,rectChar;
 
     TTF_Font *font;
-    SDL_Surface *tSurface;
     SDL_Texture *tTexture;
     SDL_Rect rectText;
-    SDL_Color text_color = {255, 255, 255}; //white
-    const char *cStrText = "FPS bolado";
+
+    framesPerSecond fps;
 
     // OnInit
 
@@ -69,19 +68,16 @@ int main(int argc, char *argv[]){
     src.y=0;
     src.w=w/4;
     src.h=h/2;
+    
+    // FPS Setup
 
-    // Font & Write Setup
-    //text = "FPS bolado";
+    font = loadFont();  
 
-    font = loadFont();    
-    tSurface = textContent(font,cStrText,text_color);
-    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
-    rectText.x = 0;
-    rectText.y = 0;
-    rectText.w = w;
-    rectText.h = h;
-
+    fps.frames(0);
+    time_t hold;
+    time_t actual;
+    hold = fps.start();
+    actual = hold;
 
 
     while (Running) 
@@ -115,7 +111,27 @@ int main(int argc, char *argv[]){
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, Map, NULL, &rectMap);
 		SDL_RenderCopy(renderer, Char, &src, &rectChar);
+
+        //FPS BEGIN
+
+        fps.plus();
+        if (actual != hold)
+        {
+            fps.calculate();
+            fps.frames(0);
+            hold = fps.end();
+
+        }
+        else
+        {
+            actual = fps.end();
+        }
+        tTexture = fps.show(renderer,font);
+        rectText = fps.rect();
         SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+
+        //FPS END
+
 		SDL_RenderPresent(renderer);
     }
 
