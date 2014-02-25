@@ -32,6 +32,9 @@ int main(int argc, char *argv[]){
     SDL_Rect rectText;
 
     framesPerSecond fps;
+    Board gameBoard(8,8);
+    GameManager gm(&gameBoard);
+
 
     // OnInit
 
@@ -69,7 +72,7 @@ int main(int argc, char *argv[]){
     src.w=w/4;
     src.h=h/2;
     
-    // FPS Setup
+    // FPS Setup BEGIN
 
     font = loadFont();  
 
@@ -79,6 +82,19 @@ int main(int argc, char *argv[]){
     hold = fps.start();
     actual = hold;
 
+    // FPS Setup END
+
+    // Unit create BEGIN
+    cerr << "Criando unidade 1!" << endl;
+    gm.createUnit("wizard",TEAM_A);
+
+    cerr << "Criando unidade 2!" << endl;
+    gm.createUnit("wizard",TEAM_B);
+
+    //gameBoard.debug_showMap();
+    //gm.startGame();
+
+    // Unit create END
 
     while (Running) 
     {
@@ -129,14 +145,6 @@ int main(int argc, char *argv[]){
         tTexture = fps.show(renderer,font);
         rectText = fps.rect();
         SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
-
-        //FPS END
-
-    	cout << "Criando unidade 1!" << endl;
-    	gm.createUnit("wizard",TEAM_A);
-
-    	cout << "Criando unidade 2!" << endl;
-    	gm.createUnit("wizard",TEAM_B);
 
         //FPS END
 
