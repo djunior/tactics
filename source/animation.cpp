@@ -74,17 +74,17 @@ framesPerSecond::framesPerSecond(void)
 	_rect.h = 0;
 	_rect.w = 0;
 };
-void framesPerSecond::frames(int f)
+void framesPerSecond::setFrames(int f)
 {
 	_frames = f;
 };
 
-int framesPerSecond::frames()
+int framesPerSecond::getFrames()
 {
 	return _frames;
 };
 
-SDL_Rect framesPerSecond::rect()
+SDL_Rect framesPerSecond::getRect()
 {
 	return _rect;
 };
@@ -98,7 +98,7 @@ time_t framesPerSecond::end()
 	_end = time(NULL);
 	return _end;
 };
-double framesPerSecond::loop()
+double framesPerSecond::getLoop()
 {
 	return _loop;
 };
