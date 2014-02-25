@@ -1,7 +1,7 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "Unit.h"
+#include "unit.h"
 #include "utils/t_error.h"
 #include <vector>
 #include <algorithm>

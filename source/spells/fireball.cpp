@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "Fireball.h"
+#include "fireball.h"
 
 Fireball::Fireball(Unit* u) : Spell(u) {
 	// TODO Auto-generated constructor stub

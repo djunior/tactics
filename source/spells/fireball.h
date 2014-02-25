@@ -8,7 +8,7 @@
 #ifndef FIREBALL_H_
 #define FIREBALL_H_
 
-#include "../Spell.h"
+#include "../spell.h"
 
 class Fireball : public Spell {
 public:
