@@ -11,8 +11,8 @@
 #include <vector>
 #include "utils/t_error.h"
 #include "utils/board_utils.h"
-#include "Unit.h"
-#include "GameManager.h"
+#include "unit.h"
+#include "gameManager.h"
 #include <string>
 
 //Forward declaration

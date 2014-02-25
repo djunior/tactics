@@ -8,9 +8,9 @@
 #ifndef WIZARD_H_
 #define WIZARD_H_
 
-#include "../Unit.h"
+#include "../unit.h"
 #include "../utils/t_team.h"
-#include "../spells/Fireball.h"
+#include "../spells/fireball.h"
 
 #define WIZARD_HP 40
 #define WIZARD_DAMAGE 10

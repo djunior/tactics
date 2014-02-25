@@ -10,9 +10,9 @@
 
 #include "animation.h"
 
-#include "Board.h"
-#include "GameManager.h"
-#include "Unit.h"
+#include "board.h"
+#include "gameManager.h"
+#include "unit.h"
 
 int main(int argc, char *argv[]){
 

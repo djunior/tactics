@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "Board.h"
+#include "board.h"
 #include "utils/t_error.h"
 
 Board::Board(int width, int length){

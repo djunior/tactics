@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "GameManager.h"
+#include "gameManager.h"
 #include <typeinfo>
 #include "unit_class/Knight.h"
 #include "unit_class/Wizard.h"

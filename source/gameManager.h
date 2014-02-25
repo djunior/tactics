@@ -1,6 +1,6 @@
 #ifndef __GAME_MANAGER_H__
 #define __GAME_MANAGER_H__
-#include "Board.h"
+#include "board.h"
 #include <vector>
 #include <map>
 #include "utils/t_team.h"

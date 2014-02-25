@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "Spell.h"
+#include "spell.h"
 
 Spell::Spell(Unit* u) {
 	cooldown = 0;

@@ -6,7 +6,8 @@
  */
 
 
-#include "Unit.h"
+#include "unit.h"
+#include "spell.h"
 
 Unit::Unit (T_TEAM t){
 	x = 0;

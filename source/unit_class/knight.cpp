@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "Knight.h"
+#include "knight.h"
 
 Knight::Knight(T_TEAM t)  : Unit (t) {
 	hp = KNIGHT_HP;

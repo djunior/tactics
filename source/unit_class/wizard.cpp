@@ -5,7 +5,7 @@
  *      Author: djunior
  */
 
-#include "Wizard.h"
+#include "wizard.h"
 
 Wizard::Wizard(T_TEAM t) : Unit(t) {
 
