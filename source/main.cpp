@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
 
     font = loadFont();  
 
-    fps.frames(0);
+    fps.setFrames(0);
     time_t hold;
     time_t actual;
     hold = fps.start();
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
         if (actual != hold)
         {
             fps.calculate();
-            fps.frames(0);
+            fps.setFrames(0);
             hold = fps.end();
 
         }
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
             actual = fps.end();
         }
         tTexture = fps.show(renderer,font);
-        rectText = fps.rect();
+        rectText = fps.getRect();
         SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
 
         //FPS END

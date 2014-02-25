@@ -22,13 +22,13 @@ class framesPerSecond
 		//CONSTRUTOR:
 		framesPerSecond(void);
 		// SET Variables:
-		void frames(int);
+		void setFrames(int);
 		// GET Variables:
-		int frames();
-		SDL_Rect rect();
+		int getFrames();
+		SDL_Rect getRect();
 		time_t start();
 		time_t end();
-		double loop();
+		double getLoop();
 
 		//FUNCTIONS:
 		void plus();
