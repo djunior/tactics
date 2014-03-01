@@ -9,10 +9,14 @@
 #include "basic_includes.h"
 
 #include "animation.h"
+#include "fpsControl.h"
 
 #include "board.h"
 #include "gameManager.h"
 #include "unit.h"
+
+#include <thread>
+#include <chrono>
 
 int main(int argc, char *argv[]){
 
@@ -96,95 +100,102 @@ int main(int argc, char *argv[]){
 
     // Unit create END
 
+    FpsControl fpsControl(60);
+
     while (Running) 
     {
-        while(SDL_PollEvent(&Event)) 
-        {
-        	switch(Event.type)
-			{
-				case SDL_QUIT:
-					Running = false;
-					break;
 
-				case SDL_KEYDOWN:
-					switch(Event.key.keysym.sym)
-					{
-						case SDLK_ESCAPE:
-							Running = false;
-							break;
-						case SDLK_RIGHT:
-							rectChar.x+=10;
-							break;
-						case SDLK_LEFT:
-							rectChar.x-=10;
-							break;
-					}
-					break;
+    	if (fpsControl.isFrameDone()) {
+
+			while(SDL_PollEvent(&Event))
+			{
+				switch(Event.type)
+				{
+					case SDL_QUIT:
+						Running = false;
+						break;
+
+					case SDL_KEYDOWN:
+						switch(Event.key.keysym.sym)
+						{
+							case SDLK_ESCAPE:
+								Running = false;
+								break;
+							case SDLK_RIGHT:
+								rectChar.x+=10;
+								break;
+							case SDLK_LEFT:
+								rectChar.x-=10;
+								break;
+						}
+						break;
+
+				}
+			}
+
+
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, Map, NULL, &rectMap);
+			SDL_RenderCopy(renderer, Char, &src, &rectChar);
+
+			//FPS BEGIN
+
+			fps.plus();
+			if (actual != hold)
+			{
+				fps.calculate();
+				fps.setFrames(0);
+				hold = fps.end();
 
 			}
-        }
+			else
+			{
+				actual = fps.end();
+			}
+			tTexture = fps.show(renderer,font);
+			rectText = fps.getRect();
+			SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+
+			//FPS END
 
 
-		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, Map, NULL, &rectMap);
-		SDL_RenderCopy(renderer, Char, &src, &rectChar);
+		/*
+			David: forma mais gambiarra de implementar limitação de fps em 60 fps
 
-        //FPS BEGIN
+			utilizar um sleep de 1/60 segundos
 
-        fps.plus();
-        if (actual != hold)
-        {
-            fps.calculate();
-            fps.setFrames(0);
-            hold = fps.end();
+			para isso, utilizar a biblioteca thread e chrono
 
-        }
-        else
-        {
-            actual = fps.end();
-        }
-        tTexture = fps.show(renderer,font);
-        rectText = fps.getRect();
-        SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+			acrescentar os includes:
+			<thread>
+			<chrono>
 
-        //FPS END
+			e logo abaixo desse comentario fazer:
 
+			std::this_thread::sleep_for(std::chrono::seconds(1/60));
 
-	/*	
-		David: forma mais gambiarra de implementar limitação de fps em 60 fps
-		
-		utilizar um sleep de 1/60 segundos
-		
-		para isso, utilizar a biblioteca thread e chrono
-		
-		acrescentar os includes:
-		<thread>
-		<chrono>
-		
-		e logo abaixo desse comentario fazer:
-		
-		std::this_thread::sleep_for(std::chrono::seconds(1/60));
+			Mais informações sobre essa função em: http://www.cplusplus.com/reference/thread/this_thread/sleep_for/
+			http://www.cplusplus.com/reference/chrono/ também pode ser útil em caso de dúvidas.
 
-		Mais informações sobre essa função em: http://www.cplusplus.com/reference/thread/this_thread/sleep_for/
-		http://www.cplusplus.com/reference/chrono/ também pode ser útil em caso de dúvidas.
-		
-		Para tornar esse controle mais valido, pode-se estimar o tempo que o pc leva para desenhar um quadro.
-		Considerando que o codigo de contagem de fps do jack estava resultado aproximadamente 3k a 4k fps,
-		podemos fazer:
-		
-		std::this_thread::sleep_for(std::chrono::seconds(1/60 - 1/3500));
-		
-		A solução final seria medir o tempo do inicio do loop e subtrair o tempo apos realizar as operações
-		de pintura, dessa forma calculando o tempo de cada frame e nao estimando, como foi feito acima.
-		
-		Também é interessante utilizar SDLBlit e SDL_Flip para otimizar esse processo. 
-		
-		Esse sleep deveria forçar o tempo de pintura de cada quadro para algo próximo a 1/60 segundos,
-		o que resulta em 60 fps.
-		
-	*/
+			Para tornar esse controle mais valido, pode-se estimar o tempo que o pc leva para desenhar um quadro.
+			Considerando que o codigo de contagem de fps do jack estava resultado aproximadamente 3k a 4k fps,
+			podemos fazer:
 
-		SDL_RenderPresent(renderer);
+			std::this_thread::sleep_for(std::chrono::seconds(1/60 - 1/3500));
+
+			A solução final seria medir o tempo do inicio do loop e subtrair o tempo apos realizar as operações
+			de pintura, dessa forma calculando o tempo de cada frame e nao estimando, como foi feito acima.
+
+			Também é interessante utilizar SDLBlit e SDL_Flip para otimizar esse processo.
+
+			Esse sleep deveria forçar o tempo de pintura de cada quadro para algo próximo a 1/60 segundos,
+			o que resulta em 60 fps.
+
+		*/
+		  //  std::this_thread::sleep_for(std::chrono::seconds(1/60 - 1/3500));
+
+			SDL_RenderPresent(renderer);
+    	}
     }
 
 	SDL_Quit();

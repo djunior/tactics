@@ -131,9 +131,9 @@ SDL_Texture *framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)
 
 	text = "FPS: " + strFPS;
 
-	strncpy(cText, text.c_str(), sizeof(cText));
+	//strncpy(cText, text.c_str(), sizeof(cText));
 
-    tSurface = textContent(font,cText,text_color);
+    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
     tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
     SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
     rectText.x = 0;
@@ -141,6 +141,9 @@ SDL_Texture *framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)
     rectText.w = w;
     rectText.h = h;
     _rect = rectText;
+
+
+    SDL_FreeSurface(tSurface);
 
     return tTexture;
 };
