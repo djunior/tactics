@@ -31,6 +31,8 @@ T_ERROR Fireball::perform(GameManager *gm, Unit * target){
 	if (target->getTeam() == owner->getTeam())
 		return T_ERROR_INVALID_TARGET;
 
+	std::cout << "Fireball(" << this << ") partindo da unidade: " << owner << " para a unidade: " << target << " causando " << damage << " de dano" << std::endl;
+
 	target->takeDamage(damage);
 
 	if (target->isDead())

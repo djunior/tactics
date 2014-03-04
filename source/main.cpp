@@ -36,8 +36,8 @@ int main(int argc, char *argv[]){
     SDL_Rect rectText;
 
     framesPerSecond fps;
-    Board gameBoard(8,8);
-    GameManager gm(&gameBoard);
+    Board gameBoard(3,3);
+    GameManager gm(&gameBoard, renderer);
 
 
     // OnInit
@@ -95,13 +95,21 @@ int main(int argc, char *argv[]){
     cerr << "Criando unidade 2!" << endl;
     gm.createUnit("wizard",TEAM_B);
 
-    //gameBoard.debug_showMap();
+//    cerr << "Criando unidade 3!" << endl;
+//    gm.createUnit("knight",TEAM_A);
+//
+//    cerr << "Criando unidade 4!" << endl;
+//    gm.createUnit("knight",TEAM_B);
+
+    gameBoard.debug_showMap();
     //gm.startGame();
 
     // Unit create END
 
     FpsControl fpsControl(60);
 
+
+    std::cout << "Pressione S para iniciar a partida" << std::endl;
     while (Running) 
     {
 
@@ -121,12 +129,8 @@ int main(int argc, char *argv[]){
 							case SDLK_ESCAPE:
 								Running = false;
 								break;
-							case SDLK_RIGHT:
-								rectChar.x+=10;
-								break;
-							case SDLK_LEFT:
-								rectChar.x-=10;
-								break;
+							default:
+								gm.processEvent(&Event);
 						}
 						break;
 

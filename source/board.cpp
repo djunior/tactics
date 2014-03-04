@@ -41,15 +41,22 @@ T_ERROR Board::addUnit(Unit *u){
 	std::cout << "Board::addUnit Adicionando unidade " << u << std::endl;
 	unsigned int ix = 0, iy = 0;
 
+	if (u->getTeam() == TEAM_B)
+		iy = maxBoardY-1;
+
 	while(boardMap[ix][iy] != 0) {
 		ix++;
 		if (ix == maxBoardX) {
 			ix = 0;
-			iy++;
+			if (u->getTeam() == TEAM_A)
+				iy++;
+			else
+				iy--;
 		}
 		if (iy == maxBoardY)
 			return T_ERROR_MAP_FULL;
-
+		else if(iy < 0)
+			return T_ERROR_MAP_FULL;
 	};
 
 	addUnit(u,ix,iy);
