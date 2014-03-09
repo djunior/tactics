@@ -6,6 +6,8 @@
 #include "utils/t_team.h"
 #include "SDL2/SDL.h"
 
+#include "drawFunctions.h"
+
 #define GAMEMANAGER_INITIAL_TURN 0;
 
 enum GAME_MANAGER_CONTEXT {
@@ -53,6 +55,9 @@ private:
 	T_ERROR selectSpellTargets(SDL_Keycode key);
 
 	void showMap();
+	void showMap(TTF_Font *);
+	void showUnit(Unit*);
+	void showUnit(Unit*,SDL_Renderer*,TTF_Font *);
 	void showUnitMenu();
 	void showSpellMenu();
 	void showMoveOptions();
@@ -68,6 +73,7 @@ public:
 	void endGame();
 	void notifyDeath(T_TEAM team, int casualties);
 	void processEvent(SDL_Event* event);
+	void update(SDL_Renderer*,TTF_Font*);
 	unsigned int getTurn();
 };
 

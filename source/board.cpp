@@ -129,7 +129,6 @@ T_ERROR Board::removeUnit(Unit * unit){
 }
 
 T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAPE shape, vector<Unit *> *targetList){
-
 	if (x < 0 || x > maxBoardX || y < 0 || y > maxBoardY)
 		return T_ERROR_OUT_OF_BOUNDS;
 
@@ -147,15 +146,32 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 		else if (axis == BOARD_AXIS_Y_MINUS)
 			y-=range;
 
+		if ( x < 0)
+			x = 0;
+
+		if (y < 0)
+			y = 0;
+
+		int finalX = x+range;
+		int finalY = y+range;
+
+		if (finalX > maxBoardX)
+			finalX = maxBoardX;
+
+		if (finalY > maxBoardY)
+			finalY = maxBoardY;
+
+
 		if (axis == BOARD_AXIS_X || axis == BOARD_AXIS_X_MINUS) {
-			for (int i=x;i<x+range;i++) {
+			for (int i=x;i<maxBoardX;i++) {
 				if (boardMap[i][y] != 0)
 					targetList->push_back(boardMap[i][y]);
 			}
 		} else if (axis == BOARD_AXIS_Y || axis == BOARD_AXIS_Y_MINUS) {
-			for (int i=y;i<y+range;i++) {
-				if (boardMap[x][i] != 0)
+			for (int i=y;i<maxBoardY;i++) {
+				if (boardMap[x][i] != 0){
 					targetList->push_back(boardMap[x][i]);
+				}
 			}
 		}
 
@@ -164,6 +180,14 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 	}
 
 	return T_SUCCESS;
+}
+
+unsigned int Board::getMaxBoardX(){
+	return maxBoardX;
+}
+
+unsigned int Board::getMaxBoardY(){
+	return maxBoardY;
 }
 
 void Board::debug_showMap(){
@@ -179,3 +203,4 @@ void Board::debug_showMap(){
 		std::cout << std::endl;
 	}
 }
+

@@ -16,6 +16,8 @@ private:
 
 public:
 	Board(int width, int length);
+	unsigned int getMaxBoardX();
+	unsigned int getMaxBoardY();
 	Unit* getUnitAt(unsigned int x, unsigned int y);
 	T_ERROR moveUnit(Unit* u, unsigned int x, unsigned int y);
 	T_ERROR addUnit(Unit* u, unsigned int x, unsigned int y);

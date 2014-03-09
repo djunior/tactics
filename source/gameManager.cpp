@@ -428,6 +428,10 @@ void GameManager::showMap(){
 	board->debug_showMap();
 }
 
+void GameManager::showMap(TTF_Font *font){
+	drawBoard(renderer,board);
+}
+
 void GameManager::showUnitMenu(){
 	showMap();
 	std::cout << "Pressione M para mover, A para atacar, S para utilizar uma magia, e P para pular" << std::endl;
@@ -505,7 +509,7 @@ T_ERROR GameManager::selectSpellTargets(SDL_Keycode key){
 			e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),activeSpell->getRange(),BOARD_AXIS_X,activeSpell->getAreaOfEffect(),&targets);
 			break;
 		case SDLK_UP:
-			e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),activeSpell->getRange(),BOARD_AXIS_Y,activeSpell->getAreaOfEffect(),&targets);
+			e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,activeSpell->getRange(),BOARD_AXIS_Y,activeSpell->getAreaOfEffect(),&targets);
 			break;
 	}
 
@@ -540,19 +544,37 @@ T_ERROR GameManager::combat(vector<Unit*> *targets){
 
 T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 	Unit* unit = *activeUnit;
-	T_ERROR e;
-	if (e == T_SUCCESS) {
-		if (activeSpell->perform(this, targets) == T_SUCCESS){
-			actionsPerTurn--;
-			if (getOtherTeamBodyCount(unit->getTeam()) == 0){
-				endGame();
-				return T_SUCCESS;
-			}
+
+	std::cout << "Vetor vazio? " << targets->empty() << std::endl;
+	for (std::vector<Unit*>::iterator it=targets->begin(); it != targets->end(); it++) {
+		std::cout << "unidade: " << *it << std::endl;
+		(*it)->debug_showStats();
+	}
+
+	T_ERROR e = activeSpell->perform(this, targets);
+	if (e == T_SUCCESS){
+		actionsPerTurn--;
+		if (getOtherTeamBodyCount(unit->getTeam()) == 0){
+			endGame();
+			return T_SUCCESS;
 		}
+	} else {
+		std::cerr << "Erro ao usar a spell " << activeSpell << " e=" << e << std::endl;
 	}
 
 	context = UNIT_MENU;
 	showUnitMenu();
 
 	return T_SUCCESS;
+}
+
+void GameManager::update(SDL_Renderer* r,TTF_Font *font){
+//	showMap(font);
+	std::cout << "GameManager::update!" << std::endl;
+	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
+		showUnit(*it,r,font);
+}
+
+void GameManager::showUnit(Unit* unit,SDL_Renderer *r, TTF_Font* font){
+	drawUnit(unit,r,font);
 }
