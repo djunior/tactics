@@ -26,10 +26,10 @@ void textInit()
    }
 };
 
-TTF_Font *loadFont()
+void loadFont(TTF_Font **font)
 {
-	TTF_Font *font;
-    font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
+    *font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
+    cerr << *font << endl;
     if (font == NULL)
     {
 	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
@@ -37,7 +37,6 @@ TTF_Font *loadFont()
 	    SDL_Quit();
 	    exit(1);
     }
-    return font;
 };
 
 SDL_Surface *textContent(TTF_Font *font,char *text,SDL_Color text_color)
@@ -64,56 +63,60 @@ FPS
 //CONSTRUTOR
 framesPerSecond::framesPerSecond(void)
 {
-	_loop = 0.000000000;
-	_start = 0;
-	_end = 0;
-	_frames = 0;
-	_fps = 0.00;
-	_rect.x = 0;
-	_rect.y = 0;
-	_rect.h = 0;
-	_rect.w = 0;
-};
-void framesPerSecond::setFrames(int f)
-{
-	_frames = f;
+	loop = 0.000000000;
+	start = 0;
+	end = 0;
+	frames = 0;
+	fps = 0.00;
+	rect.x = 0;
+	rect.y = 0;
+	rect.h = 0;
+	rect.w = 0;
 };
 
+//SET VARIABLES
+void framesPerSecond::setFrames(int f)
+{
+	frames = f;
+};
+time_t framesPerSecond::setStart()
+{
+	start = time(NULL);
+	return start;
+};
+time_t framesPerSecond::setEnd()
+{
+	end = time(NULL);
+	return end;
+};
+
+//GET VARIABLES
 int framesPerSecond::getFrames()
 {
-	return _frames;
+	return frames;
 };
 
 SDL_Rect framesPerSecond::getRect()
 {
-	return _rect;
+	return rect;
 };
-time_t framesPerSecond::start()
-{
-	_start = time(NULL);
-	return _start;
-};
-time_t framesPerSecond::end()
-{
-	_end = time(NULL);
-	return _end;
-};
+
 double framesPerSecond::getLoop()
 {
-	return _loop;
+	return loop;
 };
 
 //FUNCTIONS:
 void framesPerSecond::plus()
 {
-	_frames++;
+	frames++;
 };
 
 double framesPerSecond::calculate()
 {
-	_loop += difftime(_end,_start);
-	_fps = _frames;
-	return _fps;
+	loop += difftime(end,start);
+	fps = frames;
+	return fps;
 };
 SDL_Texture *framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)	
 {
@@ -121,17 +124,14 @@ SDL_Texture *framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)
 	SDL_Rect rectText;
 	SDL_Surface *tSurface;
 	SDL_Color text_color = {255, 255, 255};
-	char cText[10];
 	int w=0,h=0;
 	string text;
 
 	ostringstream strStream;   // float to std::string
-    strStream << _fps;
+    strStream << fps;
     string strFPS(strStream.str());
 
 	text = "FPS: " + strFPS;
-
-	//strncpy(cText, text.c_str(), sizeof(cText));
 
     tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
     tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
@@ -140,10 +140,22 @@ SDL_Texture *framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)
     rectText.y = 0;
     rectText.w = w;
     rectText.h = h;
-    _rect = rectText;
-
+    rect = rectText;
 
     SDL_FreeSurface(tSurface);
 
     return tTexture;
+};
+void framesPerSecond::fpsControl(int limit_fps) {
+	frameDuration = (float) 1000/limit_fps;
+	lastTick = SDL_GetTicks();
+};
+bool framesPerSecond::isFrameDone(){
+	float currentTick = SDL_GetTicks();
+	float duration = currentTick - lastTick;
+	if (duration >= frameDuration){
+		lastTick = currentTick;
+		return true;
+	}
+	return false;
 };

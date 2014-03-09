@@ -9,14 +9,13 @@
 #include "basic_includes.h"
 
 #include "animation.h"
-#include "fpsControl.h"
 
 #include "board.h"
 #include "gameManager.h"
 #include "unit.h"
 
-#include <thread>
-#include <chrono>
+//#include <thread>
+//#include <chrono>
 
 int main(int argc, char *argv[]){
 
@@ -78,12 +77,14 @@ int main(int argc, char *argv[]){
     
     // FPS Setup BEGIN
 
-    font = loadFont();  
+    loadFont(&font);  
 
+    fps.fpsControl(60);
+    
     fps.setFrames(0);
     time_t hold;
     time_t actual;
-    hold = fps.start();
+    hold = fps.setStart();
     actual = hold;
 
     // FPS Setup END
@@ -100,12 +101,10 @@ int main(int argc, char *argv[]){
 
     // Unit create END
 
-    FpsControl fpsControl(60);
-
     while (Running) 
     {
 
-    	if (fpsControl.isFrameDone()) {
+    	if (fps.isFrameDone()) {
 
 			while(SDL_PollEvent(&Event))
 			{
@@ -145,12 +144,12 @@ int main(int argc, char *argv[]){
 			{
 				fps.calculate();
 				fps.setFrames(0);
-				hold = fps.end();
+				hold = fps.setEnd();
 
 			}
 			else
 			{
-				actual = fps.end();
+				actual = fps.setEnd();
 			}
 			tTexture = fps.show(renderer,font);
 			rectText = fps.getRect();

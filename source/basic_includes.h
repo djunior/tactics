@@ -15,6 +15,9 @@ using namespace std;
 #include <iostream>
 
 #include <ctime>
+
+#include "stdint.h"
+
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_image.h"
