@@ -73,7 +73,7 @@ public:
 	void endGame();
 	void notifyDeath(T_TEAM team, int casualties);
 	void processEvent(SDL_Event* event);
-	void update(SDL_Renderer*,TTF_Font*);
+	void update(SDL_Renderer*,TTF_Font*,SDL_Rect*);
 	unsigned int getTurn();
 };
 

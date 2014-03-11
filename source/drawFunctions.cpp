@@ -7,6 +7,17 @@
 
 #include "drawFunctions.h"
 
+namespace Screen {
+
+SDL_Texture* unit_texture;
+bool isInitialized = false;
+
+void init(SDL_Renderer* renderer){
+	unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+
+	isInitialized = true;
+}
+
 void drawBoard(SDL_Renderer *renderer, Board* board) {
 //	int x = BOARD_INITIAL_X;
 //	int y = BOARD_INITIAL_Y;
@@ -37,29 +48,30 @@ void drawBoard(SDL_Renderer *renderer, Board* board) {
 }
 
 void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
-	std::cout << "Pintando unidade" << std::endl;
+	if (! isInitialized) {
+		std::cerr << "Falha a pintar a unidade " << unit << std::endl;
+		std::cerr << "A funcao Screen::init nao foi invocada" << std::endl;
+		return;
+	}
 
-	unit->debug_showStats();
+	int w = 0;
+	int h = 0;
+	SDL_Rect rectChar;
 
-	std::cout << "Unit x=" << unit->getX() << std::endl;
-	std::cout << "Block size=" << BOARD_BLOCK_SIZE << std::endl;
-	std::cout << "Initial x=" << BOARD_INITIAL_X << std::endl;
+    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
+    // TODO: Inverter o X e Y do Board
+    rectChar.y = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
+    rectChar.x = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
+    rectChar.w = BOARD_BLOCK_SIZE;
+    rectChar.h = BOARD_BLOCK_SIZE;
 
-    SDL_Rect rect;
-	SDL_Color text_color = {255, 255, 255};
-	string text = "Teste";
-	int w,h;
+    SDL_Rect src;
+    src.x=0;
+    src.y=0;
+    src.w=w/4;
+    src.h=h/2;
 
-    SDL_Surface *tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
-    SDL_Texture *tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
+    SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+}
 
-    rect.x = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
-    rect.y = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
-    rect.w = w;
-    rect.y = h;
-
-    SDL_FreeSurface(tSurface);
-
-	SDL_RenderCopy(renderer, tTexture, NULL, &rect);
 }

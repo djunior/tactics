@@ -61,13 +61,11 @@ void GameManager::createUnit(string unitClass, T_TEAM team){
 void GameManager::startGame(){
 	std::cout << "GameManager::startGame()" << std::endl;
 	board->debug_showMap();
-//	do {
-//		startTurn();
-//	} while (teamABodyCount > 0 && teamBBodyCount > 0);
 	turn = 0;
 	startNextTurn();
 }
 
+//Deprecated
 void  GameManager::startTurn(){
 	turn++;
 	bool forceEnd = false;
@@ -229,6 +227,7 @@ T_ERROR GameManager::startNextTurn(){
 	context = BEGINNING_TURN;
 	std::cout << "Começando o turno " << turn << std::endl;
 
+	// TODO: adicionar algoritmo de sort
 	// Sort do vetor de unidades, baseados na "speed" de cada unidade
 
 	// Seta activeUnit como a primeira unidade da lista
@@ -246,7 +245,8 @@ T_ERROR GameManager::startNextTurn(){
 T_ERROR GameManager::endTurn(){
 	std::cout << "Terminando o turno " << turn << std::endl;
 	context = ENDING_TURN;
-	// Verificar efeitos de fim de turno
+
+	// TODO: Verificar efeitos de fim de turno
 
 	// Verificar se o jogo acabou
 	if (teamABodyCount <= 0 || teamBBodyCount <= 0) {
@@ -429,7 +429,7 @@ void GameManager::showMap(){
 }
 
 void GameManager::showMap(TTF_Font *font){
-	drawBoard(renderer,board);
+	Screen::drawBoard(renderer,board);
 }
 
 void GameManager::showUnitMenu(){
@@ -568,13 +568,12 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 	return T_SUCCESS;
 }
 
-void GameManager::update(SDL_Renderer* r,TTF_Font *font){
+void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 //	showMap(font);
-	std::cout << "GameManager::update!" << std::endl;
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
 }
 
 void GameManager::showUnit(Unit* unit,SDL_Renderer *r, TTF_Font* font){
-	drawUnit(unit,r,font);
+	Screen::drawUnit(unit,r,font);
 }

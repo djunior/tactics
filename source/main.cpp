@@ -14,7 +14,7 @@
 #include "board.h"
 #include "gameManager.h"
 #include "unit.h"
-
+#include "drawFunctions.h"
 
 int main(int argc, char *argv[]){
 
@@ -48,6 +48,8 @@ int main(int argc, char *argv[]){
         cout << SDL_GetError() << endl;
         return 1;
     }
+
+    Screen::init(renderer);
 
     Board gameBoard(3,3);
     GameManager gm(&gameBoard, renderer);
@@ -106,7 +108,7 @@ int main(int argc, char *argv[]){
 
     FpsControl fpsControl(60);
 
-
+    gm.startGame();
     std::cout << "Pressione S para iniciar a partida" << std::endl;
     while (Running) 
     {
@@ -158,8 +160,10 @@ int main(int argc, char *argv[]){
 			SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
 
 			//FPS END
-			gm.update(renderer,font);
+			SDL_Rect uRect;
+			gm.update(renderer,font,&uRect);
 
+			//SDL_RenderCopy(renderer,texture,NULL,&uRect);
 			SDL_RenderPresent(renderer);
     	}
     }
