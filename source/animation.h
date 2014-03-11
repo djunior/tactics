@@ -7,6 +7,7 @@ void sdlInit();
 void textInit();
 void loadFont(TTF_Font **);
 SDL_Surface *textContent(TTF_Font *,char *,SDL_Color);
+void write(SDL_Renderer*,TTF_Font *, string,SDL_Color text_color,SDL_Rect rectText);
 
 class framesPerSecond
 {
@@ -35,7 +36,7 @@ class framesPerSecond
 		//FUNCTIONS:
 		void plus();
 		double calculate();
-		SDL_Texture *show(SDL_Renderer*, TTF_Font *);
+		void show(SDL_Renderer*, TTF_Font *);
 		void fpsControl(int limit_fps);
 		bool isFrameDone();
 };

@@ -31,8 +31,6 @@ int main(int argc, char *argv[]){
     SDL_Rect rectMap,rectChar;
 
     TTF_Font *font;
-    SDL_Texture *tTexture;
-    SDL_Rect rectText;
 
     framesPerSecond fps;
     Board gameBoard(8,8);
@@ -151,9 +149,7 @@ int main(int argc, char *argv[]){
 			{
 				actual = fps.setEnd();
 			}
-			tTexture = fps.show(renderer,font);
-			rectText = fps.getRect();
-			SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+			fps.show(renderer,font);
 
 			//FPS END
 
