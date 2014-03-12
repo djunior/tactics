@@ -109,7 +109,6 @@ int main(int argc, char *argv[]){
     FpsControl fpsControl(60);
 
     gm.startGame();
-    std::cout << "Pressione S para iniciar a partida" << std::endl;
     while (Running) 
     {
     	if (fpsControl.isFrameDone()) {
