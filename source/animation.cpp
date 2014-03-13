@@ -29,7 +29,6 @@ void textInit()
 void loadFont(TTF_Font **font)
 {
     *font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
-    cerr << *font << endl;
     if (font == NULL)
     {
 	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
@@ -77,6 +76,39 @@ void write(
     rectText.h=h;
 
     SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+};
+
+SDL_Rect write(
+	SDL_Renderer* renderer,
+	TTF_Font *font, 
+	string text,
+	SDL_Color text_color,
+	SDL_Rect rectText,
+	float scale
+	)
+{
+	SDL_Texture *tTexture;
+	SDL_Surface *tSurface;
+
+	int w,h;
+	float wF,hF;
+
+    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
+    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
+    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
+    SDL_FreeSurface(tSurface);
+
+    wF = w*scale;
+    hF = h*scale;
+    w = (int)wF;
+    h = (int)hF;
+
+    rectText.w=w;
+    rectText.h=h;
+
+    SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+
+    return rectText;
 };
 
 /*=============================
