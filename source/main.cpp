@@ -51,31 +51,9 @@ int main(int argc, char *argv[]){
 
     Screen::init(renderer);
 
-    Board gameBoard(3,3);
+    Board gameBoard(8,4);
     GameManager gm(&gameBoard, renderer);
 
-    //Load Content
-    int w=0,h=0;
-    Map = IMG_LoadTexture(renderer,"images\\mapa.jpg");
-    SDL_QueryTexture(Map, NULL, NULL, &w, &h);
-    rectMap.x = 0;
-    rectMap.y = 0;
-    rectMap.w = w;
-    rectMap.h = h;
-
-    Char = IMG_LoadTexture(renderer, "images\\char_lanca.png");
-    SDL_QueryTexture(Char, NULL, NULL, &w, &h);
-    rectChar.x = 350;
-    rectChar.y = 200;
-    rectChar.w = w/2;
-    rectChar.h = h;
-
-    SDL_Rect src;
-    src.x=0;
-    src.y=0;
-    src.w=w/4;
-    src.h=h/2;
-    
     // FPS Setup BEGIN
 
     font = loadFont();  
@@ -102,8 +80,6 @@ int main(int argc, char *argv[]){
 //    gm.createUnit("knight",TEAM_B);
 
     gameBoard.debug_showMap();
-    //gm.startGame();
-
     // Unit create END
 
     FpsControl fpsControl(60);
@@ -137,9 +113,6 @@ int main(int argc, char *argv[]){
 				}
 			}
 
-//			SDL_RenderCopy(renderer, Map, NULL, &rectMap);
-//			SDL_RenderCopy(renderer, Char, &src, &rectChar);
-//
 //			//FPS BEGIN
 //
 			fps.plus();
@@ -162,7 +135,6 @@ int main(int argc, char *argv[]){
 			SDL_Rect uRect;
 			gm.update(renderer,font,&uRect);
 
-			//SDL_RenderCopy(renderer,texture,NULL,&uRect);
 			SDL_RenderPresent(renderer);
     	}
     }

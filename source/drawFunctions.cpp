@@ -9,42 +9,55 @@
 
 namespace Screen {
 
-SDL_Texture* unit_texture;
+SDL_Texture* unit_texture, *background_texture;
 bool isInitialized = false;
 
 void init(SDL_Renderer* renderer){
 	unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+	background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
 
 	isInitialized = true;
 }
 
 void drawBoard(SDL_Renderer *renderer, Board* board) {
-//	int x = BOARD_INITIAL_X;
-//	int y = BOARD_INITIAL_Y;
-//
-//	int endX = BOARD_INITIAL_X + BOARD_BLOCK_SIZE*board->getMaxBoardX();
-//	int endY = BOARD_INITIAL_Y + BOARD_BLOCK_SIZE*board->getMaxBoardY();
+	int x = BOARD_INITIAL_X;
+	int y = BOARD_INITIAL_Y;
 
-//	SDL_SetRenderDrawColor(renderer,255,255,255,SDL_ALPHA_OPAQUE);
-//
-//	// Linha no eixo x
-//	SDL_RenderDrawLine(renderer,x,y,endX,y);
-//
-//	// Linha no eixo y
-//	SDL_RenderDrawLine(renderer,x,y,x,endY);
-//
-//	// Linha paralela ao eixo x, deslocada de endX
-//	SDL_RenderDrawLine(renderer,endX,y,endX,endY);
-//
-//	// Linha paralela ao eixo y, deslocada de endY
-//	SDL_RenderDrawLine(renderer,x,endY,endX,endY);
-//
-//	SDL_RenderPresent(renderer);
+	int endX = BOARD_INITIAL_X + BOARD_BLOCK_SIZE*board->getMaxBoardX();
+	int endY = BOARD_INITIAL_Y + BOARD_BLOCK_SIZE*board->getMaxBoardY();
 
+	SDL_Rect rect;
 
-//    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
-//    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-//    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 1280;
+    rect.h = 720;
+
+    SDL_RenderCopy(renderer, background_texture, NULL, &rect);
+
+	SDL_SetRenderDrawColor(renderer,0,0,0,SDL_ALPHA_OPAQUE);
+
+	// Linha no eixo x
+	SDL_RenderDrawLine(renderer,x,y,endX,y);
+
+	// Linha no eixo y
+	SDL_RenderDrawLine(renderer,x,y,x,endY);
+
+	// Linha paralela ao eixo x, deslocada de endX
+	SDL_RenderDrawLine(renderer,endX,y,endX,endY);
+
+	// Linha paralela ao eixo y, deslocada de endY
+	SDL_RenderDrawLine(renderer,x,endY,endX,endY);
+
+	for (unsigned int i=1; i < board->getMaxBoardX();i++){
+		unsigned int xi = x+BOARD_BLOCK_SIZE*i;
+		SDL_RenderDrawLine(renderer,xi,y,xi,endY);
+	}
+
+	for (unsigned int i=1; i < board->getMaxBoardY();i++){
+		unsigned int yi = y+BOARD_BLOCK_SIZE*i;
+		SDL_RenderDrawLine(renderer,x,yi,endX,yi);
+	}
 }
 
 void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
@@ -60,8 +73,8 @@ void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
 
     SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
     // TODO: Inverter o X e Y do Board
-    rectChar.y = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
-    rectChar.x = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
+    rectChar.y = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
+    rectChar.x = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
     rectChar.w = BOARD_BLOCK_SIZE;
     rectChar.h = BOARD_BLOCK_SIZE;
 

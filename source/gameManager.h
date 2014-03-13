@@ -55,7 +55,7 @@ private:
 	T_ERROR selectSpellTargets(SDL_Keycode key);
 
 	void showMap();
-	void showMap(TTF_Font *);
+	void showMap(SDL_Renderer *);
 	void showUnit(Unit*);
 	void showUnit(Unit*,SDL_Renderer*,TTF_Font *);
 	void showUnitMenu();

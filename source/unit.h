@@ -22,7 +22,7 @@ class Spell;
 class Unit {
 
 protected:
-	unsigned int x, y, hp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
+	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
 	std::string unitClassName;
 	int speed;
 	bool dead;
@@ -45,6 +45,7 @@ public:
 	int getSpeed();
 	unsigned int getMove();
 	unsigned int getHp();
+	unsigned int getMaxHp();
 	unsigned int getRange();
 	unsigned int getAttackDamage();
 	unsigned int getActionsPerTurn();

@@ -15,7 +15,7 @@ Board::Board(int width, int length){
 
 	for (int x = 0; x < maxBoardX; x++){
 		for (int y = 0; y < maxBoardY; y++){
-			boardMap[x][y] = 0;
+			boardMap[y][x] = 0;
 		}
 	}
 }
@@ -27,10 +27,10 @@ T_ERROR Board::addUnit(Unit * u, unsigned int x, unsigned int y){
 	if ((x > maxBoardX) || (y > maxBoardY))
 		return T_ERROR_OUT_OF_BOUNDS;
 
-	if (boardMap[x][y] != 0)
+	if (boardMap[y][x] != 0)
 		return T_ERROR_INVALID_LOCATION;
 
-	boardMap[x][y] = u;
+	boardMap[y][x] = u;
 
 	u->setOrigin(x,y);
 
@@ -40,22 +40,22 @@ T_ERROR Board::addUnit(Unit * u, unsigned int x, unsigned int y){
 T_ERROR Board::addUnit(Unit *u){
 	std::cout << "Board::addUnit Adicionando unidade " << u << std::endl;
 	unsigned int ix = 0, iy = 0;
-
+	std::cout << "MAX BOARD Y: " << maxBoardY << std::endl;
 	if (u->getTeam() == TEAM_B)
-		iy = maxBoardY-1;
+		ix = maxBoardX-1;
 
-	while(boardMap[ix][iy] != 0) {
-		ix++;
-		if (ix == maxBoardX) {
-			ix = 0;
+	while(boardMap[iy][ix] != 0) {
+		iy++;
+		if (iy == maxBoardY) {
+			iy = 0;
 			if (u->getTeam() == TEAM_A)
-				iy++;
+				ix++;
 			else
-				iy--;
+				ix--;
 		}
-		if (iy == maxBoardY)
+		if (ix == maxBoardX)
 			return T_ERROR_MAP_FULL;
-		else if(iy < 0)
+		else if(ix < 0)
 			return T_ERROR_MAP_FULL;
 	};
 
@@ -70,16 +70,16 @@ T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 
 	if ((x > maxBoardX) || (y > maxBoardY))
 		return T_ERROR_OUT_OF_BOUNDS;
-	std::cout << "BoardMap na posicao (" << x << "," << y << ") = " << boardMap[x][y] << std::endl;
+	std::cout << "BoardMap na posicao (" << y << "," << x << ") = " << boardMap[y][x] << std::endl;
 
-	if (boardMap[x][y] != 0)
+	if (boardMap[y][x] != 0)
 		return T_ERROR_INVALID_LOCATION;
 
-	if (boardMap[u->getX()][u->getY()] != u)
+	if (boardMap[u->getY()][u->getX()] != u)
 		return T_ERROR_INVALID_UNIT;
 
-	boardMap[u->getX()][u->getY()] = 0;
-	boardMap[x][y] = u;
+	boardMap[u->getY()][u->getX()] = 0;
+	boardMap[y][x] = u;
 
 	u->setOrigin(x,y);
 
@@ -90,12 +90,12 @@ T_ERROR Board::checkUnitsInVicinity(Unit *u, unsigned int range, vector<Unit*> *
 	if (u == 0)
 		return T_ERROR_INVALID_UNIT;
 
-	for (int x=u->getX()-range; x <= u->getX()+range; x++) {
-		if (x >=0 && x < maxBoardX) {
-			for (int y=u->getY()-range; y <= u->getY()+range; y++) {
-				if (y >= 0 && y < maxBoardY) {
-					if (x != u->getX() && y != u->getY() && boardMap[x][y] != 0){
-						targetList->push_back(boardMap[x][y]);
+	for (int y=u->getY()-range; y <= u->getY()+range; y++) {
+		if (y >=0 && y < maxBoardY) {
+			for (int x=u->getX()-range; x <= u->getX()+range; x++) {
+				if (x >= 0 && y < maxBoardX) {
+					if (x != u->getX() && y != u->getY() && boardMap[y][x] != 0){
+						targetList->push_back(boardMap[y][x]);
 					}
 				}
 			}
@@ -110,7 +110,7 @@ Unit* Board::getUnitAt(unsigned int x, unsigned int y){
 		return 0;
 
 	// Isso vai ser ou uma unidade ou 0
-	return boardMap[x][y];
+	return boardMap[y][x];
 }
 
 T_ERROR Board::removeUnit(Unit * unit){
@@ -120,10 +120,10 @@ T_ERROR Board::removeUnit(Unit * unit){
 	if (unit->getX() > maxBoardX || unit->getY() > maxBoardY)
 		return T_ERROR_OUT_OF_BOUNDS;
 
-	if (boardMap[unit->getX()][unit->getY()] == 0 || boardMap[unit->getX()][unit->getY()] != unit)
+	if (boardMap[unit->getY()][unit->getX()] == 0 || boardMap[unit->getY()][unit->getX()] != unit)
 		return T_ERROR_INVALID_UNIT;
 
-	boardMap[unit->getX()][unit->getY()] = 0;
+	boardMap[unit->getY()][unit->getX()] = 0;
 
 	return T_SUCCESS;
 }
@@ -134,10 +134,10 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 
 	if (shape == AOE_SHAPE_POINT) {
 
-		if (boardMap[x][y] == 0)
+		if (boardMap[y][x] == 0)
 			return T_ERROR_INVALID_UNIT;
 
-		targetList->push_back(boardMap[x][y]);
+		targetList->push_back(boardMap[y][x]);
 
 	} else if (shape == AOE_SHAPE_LINE) {
 
@@ -164,13 +164,13 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 
 		if (axis == BOARD_AXIS_X || axis == BOARD_AXIS_X_MINUS) {
 			for (int i=x;i<maxBoardX;i++) {
-				if (boardMap[i][y] != 0)
-					targetList->push_back(boardMap[i][y]);
+				if (boardMap[y][i] != 0)
+					targetList->push_back(boardMap[y][i]);
 			}
 		} else if (axis == BOARD_AXIS_Y || axis == BOARD_AXIS_Y_MINUS) {
 			for (int i=y;i<maxBoardY;i++) {
-				if (boardMap[x][i] != 0){
-					targetList->push_back(boardMap[x][i]);
+				if (boardMap[i][x] != 0){
+					targetList->push_back(boardMap[i][x]);
 				}
 			}
 		}
@@ -192,10 +192,10 @@ unsigned int Board::getMaxBoardY(){
 
 void Board::debug_showMap(){
 	std::cout << "Dump do tabuleiro:" << std::endl;
-	for (int x = 0; x < maxBoardX; x++){
-		for (int y = 0; y < maxBoardY; y++){
+	for (int y = 0;y < maxBoardY; y++){
+		for (int x = 0; x < maxBoardX; x++){
 
-			if (boardMap[x][y] == 0)
+			if (boardMap[y][x] == 0)
 				std::cout << " . ";
 			else
 				std::cout << " U ";

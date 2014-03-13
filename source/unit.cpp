@@ -13,6 +13,7 @@ Unit::Unit (T_TEAM t){
 	x = 0;
 	y = 0;
 	hp = UNIT_DEFAULT_HP;
+	maxHp = UNIT_DEFAULT_HP;
 	attackDamage = UNIT_DEFAULT_DAMAGE;
 	armor = UNIT_DEFAULT_ARMOR;
 	level = UNIT_DEFAULT_LEVEL;
@@ -78,6 +79,10 @@ int Unit::getSpeed(){
 
 unsigned int Unit::getHp(){
 	return hp;
+}
+
+unsigned Unit::getMaxHp(){
+	return maxHp;
 }
 
 unsigned int Unit::getMove(){

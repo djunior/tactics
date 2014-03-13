@@ -406,11 +406,11 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	if (direction == SDLK_LEFT)
 		e = board->moveUnit(unit,unit->getX()-1,unit->getY());
 	else if (direction == SDLK_DOWN)
-		e =board->moveUnit(unit,unit->getX(),unit->getY()-1);
+		e =board->moveUnit(unit,unit->getX(),unit->getY()+1);
 	else if (direction== SDLK_RIGHT)
 		e = board->moveUnit(unit,unit->getX()+1,unit->getY());
 	else if (direction == SDLK_UP)
-		e = board->moveUnit(unit,unit->getX(),unit->getY()+1);
+		e = board->moveUnit(unit,unit->getX(),unit->getY()-1);
 
 	if (e == T_SUCCESS) {
 		movesPerTurn--;
@@ -428,7 +428,7 @@ void GameManager::showMap(){
 	board->debug_showMap();
 }
 
-void GameManager::showMap(TTF_Font *font){
+void GameManager::showMap(SDL_Renderer* r){
 	Screen::drawBoard(renderer,board);
 }
 
@@ -473,13 +473,13 @@ T_ERROR GameManager::selectCombatTarget(SDL_Keycode key){
 			e = board->checkUnitsInAOE(unit->getX()-1,unit->getY(),unit->getRange(),BOARD_AXIS_X_MINUS,unit->getAttackArea(),&targets);
 			break;
 		case SDLK_DOWN:
-			e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,unit->getRange(),BOARD_AXIS_Y_MINUS,unit->getAttackArea(),&targets);
+			e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,unit->getRange(),BOARD_AXIS_Y,unit->getAttackArea(),&targets);
 			break;
 		case SDLK_RIGHT:
 			e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),unit->getRange(),BOARD_AXIS_X,unit->getAttackArea(),&targets);
 			break;
 		case SDLK_UP:
-			e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,unit->getRange(),BOARD_AXIS_Y,unit->getAttackArea(),&targets);
+			e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,unit->getRange(),BOARD_AXIS_Y_MINUS,unit->getAttackArea(),&targets);
 			break;
 	}
 
@@ -503,13 +503,13 @@ T_ERROR GameManager::selectSpellTargets(SDL_Keycode key){
 			e = board->checkUnitsInAOE(unit->getX()-1,unit->getY(),activeSpell->getRange(),BOARD_AXIS_X_MINUS,activeSpell->getAreaOfEffect(),&targets);
 			break;
 		case SDLK_DOWN:
-			e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,activeSpell->getRange(),BOARD_AXIS_Y_MINUS,activeSpell->getAreaOfEffect(),&targets);
+			e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,activeSpell->getRange(),BOARD_AXIS_Y,activeSpell->getAreaOfEffect(),&targets);
 			break;
 		case SDLK_RIGHT:
 			e = board->checkUnitsInAOE(unit->getX()+1,unit->getY(),activeSpell->getRange(),BOARD_AXIS_X,activeSpell->getAreaOfEffect(),&targets);
 			break;
 		case SDLK_UP:
-			e = board->checkUnitsInAOE(unit->getX(),unit->getY()+1,activeSpell->getRange(),BOARD_AXIS_Y,activeSpell->getAreaOfEffect(),&targets);
+			e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,activeSpell->getRange(),BOARD_AXIS_Y_MINUS,activeSpell->getAreaOfEffect(),&targets);
 			break;
 	}
 
@@ -569,7 +569,7 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 }
 
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
-//	showMap(font);
+	showMap(r);
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
 }

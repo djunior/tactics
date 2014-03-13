@@ -14,9 +14,9 @@
 #include "basic_includes.h"
 #include "animation.h"
 
-#define BOARD_INITIAL_X 300
-#define BOARD_INITIAL_Y 100
-#define BOARD_BLOCK_SIZE 80
+#define BOARD_INITIAL_X 250
+#define BOARD_INITIAL_Y 230
+#define BOARD_BLOCK_SIZE 100
 #define SPRITE_UNIT "images\\char_lanca.png"
 
 namespace Screen {
