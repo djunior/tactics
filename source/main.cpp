@@ -9,11 +9,14 @@
 #include "basic_includes.h"
 
 #include "animation.h"
-#include "fpsControl.h"
+#include "menu.h"
+
+#include "mouse.h"
 
 #include "board.h"
 #include "gameManager.h"
 #include "unit.h"
+
 #include "drawFunctions.h"
 
 int main(int argc, char *argv[]){
@@ -21,7 +24,8 @@ int main(int argc, char *argv[]){
     sdlInit();
     textInit();
 
-    bool Running = true;
+    bool Starting = true;
+    bool Running = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Event Event;
@@ -30,8 +34,6 @@ int main(int argc, char *argv[]){
     SDL_Rect rectMap,rectChar;
 
     TTF_Font *font;
-    SDL_Texture *tTexture;
-    SDL_Rect rectText;
 
     framesPerSecond fps;
 
@@ -54,14 +56,22 @@ int main(int argc, char *argv[]){
     Board gameBoard(8,4);
     GameManager gm(&gameBoard, renderer);
 
+    
+    //Load Content
+    int x,y;
+
+    loadFont(&font);  
+
+    mWindow menu(font,renderer);
+    
     // FPS Setup BEGIN
 
-    font = loadFont();  
-
+    fps.fpsControl(60);
+    
     fps.setFrames(0);
     time_t hold;
     time_t actual;
-    hold = fps.start();
+    hold = fps.setStart();
     actual = hold;
 
     // FPS Setup END
@@ -82,21 +92,20 @@ int main(int argc, char *argv[]){
     gameBoard.debug_showMap();
     // Unit create END
 
-    FpsControl fpsControl(60);
+    menu.mainMenu();
 
-    gm.startGame();
-    while (Running) 
+    while (Starting)
     {
-    	if (fpsControl.isFrameDone()) {
-
-    		SDL_RenderClear(renderer);
-
-    		while(SDL_PollEvent(&Event))
+    	if (fps.isFrameDone())
+    	{
+    	
+	    	while(SDL_PollEvent(&Event))
 			{
 				switch(Event.type)
 				{
 					case SDL_QUIT:
 						Running = false;
+						Starting = false;
 						break;
 
 					case SDL_KEYDOWN:
@@ -104,40 +113,102 @@ int main(int argc, char *argv[]){
 						{
 							case SDLK_ESCAPE:
 								Running = false;
+								Starting = false;
 								break;
-							default:
-								gm.processEvent(&Event);
 						}
 						break;
 
+					case SDL_MOUSEBUTTONDOWN:
+							switch(Event.button.button)
+							{
+								case SDL_BUTTON_LEFT:
+									switch(menu.btnHit())
+									{
+										case 0:
+											Starting = false;
+											Running = true;
+											gm.startGame();
+											break;
+										case 1:
+											Running = false;
+											Starting = false;
+											break;
+										default:
+											break;
+									}
+									break;
+							}
+							break;
 				}
+				menu.show();
+				SDL_RenderPresent(renderer);
 			}
+		}
+	    while (Running) 
+	    {
 
-//			//FPS BEGIN
-//
-			fps.plus();
-			if (actual != hold)
-			{
-				fps.calculate();
-				fps.setFrames(0);
-				hold = fps.end();
+	    	if (fps.isFrameDone()) {
 
-			}
-			else
-			{
-				actual = fps.end();
-			}
-			tTexture = fps.show(renderer,font);
-			rectText = fps.getRect();
-			SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+	    		SDL_RenderClear(renderer);
 
-			//FPS END
-			SDL_Rect uRect;
-			gm.update(renderer,font,&uRect);
+				while(SDL_PollEvent(&Event))
+				{
+					switch(Event.type)
+					{
+						case SDL_QUIT:
+							Running = false;
+							Starting = false;
+							break;
 
-			SDL_RenderPresent(renderer);
-    	}
-    }
+						case SDL_KEYDOWN:
+							switch(Event.key.keysym.sym)
+							{
+								case SDLK_ESCAPE:
+									Running = false;
+									break;
+								case SDLK_BACKSPACE:
+									Running = false;
+									Starting = true;
+									break;
+								default:
+									gm.processEvent(&Event);
+							}
+							break;
+						case SDL_MOUSEBUTTONDOWN:
+							switch(Event.button.button)
+							{
+								case SDL_BUTTON_LEFT:
+									SDL_GetMouseState(&x, &y);
+							}
+							break;
+					}
+				}
+
+				//FPS BEGIN
+
+				fps.plus();
+				if (actual != hold)
+				{
+					fps.calculate();
+					fps.setFrames(0);
+					hold = fps.setEnd();
+
+				}
+				else
+				{
+					actual = fps.setEnd();
+				}				
+				//FPS END
+
+				SDL_Rect uRect;
+				gm.update(renderer,font,&uRect);
+
+				fps.show(renderer,font);
+
+				SDL_RenderPresent(renderer);
+	    	}
+	    }
+	}
 
 	SDL_Quit();
 	return EXIT_SUCCESS;
