@@ -128,6 +128,26 @@ int main(int argc, char *argv[]){
 								break;
 						}
 						break;
+
+					case SDL_MOUSEBUTTONDOWN:
+							switch(Event.button.button)
+							{
+								case SDL_BUTTON_LEFT:
+									switch(menu.btnHit())
+									{
+										case 0:
+											Starting = false;
+											Running = true;
+											break;
+										case 1:
+											Running = false;
+											Starting = false;
+											break;
+										default:
+											break;
+									}
+							}
+							break;
 				}
 				menu.show();
 				SDL_RenderPresent(renderer);
@@ -152,7 +172,10 @@ int main(int argc, char *argv[]){
 							{
 								case SDLK_ESCAPE:
 									Running = false;
-									Starting = false;
+									break;
+								case SDLK_BACKSPACE:
+									Running = false;
+									Starting = true;
 									break;
 								case SDLK_RIGHT:
 									rectChar.x+=10;

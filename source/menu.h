@@ -3,6 +3,7 @@
 
 #include "basic_includes.h"
 #include "animation.h"
+#include "mouse.h"
 
 #include <vector>
 
@@ -13,8 +14,8 @@
 #define MARGIN_X 20
 #define MARGIN_Y 15
 
-#define WHITE {255,255,255}
-#define BLACK {0,0,0}
+#define SELECTED {255,255,255}
+#define NOT_SELECTED {70,70,70}
 
 #define BUTTON_IMG "images\\btn_blue_sprite.gif"
 #define MAIN_MENU_BKG "images\\fft_wallpaper.jpg"
@@ -29,16 +30,20 @@ class mButton
 		string text;
 		SDL_Color text_color;
 		TTF_Font *font;
+		float scale;
+
 	public:
 		mButton(SDL_Renderer*, TTF_Font*);
 		mButton(SDL_Renderer*, TTF_Font*, int, int);
 		mButton(SDL_Renderer*, TTF_Font*, int, int, string);
+		void setScale(float);
 		void setIsSelected(bool);
 		void setPosition(int,int);
 		void setColor(SDL_Color);
 		void setText(string);
 		void setText(float);
 		string getText();
+		bool bHit();
 		void show(SDL_Renderer*);
 };
 
@@ -52,14 +57,18 @@ class mWindow
 		const char* image;
 		SDL_Texture *mTexture;
 		vector<mButton> buttonList;
+		int btnX, btnY;
+
 	public:
 		mWindow(TTF_Font *,SDL_Renderer*);
 		mWindow(TTF_Font *,SDL_Renderer*,SDL_Rect,string);
 		void setIsOpen(bool);
 		void setRectWin(SDL_Rect);
-		void mWindow::setImage(string);
+		void setImage(string);
+		void setBtnPosition(int,int);
 		bool getIsOpen();
 		SDL_Rect getRectWin();
+		int btnHit();
 		void addButton(string);
 		void init(int,int);
 		void mainMenu();

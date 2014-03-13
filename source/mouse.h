@@ -3,6 +3,6 @@
 
 #include "basic_includes.h"
 
-bool hit();
+bool hit(SDL_Rect);
 
 #endif
