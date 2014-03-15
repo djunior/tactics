@@ -570,10 +570,26 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showMap(r);
+	if (context == UNIT_MOVE){
+		BOARD_AOE area;
+
+		area.x = (*activeUnit)->getX();
+		area.y = (*activeUnit)->getY();
+		area.range = 1;
+		area.shape = AOE_SHAPE_CROSS;
+
+		showHighlightedArea(r,&area);
+	}
+
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
+
 }
 
 void GameManager::showUnit(Unit* unit,SDL_Renderer *r, TTF_Font* font){
 	Screen::drawUnit(unit,r,font);
+}
+
+void GameManager::showHighlightedArea(SDL_Renderer*r,BOARD_AOE* area){
+	Screen::drawHighlightedArea(r,board,area);
 }

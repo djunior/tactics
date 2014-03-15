@@ -23,8 +23,17 @@ enum BOARD_AXIS {
 	BOARD_AXIS_Y_MINUS,
 };
 
+struct BOARD_AOE{
+	int x = 0;
+	int y = 0;
+	int range = 0;
+	AOE_SHAPE shape = AOE_SHAPE_POINT;
+	BOARD_AXIS axis = BOARD_AXIS_X;
+};
+
 typedef enum BOARD_AXIS BOARD_AXIS;
 typedef enum AOE_SHAPE AOE_SHAPE;
+typedef struct BOARD_AOE BOARD_AOE;
 
 class Board;
 

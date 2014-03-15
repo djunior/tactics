@@ -22,6 +22,7 @@
 namespace Screen {
 	extern void init(SDL_Renderer*);
 	extern void drawBoard(SDL_Renderer*, Board*);
+	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*);
 	extern void drawUnit(Unit*, SDL_Renderer*, TTF_Font*);
 //	void drawUnit(Knight*, SDL_Renderer*, TTF_Font*);
 //	void drawUnit(Wizard*, SDL_Renderer*, TTF_Font*);

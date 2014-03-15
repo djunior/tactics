@@ -109,4 +109,48 @@ void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
 
 }
 
+void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
+
+	SDL_SetRenderDrawColor(renderer,0,0,255,200);
+
+	if (area->shape == AOE_SHAPE_CROSS){
+
+		int ix = area->x - area->range;
+		if (ix < 0)
+			ix = 0;
+
+		int iy = area->y - area->range;
+		if (iy < 0)
+			iy = 0;
+
+		int fx = area->x + area->range;
+		if (fx >= board->getMaxBoardX())
+			fx = board->getMaxBoardX() - 1;
+
+		int fy = area->y + area->range;
+		if (fy >= board->getMaxBoardY())
+			fy = board->getMaxBoardY() - 1;
+
+		SDL_Rect rect;
+	    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
+	    rect.y = BOARD_INITIAL_Y + 5 + area->y*BOARD_BLOCK_SIZE;
+		rect.w = BOARD_BLOCK_SIZE - 10;
+		rect.h = BOARD_BLOCK_SIZE - 10;
+
+		for (int x = ix; x <= fx; x++){
+			rect.x = BOARD_INITIAL_X + 5 + x*BOARD_BLOCK_SIZE;
+			SDL_RenderFillRect(renderer,&rect);
+		}
+
+	    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
+
+		for (int y = iy; y <= fy; y++){
+			rect.y = BOARD_INITIAL_Y + 5 + y*BOARD_BLOCK_SIZE;
+			SDL_RenderFillRect(renderer,&rect);
+		}
+
+	}
+
+}
+
 }

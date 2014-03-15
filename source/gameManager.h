@@ -63,6 +63,7 @@ private:
 	void showMoveOptions();
 	void showAttackOptions();
 	void showTargetOptions();
+	void showHighlightedArea(SDL_Renderer*,BOARD_AOE*);
 
 public:
 	GameManager(Board* newBoard,SDL_Renderer* r);
