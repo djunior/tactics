@@ -33,7 +33,7 @@ void drawBoard(SDL_Renderer *renderer, Board* board) {
     rect.w = 1280;
     rect.h = 720;
 
-    SDL_RenderCopy(renderer, background_texture, NULL, &rect);
+    SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
 	SDL_SetRenderDrawColor(renderer,0,0,0,SDL_ALPHA_OPAQUE);
 
@@ -72,9 +72,9 @@ void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
 	SDL_Rect rectChar;
 
     SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
-    // TODO: Inverter o X e Y do Board
-    rectChar.y = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
+
     rectChar.x = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
+    rectChar.y = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
     rectChar.w = BOARD_BLOCK_SIZE;
     rectChar.h = BOARD_BLOCK_SIZE;
 
@@ -85,6 +85,28 @@ void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
     src.h=h/2;
 
     SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+
+	SDL_Rect healthBar;
+	healthBar.w = rectChar.w - 20;
+	healthBar.h = 5;
+
+	healthBar.x = rectChar.x + (rectChar.w - healthBar.w)/2;
+	healthBar.y = rectChar.y;
+
+	SDL_SetRenderDrawColor(renderer,255,0,0,SDL_ALPHA_OPAQUE);
+/*
+	std::cout << "HEALTH BAR *" << &healthBar << std::endl;
+	std::cout << "x=" << healthBar.x << " y= " << healthBar.y << std::endl;
+	std::cout << "w=" << healthBar.w << " h= " << healthBar.h << std::endl;
+*/
+	SDL_RenderFillRect(renderer,&healthBar);
+
+	healthBar.w = (unit->getHp() * healthBar.w) / unit->getMaxHp();
+
+	SDL_SetRenderDrawColor(renderer,0,255,0,SDL_ALPHA_OPAQUE);
+
+	SDL_RenderFillRect(renderer,&healthBar);
+
 }
 
 }

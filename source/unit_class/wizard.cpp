@@ -10,6 +10,7 @@
 Wizard::Wizard(T_TEAM t) : Unit(t) {
 
 	hp = WIZARD_HP;
+	maxHp = WIZARD_HP;
 	attackDamage = WIZARD_DAMAGE;
 	armor = WIZARD_ARMOR;
 	move = WIZARD_MOVE;
