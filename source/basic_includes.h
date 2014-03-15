@@ -2,6 +2,7 @@
 #define basic_includes_h
 
 #include <string>
+#include <vector>
 
 using namespace std;
 

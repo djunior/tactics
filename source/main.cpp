@@ -26,16 +26,16 @@ int main(int argc, char *argv[]){
 
     bool Starting = true;
     bool Running = false;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
     SDL_Event Event;
-
-    SDL_Texture *Map,*Char;
-    SDL_Rect rectMap,rectChar;
-
+    
+    SDL_Renderer* renderer;
     TTF_Font *font;
 
     framesPerSecond fps;
+
+    SDL_Window* window;
+    int min_wWindow = 850;
+    int min_hWindow = 480;
 
     // OnInit
 
@@ -45,6 +45,9 @@ int main(int argc, char *argv[]){
 		SDL_Quit();
 		return 1;
 	}
+
+	SDL_SetWindowMinimumSize(window,min_wWindow,min_hWindow);
+
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED );
     if (renderer == NULL){
         cout << SDL_GetError() << endl;
@@ -62,7 +65,7 @@ int main(int argc, char *argv[]){
 
     loadFont(&font);  
 
-    mWindow menu(font,renderer);
+    mWindow menu(font,renderer,window);
     
     // FPS Setup BEGIN
 

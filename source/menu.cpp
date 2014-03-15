@@ -80,6 +80,11 @@ void mButton::setText(float btnFloat)
 	text = btnText;
 };
 
+SDL_Rect mButton::getRect()
+{
+	return rectBtn;
+};
+
 string mButton::getText()
 {
 	return text;
@@ -106,16 +111,17 @@ void mButton::show(SDL_Renderer* renderer)
 	SDL_Color colorNotSel = NOT_SELECTED;
 
 	SDL_Rect rectText;
-	rectText.x = rectBtn.x + MARGIN_X;
-	rectText.y = rectBtn.y + MARGIN_Y;
-	rectText = write(renderer,font,text,text_color,rectText,1);
+	rectText.x = rectBtn.x + MARGIN_X*scale;
+	rectText.y = rectBtn.y + MARGIN_Y*scale;
 
-	rectBtn.h = (int)scale*BUTTON_H;
-	rectBtn.w = (int)scale*(2*MARGIN_X + rectText.w + 5);
+	rectText = simWrite(renderer,font,text,text_color,rectText,1);
+
+	rectBtn.h = (int)BUTTON_H*scale;
+	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
 
 	bHit();
 
-	rectBtn.w = (int)scale*(MARGIN_X + rectText.w);
+	rectBtn.w = (int)(MARGIN_X + rectText.w)*scale;
 
 	if(isSelected == false) 
 	{
@@ -128,9 +134,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)scale*(MARGIN_X + rectText.w);
-		rectBtn.h = (int)scale*BUTTON_H;
-		rectBtn.w = (int)scale*(5 + MARGIN_X);
+		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
+		rectBtn.h = (int)BUTTON_H*scale;
+		rectBtn.w = (int)(5 + MARGIN_X)*scale;
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 2*BUTTON_H + 2*BUTTON_SEPARATION;
@@ -151,9 +157,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)scale*(MARGIN_X + rectText.w);
-		rectBtn.h = (int)scale*BUTTON_H;
-		rectBtn.w = (int)scale*(5 + MARGIN_X);
+		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
+		rectBtn.h = (int)BUTTON_H*scale;
+		rectBtn.w = (int)(5 + MARGIN_X)*scale;
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 3*BUTTON_H + 3*BUTTON_SEPARATION;
@@ -163,7 +169,7 @@ void mButton::show(SDL_Renderer* renderer)
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 		
 	}
-	rectBtn.w = (int)scale*(2*MARGIN_X + rectText.w + 5);
+	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
 	setPosition(hold.x,hold.y);
 	write(renderer,font,text,text_color,rectText,scale);
 };
@@ -172,18 +178,39 @@ void mButton::show(SDL_Renderer* renderer)
 MENU
 ===============================*/
 
-mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend)
+mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 {
 	font = f;
 	renderer = rend;
+	window = w;
+
+	int wWindow,hWindow;
+	SDL_GetWindowSize(window,&wWindow,&hWindow);
+	xScale = wWindow/1280;
+	yScale = hWindow/720;
+
 };
 
-mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img)
+mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_Window *w)
 {
 	font = f;
 	rectWin = rect;
 	renderer = rend;
 	image = const_cast<char*>(img.c_str());
+	window = w;
+
+	int wWindow,hWindow;
+	SDL_GetWindowSize(window,&wWindow,&hWindow);
+	xScale = wWindow/1280;
+	yScale = hWindow/720;
+};
+
+void mWindow::setScale()
+{
+	int wWindow,hWindow;
+	SDL_GetWindowSize(window,&wWindow,&hWindow);
+	xScale = (float)wWindow/1280;
+	yScale = (float)hWindow/720;
 };
 
 void mWindow::setIsOpen(bool open)
@@ -250,9 +277,7 @@ void mWindow::init(int x, int y)
 
 void mWindow::mainMenu()
 {
-	setBtnPosition(300,100);
 	addButton("Start Game");
-	setBtnPosition(300,200);
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
 	init(0,0);
@@ -260,9 +285,17 @@ void mWindow::mainMenu()
 
 void mWindow::show()
 {
-	SDL_RenderCopy(renderer, mTexture, NULL, &rectWin);
+	setScale();
+	int x,y,xIncrement;
+	x = (int)MAIN_MENU_DEFAULT_X*xScale;
+	y = (int)MAIN_MENU_DEFAULT_Y*yScale;
+	xIncrement = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+
+	SDL_RenderCopy(renderer, mTexture, NULL, NULL);
 	for (unsigned i=0; i < buttonList.size(); i++)
 	{
+		buttonList[i].setPosition(x,y + xIncrement*i);
+		buttonList[i].setScale(yScale);
 		buttonList[i].show(renderer);
 	}
 };

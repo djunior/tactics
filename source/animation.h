@@ -9,6 +9,7 @@ void loadFont(TTF_Font **);
 SDL_Surface *textContent(TTF_Font *,char *,SDL_Color);
 void write(SDL_Renderer*, TTF_Font *, string, SDL_Color, SDL_Rect);
 SDL_Rect write(SDL_Renderer*, TTF_Font *, string, SDL_Color, SDL_Rect, float);
+SDL_Rect simWrite(SDL_Renderer*, TTF_Font *, string, SDL_Color, SDL_Rect, float);
 
 class framesPerSecond
 {
