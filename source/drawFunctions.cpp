@@ -33,7 +33,7 @@ void drawBoard(SDL_Renderer *renderer, Board* board) {
     rect.w = 1280;
     rect.h = 720;
 
-    SDL_RenderCopy(renderer, background_texture, NULL, NULL);
+    SDL_RenderCopy(renderer, background_texture, NULL, &rect);
 
 	SDL_SetRenderDrawColor(renderer,0,0,0,SDL_ALPHA_OPAQUE);
 
@@ -111,7 +111,8 @@ void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
 
 void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
 
-	SDL_SetRenderDrawColor(renderer,0,0,255,200);
+	SDL_SetRenderDrawColor(renderer,0,0,255,150);
+	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
 	if (area->shape == AOE_SHAPE_CROSS){
 
@@ -125,28 +126,30 @@ void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
 
 		int fx = area->x + area->range;
 		if (fx >= board->getMaxBoardX())
-			fx = board->getMaxBoardX() - 1;
+			fx = board->getMaxBoardX()-1;
 
 		int fy = area->y + area->range;
 		if (fy >= board->getMaxBoardY())
-			fy = board->getMaxBoardY() - 1;
+			fy = board->getMaxBoardY()-1;
 
 		SDL_Rect rect;
-	    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
-	    rect.y = BOARD_INITIAL_Y + 5 + area->y*BOARD_BLOCK_SIZE;
-		rect.w = BOARD_BLOCK_SIZE - 10;
-		rect.h = BOARD_BLOCK_SIZE - 10;
+	    rect.x = BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE;
+	    rect.y = BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE;
+		rect.w = BOARD_BLOCK_SIZE;
+		rect.h = BOARD_BLOCK_SIZE;
 
 		for (int x = ix; x <= fx; x++){
-			rect.x = BOARD_INITIAL_X + 5 + x*BOARD_BLOCK_SIZE;
+			rect.x = BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE;
 			SDL_RenderFillRect(renderer,&rect);
 		}
 
-	    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
+	    rect.x = BOARD_INITIAL_X + area->x*BOARD_BLOCK_SIZE;
 
 		for (int y = iy; y <= fy; y++){
-			rect.y = BOARD_INITIAL_Y + 5 + y*BOARD_BLOCK_SIZE;
-			SDL_RenderFillRect(renderer,&rect);
+			if (y != area->y){
+				rect.y = BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE;
+				SDL_RenderFillRect(renderer,&rect);
+			}
 		}
 
 	}
