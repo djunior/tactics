@@ -88,10 +88,10 @@ namespace Screen {
 
 	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
 
-	    rectChar.x = BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE;
-	    rectChar.y = BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE;
-	    rectChar.w = BOARD_BLOCK_SIZE;
-	    rectChar.h = BOARD_BLOCK_SIZE;
+	    rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
+	    rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
+	    rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
+	    rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
 
 	    SDL_Rect src;
 	    src.x=0;
@@ -126,6 +126,8 @@ namespace Screen {
 
 	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
 
+		setScale();
+
 		SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
 		SDL_SetRenderDrawColor(renderer,0,0,255,170);
@@ -149,20 +151,20 @@ namespace Screen {
 				fy = board->getMaxBoardY() - 1;
 
 			SDL_Rect rect;
-		    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
-		    rect.y = BOARD_INITIAL_Y + 5 + area->y*BOARD_BLOCK_SIZE;
-			rect.w = BOARD_BLOCK_SIZE - 10;
-			rect.h = BOARD_BLOCK_SIZE - 10;
+		    rect.x = (int)(BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE)*xScale;
+		    rect.y = (int)(BOARD_INITIAL_Y + 5 + area->y*BOARD_BLOCK_SIZE)*yScale;
+			rect.w = (int)(BOARD_BLOCK_SIZE - 10)*xScale;
+			rect.h = (int)(BOARD_BLOCK_SIZE - 10)*yScale;
 
 			for (int x = ix; x <= fx; x++){
-				rect.x = BOARD_INITIAL_X + 5 + x*BOARD_BLOCK_SIZE;
+				rect.x = (int)(BOARD_INITIAL_X + 5 + x*BOARD_BLOCK_SIZE)*xScale;
 				SDL_RenderFillRect(renderer,&rect);
 			}
 
-		    rect.x = BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE;
+		    rect.x = (int)(BOARD_INITIAL_X + 5 + area->x*BOARD_BLOCK_SIZE)*xScale;
 
 			for (int y = iy; y <= fy; y++){
-				rect.y = BOARD_INITIAL_Y + 5 + y*BOARD_BLOCK_SIZE;
+				rect.y = (int)(BOARD_INITIAL_Y + 5 + y*BOARD_BLOCK_SIZE)*yScale;
 				SDL_RenderFillRect(renderer,&rect);
 			}
 
