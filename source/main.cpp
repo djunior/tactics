@@ -26,32 +26,37 @@ int main(int argc, char *argv[]){
 
     bool Starting = true;
     bool Running = false;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
     SDL_Event Event;
-
-    SDL_Texture *Map,*Char;
-    SDL_Rect rectMap,rectChar;
-
+    
+    SDL_Renderer* renderer;
     TTF_Font *font;
 
     framesPerSecond fps;
 
+    SDL_Window* window;
+    int wWindow = WINDOW_INITIAL_W;
+    int hWindow = WINDOW_INITIAL_H;
+    int min_wWindow = WINDOW_MIN_W;
+    int min_hWindow = WINDOW_MIN_H;
+
     // OnInit
 
-    window = SDL_CreateWindow("Tactics", 100, 100, 1280, 720, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
+    window = SDL_CreateWindow("Tactics", 100, 100, wWindow, hWindow, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
 	if (window == 0){
 		cout << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
 		SDL_Quit();
 		return 1;
 	}
+
+	SDL_SetWindowMinimumSize(window,min_wWindow,min_hWindow);
+
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED );
     if (renderer == NULL){
         cout << SDL_GetError() << endl;
         return 1;
     }
 
-    Screen::init(renderer);
+    Screen::init(renderer, window);
 
     Board gameBoard(8,4);
     GameManager gm(&gameBoard, renderer);
@@ -62,7 +67,7 @@ int main(int argc, char *argv[]){
 
     loadFont(&font);  
 
-    mWindow menu(font,renderer);
+    mWindow menu(font,renderer,window);
     
     // FPS Setup BEGIN
 

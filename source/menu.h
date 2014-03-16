@@ -11,6 +11,9 @@
 #define BUTTON_MAX_W 600
 #define BUTTON_SEPARATION 20
 
+#define MAIN_MENU_DEFAULT_X 300
+#define MAIN_MENU_DEFAULT_Y 100
+
 #define MARGIN_X 20
 #define MARGIN_Y 15
 
@@ -18,7 +21,7 @@
 #define NOT_SELECTED {70,70,70}
 
 #define BUTTON_IMG "images\\btn_blue_sprite.gif"
-#define MAIN_MENU_BKG "images\\fft_wallpaper.jpg"
+#define MAIN_MENU_BKG "images\\fft_wallpaper.png"
 
 class mButton
 {
@@ -42,6 +45,7 @@ class mButton
 		void setColor(SDL_Color);
 		void setText(string);
 		void setText(float);
+		SDL_Rect getRect();
 		string getText();
 		bool bHit();
 		void show(SDL_Renderer*);
@@ -58,10 +62,13 @@ class mWindow
 		SDL_Texture *mTexture;
 		vector<mButton> buttonList;
 		int btnX, btnY;
+		SDL_Window* window;
+		float xScale,yScale;
 
 	public:
-		mWindow(TTF_Font *,SDL_Renderer*);
-		mWindow(TTF_Font *,SDL_Renderer*,SDL_Rect,string);
+		mWindow(TTF_Font *,SDL_Renderer*,SDL_Window*);
+		mWindow(TTF_Font *,SDL_Renderer*,SDL_Rect,string,SDL_Window*);
+		void setScale();
 		void setIsOpen(bool);
 		void setRectWin(SDL_Rect);
 		void setImage(string);

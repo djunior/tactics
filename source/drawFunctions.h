@@ -20,7 +20,8 @@
 #define SPRITE_UNIT "images\\char_lanca.png"
 
 namespace Screen {
-	extern void init(SDL_Renderer*);
+	extern void setScale();
+	extern void init(SDL_Renderer*, SDL_Window*);
 	extern void drawBoard(SDL_Renderer*, Board*);
 	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*);
 	extern void drawUnit(Unit*, SDL_Renderer*, TTF_Font*);
