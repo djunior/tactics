@@ -1,6 +1,13 @@
 #ifndef basic_includes_h
 #define basic_includes_h
 
+#define WINDOW_MIN_W 800
+#define WINDOW_MIN_H 450
+
+#define WINDOW_INITIAL_W 1280
+#define WINDOW_INITIAL_H 720
+#define WINDOW_PROPORTION WINDOW_INITIAL_W/WINDOW_INITIAL_H
+
 #include <string>
 #include <vector>
 

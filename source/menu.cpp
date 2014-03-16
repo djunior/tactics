@@ -186,8 +186,8 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow/1280;
-	yScale = hWindow/720;
+	xScale = wWindow/WINDOW_INITIAL_W;
+	yScale = hWindow/WINDOW_INITIAL_H;
 
 };
 
@@ -201,16 +201,16 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_W
 
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow/1280;
-	yScale = hWindow/720;
+	xScale = wWindow/WINDOW_INITIAL_W;
+	yScale = hWindow/WINDOW_INITIAL_H;
 };
 
 void mWindow::setScale()
 {
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = (float)wWindow/1280;
-	yScale = (float)hWindow/720;
+	xScale = wWindow/WINDOW_INITIAL_W;
+	yScale = hWindow/WINDOW_INITIAL_H;
 };
 
 void mWindow::setIsOpen(bool open)
