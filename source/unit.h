@@ -1,6 +1,7 @@
 #ifndef __UNIT_H__
 #define __UNIT_H__
 
+#include "basic_includes.h"
 #include "utils/t_team.h"
 #include <iostream>
 #include <vector>
@@ -17,11 +18,15 @@
 #define UNIT_DEFAULT_ACTION_PER_TURN 1
 #define UNIT_DEFAULT_MANA_POOL 0
 
+#define UNIT_DEFAULT_SPRITE_UNIT "images\\char_lanca.png"
+
 class Spell;
 
 class Unit {
 
 protected:
+	const char* image;
+	SDL_Texture* unit_texture;
 	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
 	std::string unitClassName;
 	int speed;
@@ -31,7 +36,7 @@ protected:
 	std::vector<Spell *> spellList;
 
 public:
-	Unit (T_TEAM t);
+	Unit (T_TEAM t,SDL_Renderer *renderer);
 	virtual ~Unit();
 	bool takeDamage(unsigned int rawDamage);
 	void setX(unsigned int _x);
@@ -40,6 +45,7 @@ public:
 	unsigned int getX();
 	unsigned int getY();
 	T_TEAM getTeam();
+	SDL_Texture* getTexture();
 	bool isDead();
 	void kill();
 	int getSpeed();

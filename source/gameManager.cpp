@@ -38,14 +38,14 @@ void GameManager::createUnit(string unitClass, T_TEAM team){
 
 	if (unitClass == "knight") {
 		std::cout << "Creating new knight" << std::endl;
-		Knight* newUnit = new Knight(team);
+		Knight* newUnit = new Knight(team,renderer);
 		std::cout << "Criou knight: typeid=" << typeid(newUnit).name() << std::endl;
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
 	} else if (unitClass == "wizard") {
 		std::cout << "Creating new wizard" << std::endl;
-		Wizard* newUnit = new Wizard(team);
+		Wizard* newUnit = new Wizard(team,renderer);
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;

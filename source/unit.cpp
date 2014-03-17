@@ -9,7 +9,7 @@
 #include "unit.h"
 #include "spell.h"
 
-Unit::Unit (T_TEAM t){
+Unit::Unit (T_TEAM t,SDL_Renderer *renderer){
 	x = 0;
 	y = 0;
 	hp = UNIT_DEFAULT_HP;
@@ -27,6 +27,8 @@ Unit::Unit (T_TEAM t){
 	manaPool = UNIT_DEFAULT_MANA_POOL;
 	dead = false;
 	team = t;
+	image = UNIT_DEFAULT_SPRITE_UNIT;
+	unit_texture = IMG_LoadTexture(renderer, image);
 }
 
 Unit::~Unit(){
@@ -71,6 +73,10 @@ bool Unit::isDead(){
 
 T_TEAM Unit::getTeam(){
 	return team;
+}
+
+SDL_Texture* Unit::getTexture(){
+	return unit_texture;
 }
 
 int Unit::getSpeed(){

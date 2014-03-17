@@ -7,7 +7,7 @@
 
 #include "wizard.h"
 
-Wizard::Wizard(T_TEAM t) : Unit(t) {
+Wizard::Wizard(T_TEAM t,SDL_Renderer *r) : Unit(t,r) {
 
 	hp = WIZARD_HP;
 	maxHp = WIZARD_HP;

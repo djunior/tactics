@@ -7,7 +7,7 @@
 
 #include "knight.h"
 
-Knight::Knight(T_TEAM t)  : Unit (t) {
+Knight::Knight(T_TEAM t,SDL_Renderer *r)  : Unit (t,r) {
 	hp = KNIGHT_HP;
 	attackDamage = KNIGHT_DAMAGE;
 	armor = KNIGHT_ARMOR;

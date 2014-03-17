@@ -23,7 +23,7 @@ namespace Screen {
 		}
 
 	void init(SDL_Renderer* renderer,SDL_Window* win){
-		unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+		//unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
 		background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
 		window = win;
 		setScale();
@@ -68,7 +68,7 @@ namespace Screen {
 		}
 	}
 
-	void drawUnit(Unit* unit, SDL_Renderer *renderer, TTF_Font *font){
+	void drawUnit(Unit *unit, SDL_Renderer *renderer, TTF_Font *font){
 		if (! isInitialized) {
 			std::cerr << "Falha a pintar a unidade " << unit << std::endl;
 			std::cerr << "A funcao Screen::init nao foi invocada" << std::endl;
@@ -78,6 +78,8 @@ namespace Screen {
 		int w = 0;
 		int h = 0;
 		SDL_Rect rectChar;
+
+		unit_texture = unit->getTexture();
 
 	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
 
