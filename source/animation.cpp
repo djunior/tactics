@@ -38,6 +38,18 @@ void loadFont(TTF_Font **font)
     }
 };
 
+void loadTitle(TTF_Font **font)
+{
+    *font = TTF_OpenFont("images\\finalf.ttf", 72);
+    if (font == NULL)
+    {
+	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
+	    TTF_Quit();
+	    SDL_Quit();
+	    exit(1);
+    }
+};
+
 SDL_Surface *textContent(TTF_Font *font,char *text,SDL_Color text_color)
 {
 	SDL_Surface *textSurface;

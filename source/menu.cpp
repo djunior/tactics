@@ -1,6 +1,40 @@
 #include "menu.h"
 
 /*===============================
+TEXT
+===============================*/
+
+mText::mText(SDL_Renderer* r,TTF_Font* f,string t,SDL_Color c,float s)
+{
+	renderer = r;
+	font = f;
+	text_color = c;
+	scale = s;
+	text = t;
+};
+
+void mText::setScale(float mult)
+{
+	scale = mult;
+};
+
+void mText::setFont(TTF_Font* f)
+{
+	font = f;
+};
+
+void mText::setPosition(int x, int y)
+{
+	rectText.x = x;
+	rectText.y = y;
+};
+
+void mText::show()
+{
+	write(renderer,font,text,text_color,rectText,scale);
+};
+
+/*===============================
 BUTTON
 ===============================*/
 
@@ -186,12 +220,14 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow/WINDOW_INITIAL_W;
-	yScale = hWindow/WINDOW_INITIAL_H;
+	xScale = wWindow*1.0/WINDOW_INITIAL_W;
+	yScale = hWindow*1.0/WINDOW_INITIAL_H;
+
+	menu = MAIN;
 
 };
 
-mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_Window *w)
+mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_Window *w, MENU m)
 {
 	font = f;
 	rectWin = rect;
@@ -201,16 +237,18 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_W
 
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow/WINDOW_INITIAL_W;
-	yScale = hWindow/WINDOW_INITIAL_H;
+	xScale = wWindow*1.0/WINDOW_INITIAL_W;
+	yScale = hWindow*1.0/WINDOW_INITIAL_H;
+
+	menu = m;
 };
 
 void mWindow::setScale()
 {
 	int wWindow,hWindow;
 	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow/WINDOW_INITIAL_W;
-	yScale = hWindow/WINDOW_INITIAL_H;
+	xScale = wWindow*1.0/WINDOW_INITIAL_W;
+	yScale = hWindow*1.0/WINDOW_INITIAL_H;
 };
 
 void mWindow::setIsOpen(bool open)
@@ -238,10 +276,43 @@ void mWindow::setImage(string img)
 	image = const_cast<char*>(img.c_str());
 };
 
-void mWindow::setBtnPosition(int x,int y)
+void mWindow::setBtnPosition()
 {
+	int x,y;
+	if (menu == MAIN)
+	{
+		x = (int)MAIN_BTN_DEFAULT_X*xScale;
+		y = (int)MAIN_BTN_DEFAULT_Y*yScale;
+		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+	}
+	if (menu == UNIT)
+	{
+		x = (int)UNIT_BTN_DEFAULT_X*xScale;
+		y = (int)UNIT_BTN_DEFAULT_Y*yScale;
+		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+	}
 	btnX = x;
 	btnY = y;
+
+};
+
+void mWindow::setTxtPosition()
+{
+	int x,y;
+	if (menu == MAIN)
+	{
+		x = (int)MAIN_TXT_DEFAULT_X*xScale;
+		y = (int)MAIN_TXT_DEFAULT_Y*yScale;
+	}
+	if (menu == UNIT)
+	{
+		x = (int)UNIT_TXT_DEFAULT_X*xScale;
+		y = (int)UNIT_TXT_DEFAULT_Y*yScale;
+		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+	}
+	txtX = x;
+	txtY = y;
+
 };
 
 int mWindow::btnHit()
@@ -266,6 +337,14 @@ void mWindow::addButton(string text)
 	buttonList.push_back(button);
 };
 
+void mWindow::addText(string text)
+{
+	SDL_Color color = NOT_SELECTED;
+	mText textLine(renderer,font,text,color,yScale);
+	textLine.setPosition(txtX,txtY);
+	textList.push_back(textLine);
+}
+
 void mWindow::init(int x, int y)
 {
 	mTexture = IMG_LoadTexture(renderer,image);
@@ -277,26 +356,54 @@ void mWindow::init(int x, int y)
 
 void mWindow::mainMenu()
 {
+	addText("TACTICS");
 	addButton("Start Game");
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
+	setScale();
+	menu = MAIN;
+	setBtnPosition();
 	init(0,0);
+};
+
+void mWindow::statsMenu()
+{
+
 };
 
 void mWindow::show()
 {
 	setScale();
-	int x,y,xIncrement;
-	x = (int)MAIN_MENU_DEFAULT_X*xScale;
-	y = (int)MAIN_MENU_DEFAULT_Y*yScale;
-	xIncrement = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+	setBtnPosition();
+	setTxtPosition();
 
-	SDL_RenderCopy(renderer, mTexture, NULL, NULL);
-	for (unsigned i=0; i < buttonList.size(); i++)
+	int xB,yB;
+	int xT,yT;
+
+	xB = btnX;
+	yB = btnY;
+
+	xT = txtX;
+	yT = txtY;
+
+	if(menu == MAIN)
 	{
-		buttonList[i].setPosition(x,y + xIncrement*i);
-		buttonList[i].setScale(yScale);
-		buttonList[i].show(renderer);
+		TTF_Font *title;
+		loadTitle(&title);
+
+		SDL_RenderCopy(renderer, mTexture, NULL, NULL);
+
+		textList[0].setFont(title);
+		textList[0].setPosition(xT,yT);
+		textList[0].setScale(yScale);
+		textList[0].show();
+
+		for (unsigned i=0; i < buttonList.size(); i++)
+		{
+			buttonList[i].setPosition(xB,yB + increment*i);
+			buttonList[i].setScale(yScale);
+			buttonList[i].show(renderer);
+		}
 	}
 };
 
