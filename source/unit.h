@@ -7,6 +7,7 @@
 #include <vector>
 #include "utils/t_error.h"
 #include "utils/board_utils.h"
+#include "menu.h"
 
 #define UNIT_DEFAULT_HP 1
 #define UNIT_DEFAULT_DAMAGE 0
@@ -36,7 +37,7 @@ protected:
 	std::vector<Spell *> spellList;
 
 public:
-	Unit (T_TEAM t,SDL_Renderer *renderer);
+	Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window);
 	virtual ~Unit();
 	bool takeDamage(unsigned int rawDamage);
 	void setX(unsigned int _x);
@@ -64,6 +65,7 @@ public:
 	void debug_showStats();
 	void debug_showStats(bool verbose);
 	std::vector<Spell *> *getSpellList();
+	mWindow menu;
 };
 
 #endif

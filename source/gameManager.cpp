@@ -10,7 +10,7 @@
 #include "unit_class/Knight.h"
 #include "unit_class/Wizard.h"
 
-GameManager::GameManager(Board* newBoard, SDL_Renderer *r){
+GameManager::GameManager(Board* newBoard, SDL_Renderer *r, SDL_Window *w){
 	turn = GAMEMANAGER_INITIAL_TURN;
 	board = newBoard;
 	teamABodyCount = 0;
@@ -21,6 +21,7 @@ GameManager::GameManager(Board* newBoard, SDL_Renderer *r){
 	movesPerTurn = 0;
 	renderer = r;
 	context = IDLE;
+	window = w;
 }
 
 GameManager::~GameManager(){
@@ -38,14 +39,14 @@ void GameManager::createUnit(string unitClass, T_TEAM team){
 
 	if (unitClass == "knight") {
 		std::cout << "Creating new knight" << std::endl;
-		Knight* newUnit = new Knight(team,renderer);
+		Knight* newUnit = new Knight(team,renderer,window);
 		std::cout << "Criou knight: typeid=" << typeid(newUnit).name() << std::endl;
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
 	} else if (unitClass == "wizard") {
 		std::cout << "Creating new wizard" << std::endl;
-		Wizard* newUnit = new Wizard(team,renderer);
+		Wizard* newUnit = new Wizard(team,renderer,window);
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
@@ -433,8 +434,10 @@ void GameManager::showMap(SDL_Renderer* r){
 }
 
 void GameManager::showUnitMenu(){
-	showMap();
-	std::cout << "Pressione M para mover, A para atacar, S para utilizar uma magia, e P para pular" << std::endl;
+	//showMap();
+	//std::cout << "Pressione M para mover, A para atacar, S para utilizar uma magia, e P para pular" << std::endl;
+	Unit *unit = *activeUnit;
+	unit->menu.show();
 }
 
 void GameManager::showSpellMenu(){
@@ -580,7 +583,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 
 		showHighlightedArea(r,&area);
 	}
-
+	showUnitMenu();
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
 

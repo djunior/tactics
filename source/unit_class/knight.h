@@ -19,7 +19,7 @@
 
 class Knight : public Unit {
 public:
-	Knight(T_TEAM t,SDL_Renderer *r);
+	Knight(T_TEAM t,SDL_Renderer *r, SDL_Window *w);
 	virtual ~Knight();
 };
 

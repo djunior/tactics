@@ -212,6 +212,17 @@ void mButton::show(SDL_Renderer* renderer)
 MENU
 ===============================*/
 
+mWindow::mWindow(void)
+{
+	cerr << "Criando Unit.......?" << endl;
+	loadFont(&font);
+
+	int wWindow,hWindow;
+	SDL_GetWindowSize(window,&wWindow,&hWindow);
+	xScale = wWindow*1.0/WINDOW_INITIAL_W;
+	yScale = hWindow*1.0/WINDOW_INITIAL_H;
+};
+
 mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 {
 	font = f;
@@ -227,19 +238,11 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 
 };
 
-mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend,SDL_Rect rect, string img, SDL_Window *w, MENU m)
+void mWindow::setup(SDL_Renderer* rend, string img, SDL_Window *w, MENU m)
 {
-	font = f;
-	rectWin = rect;
 	renderer = rend;
 	image = const_cast<char*>(img.c_str());
 	window = w;
-
-	int wWindow,hWindow;
-	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow*1.0/WINDOW_INITIAL_W;
-	yScale = hWindow*1.0/WINDOW_INITIAL_H;
-
 	menu = m;
 };
 
@@ -308,7 +311,7 @@ void mWindow::setTxtPosition()
 	{
 		x = (int)UNIT_TXT_DEFAULT_X*xScale;
 		y = (int)UNIT_TXT_DEFAULT_Y*yScale;
-		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		//increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
 	}
 	txtX = x;
 	txtY = y;
@@ -368,41 +371,52 @@ void mWindow::mainMenu()
 
 void mWindow::statsMenu()
 {
-
+	addText("Testando Boladamente");
+	setTxtPosition();
+	init(0,0);
 };
 
 void mWindow::show()
 {
-	setScale();
-	setBtnPosition();
-	setTxtPosition();
-
-	int xB,yB;
-	int xT,yT;
-
-	xB = btnX;
-	yB = btnY;
-
-	xT = txtX;
-	yT = txtY;
-
-	if(menu == MAIN)
+	if (getIsOpen())
 	{
-		TTF_Font *title;
-		loadTitle(&title);
+		setScale();
+		setBtnPosition();
+		setTxtPosition();
 
-		SDL_RenderCopy(renderer, mTexture, NULL, NULL);
+		int xB,yB;
+		int xT,yT;
 
-		textList[0].setFont(title);
-		textList[0].setPosition(xT,yT);
-		textList[0].setScale(yScale);
-		textList[0].show();
+		xB = btnX;
+		yB = btnY;
 
-		for (unsigned i=0; i < buttonList.size(); i++)
+		xT = txtX;
+		yT = txtY;
+
+		if(menu == MAIN)
 		{
-			buttonList[i].setPosition(xB,yB + increment*i);
-			buttonList[i].setScale(yScale);
-			buttonList[i].show(renderer);
+			TTF_Font *title;
+			loadTitle(&title);
+
+			SDL_RenderCopy(renderer, mTexture, NULL, NULL);
+
+			textList[0].setFont(title);
+			textList[0].setPosition(xT,yT);
+			textList[0].setScale(yScale);
+			textList[0].show();
+
+			for (unsigned i=0; i < buttonList.size(); i++)
+			{
+				buttonList[i].setPosition(xB,yB + increment*i);
+				buttonList[i].setScale(yScale);
+				buttonList[i].show(renderer);
+			}
+		}
+		if(menu == UNIT)
+		{
+			textList[0].setPosition(xT,yT);
+			textList[0].setScale(yScale);
+			textList[0].show();
 		}
 	}
 };

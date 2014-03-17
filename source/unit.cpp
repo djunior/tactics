@@ -9,7 +9,7 @@
 #include "unit.h"
 #include "spell.h"
 
-Unit::Unit (T_TEAM t,SDL_Renderer *renderer){
+Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	x = 0;
 	y = 0;
 	hp = UNIT_DEFAULT_HP;
@@ -29,6 +29,9 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer){
 	team = t;
 	image = UNIT_DEFAULT_SPRITE_UNIT;
 	unit_texture = IMG_LoadTexture(renderer, image);
+
+	menu.setup(renderer,image,window,UNIT);
+	menu.statsMenu();
 }
 
 Unit::~Unit(){

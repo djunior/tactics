@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
     Screen::init(renderer, window);
 
     Board gameBoard(8,4);
-    GameManager gm(&gameBoard, renderer);
+    GameManager gm(&gameBoard, renderer, window);
 
     
     //Load Content

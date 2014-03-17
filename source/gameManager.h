@@ -1,5 +1,7 @@
 #ifndef __GAME_MANAGER_H__
 #define __GAME_MANAGER_H__
+
+#include "menu.h"
 #include "board.h"
 #include <vector>
 #include <map>
@@ -40,6 +42,7 @@ private:
 	int teamABodyCount, teamBBodyCount;
 	GAMEMANAGER_CONTEXT context;
 	SDL_Renderer* renderer;
+	SDL_Window* window;
 
 	void cleanup();
 	int getOtherTeamBodyCount(T_TEAM team);
@@ -66,7 +69,7 @@ private:
 	void showHighlightedArea(SDL_Renderer*,BOARD_AOE*);
 
 public:
-	GameManager(Board* newBoard,SDL_Renderer* r);
+	GameManager(Board* newBoard,SDL_Renderer* r, SDL_Window *w);
 	~GameManager();
 	void createUnit(string unitClass,T_TEAM team);
 	void startGame();

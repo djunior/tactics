@@ -20,8 +20,8 @@
 #define MAIN_TXT_DEFAULT_X 250
 #define MAIN_TXT_DEFAULT_Y 50
 
-#define UNIT_TXT_DEFAULT_X 300
-#define UNIT_TXT_DEFAULT_Y 100
+#define UNIT_TXT_DEFAULT_X 10
+#define UNIT_TXT_DEFAULT_Y 10
 
 #define MARGIN_X 20
 #define MARGIN_Y 15
@@ -116,8 +116,9 @@ class mWindow
 		vector<mButton> buttonList;
 
 	public:
+		mWindow(void);
 		mWindow(TTF_Font *,SDL_Renderer*,SDL_Window*);
-		mWindow(TTF_Font *,SDL_Renderer*,SDL_Rect,string,SDL_Window*,MENU);
+		void setup(SDL_Renderer*,string,SDL_Window*,MENU);
 		void setScale();
 		void setIsOpen(bool);
 		void setRectWin(SDL_Rect);

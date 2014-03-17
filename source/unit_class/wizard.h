@@ -21,7 +21,7 @@
 
 class Wizard : public Unit{
 public:
-	Wizard(T_TEAM t,SDL_Renderer *r);
+	Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w);
 	virtual ~Wizard();
 };
 
