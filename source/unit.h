@@ -27,6 +27,7 @@ class Unit {
 
 protected:
 	const char* image;
+	const char* menu_bkg;
 	SDL_Texture* unit_texture;
 	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
 	std::string unitClassName;

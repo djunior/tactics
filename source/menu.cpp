@@ -214,7 +214,6 @@ MENU
 
 mWindow::mWindow(void)
 {
-	cerr << "Criando Unit.......?" << endl;
 	loadFont(&font);
 
 	int wWindow,hWindow;
@@ -238,10 +237,10 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 
 };
 
-void mWindow::setup(SDL_Renderer* rend, string img, SDL_Window *w, MENU m)
+void mWindow::setup(SDL_Renderer* rend, SDL_Window *w, MENU m)
 {
 	renderer = rend;
-	image = const_cast<char*>(img.c_str());
+	//image = const_cast<char*>(img.c_str());
 	window = w;
 	menu = m;
 };
@@ -290,9 +289,9 @@ void mWindow::setBtnPosition()
 	}
 	if (menu == UNIT)
 	{
-		x = (int)UNIT_BTN_DEFAULT_X*xScale;
-		y = (int)UNIT_BTN_DEFAULT_Y*yScale;
-		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = (int)(rectWin.x + UNIT_BTN_DEFAULT_X)*xScale;
+		y = (int)(rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale;
+		//increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
 	}
 	btnX = x;
 	btnY = y;
@@ -304,14 +303,14 @@ void mWindow::setTxtPosition()
 	int x,y;
 	if (menu == MAIN)
 	{
-		x = (int)MAIN_TXT_DEFAULT_X*xScale;
-		y = (int)MAIN_TXT_DEFAULT_Y*yScale;
+		x = (int)(rectWin.x + MAIN_TXT_DEFAULT_X)*xScale;
+		y = (int)(rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale;
 	}
 	if (menu == UNIT)
 	{
-		x = (int)UNIT_TXT_DEFAULT_X*xScale;
-		y = (int)UNIT_TXT_DEFAULT_Y*yScale;
-		//increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = (int)(rectWin.x + UNIT_TXT_DEFAULT_X)*xScale;
+		y = (int)(rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale;
+		increment = (int)(TEXT_H + BUTTON_SEPARATION)*yScale;
 	}
 	txtX = x;
 	txtY = y;
@@ -373,7 +372,7 @@ void mWindow::statsMenu()
 {
 	addText("Testando Boladamente");
 	setTxtPosition();
-	init(0,0);
+	init(0,25);
 };
 
 void mWindow::show()

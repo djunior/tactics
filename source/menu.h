@@ -7,24 +7,28 @@
 
 #include <vector>
 
+#define MARGIN_X 20
+#define MARGIN_Y 15
+
 #define BUTTON_H 50
 #define BUTTON_MAX_W 600
 #define BUTTON_SEPARATION 20
 
+#define TEXT_H 23
+#define LINE_SEPARATION 10
+
 #define MAIN_BTN_DEFAULT_X 300
 #define MAIN_BTN_DEFAULT_Y 200
-
 #define UNIT_BTN_DEFAULT_X 10
 #define UNIT_BTN_DEFAULT_Y 150
 
 #define MAIN_TXT_DEFAULT_X 250
 #define MAIN_TXT_DEFAULT_Y 50
-
 #define UNIT_TXT_DEFAULT_X 10
 #define UNIT_TXT_DEFAULT_Y 10
 
-#define MARGIN_X 20
-#define MARGIN_Y 15
+#define UNIT_MENU_MAX_X 200
+#define UNIT_MENU_MAX_Y 350
 
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
@@ -118,7 +122,7 @@ class mWindow
 	public:
 		mWindow(void);
 		mWindow(TTF_Font *,SDL_Renderer*,SDL_Window*);
-		void setup(SDL_Renderer*,string,SDL_Window*,MENU);
+		void setup(SDL_Renderer*,SDL_Window*,MENU);
 		void setScale();
 		void setIsOpen(bool);
 		void setRectWin(SDL_Rect);

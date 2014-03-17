@@ -19,6 +19,8 @@
 #define WIZARD_ARMOR 1
 #define WIZARD_MANA_POOL 20
 
+#define WIZARD_SPRITE "images\\char_lanca.png"
+
 class Wizard : public Unit{
 public:
 	Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w);

@@ -21,6 +21,9 @@ Wizard::Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w) : Unit(t,r,w) {
 	spellList.push_back(fireball);
 	mana = WIZARD_MANA_POOL;
 	manaPool = WIZARD_MANA_POOL;
+
+	menu.setImage(WIZARD_SPRITE);
+	menu.statsMenu();
 }
 
 Wizard::~Wizard() {
