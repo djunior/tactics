@@ -23,6 +23,11 @@ void mText::setFont(TTF_Font* f)
 	font = f;
 };
 
+void mText::setColor(SDL_Color c)
+{
+	text_color = c;
+};
+
 void mText::setPosition(int x, int y)
 {
 	rectText.x = x;
@@ -310,7 +315,7 @@ void mWindow::setTxtPosition()
 	{
 		x = (int)(rectWin.x + UNIT_TXT_DEFAULT_X)*xScale;
 		y = (int)(rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale;
-		increment = (int)(TEXT_H + BUTTON_SEPARATION)*yScale;
+		increment = (int)(TEXT_H + LINE_SEPARATION)*yScale;
 	}
 	txtX = x;
 	txtY = y;
@@ -368,9 +373,41 @@ void mWindow::mainMenu()
 	init(0,0);
 };
 
-void mWindow::statsMenu()
+void mWindow::statsMenu(
+			unsigned int hp, 
+			unsigned int maxHp, 
+			unsigned int attackDamage, 
+			unsigned int armor, 
+			unsigned int level, 
+			unsigned int move, 
+			unsigned int range, 
+			unsigned int actionPerTurn, 
+			unsigned int mana, 
+			unsigned int manaPool
+			)
 {
-	addText("Testando Boladamente");
+	stringstream ss,s;
+	addText("Unit: ");
+	addText("  Stats:");
+	s << maxHp;
+	ss << hp;
+	addText("HP: " + ss.str() + "/" + s.str());
+	ss.str("");
+	ss << attackDamage;
+	addText("AD: " + ss.str());
+	ss.str("");
+	ss << armor;
+	addText("Armor: " + ss.str());
+	ss.str("");
+	ss << level;
+	addText("Level: " + ss.str());
+	ss.str("");
+	ss << range;
+	addText("Range: " + ss.str());
+	ss.str("");
+	ss << actionPerTurn;
+	addText("Actions: " + ss.str());
+	ss.str("");
 	setTxtPosition();
 	init(0,25);
 };
@@ -382,6 +419,8 @@ void mWindow::show()
 		setScale();
 		setBtnPosition();
 		setTxtPosition();
+
+		SDL_Color color = SELECTED;
 
 		int xB,yB;
 		int xT,yT;
@@ -413,9 +452,13 @@ void mWindow::show()
 		}
 		if(menu == UNIT)
 		{
-			textList[0].setPosition(xT,yT);
-			textList[0].setScale(yScale);
-			textList[0].show();
+			for (unsigned i=0; i < textList.size(); i++)
+			{
+				textList[i].setColor(color);
+				textList[i].setPosition(xT,yT + increment*i);
+				textList[i].setScale(yScale);
+				textList[i].show();
+			}
 		}
 	}
 };

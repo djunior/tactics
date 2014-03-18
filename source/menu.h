@@ -62,10 +62,12 @@ class mText
 		SDL_Renderer* renderer;
 		float scale;
 		SDL_Rect rectText;
+		MENU menu;
 	public:
 		mText(SDL_Renderer*,TTF_Font*,string,SDL_Color,float);
 		void setScale(float);
 		void setFont(TTF_Font*);
+		void setColor(SDL_Color);
 		void setPosition(int,int);
 		void show();
 };
@@ -136,7 +138,18 @@ class mWindow
 		void addText(string);
 		void init(int,int);
 		void mainMenu();
-		void statsMenu();
+		void statsMenu(
+			unsigned int hp, 
+			unsigned int maxHp, 
+			unsigned int attackDamage, 
+			unsigned int armor, 
+			unsigned int level, 
+			unsigned int move, 
+			unsigned int range, 
+			unsigned int actionPerTurn, 
+			unsigned int mana, 
+			unsigned int manaPool
+			);
 		void show();
 };
 

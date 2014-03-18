@@ -23,7 +23,7 @@ Wizard::Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w) : Unit(t,r,w) {
 	manaPool = WIZARD_MANA_POOL;
 
 	menu.setImage(WIZARD_SPRITE);
-	menu.statsMenu();
+	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);
 }
 
 Wizard::~Wizard() {
