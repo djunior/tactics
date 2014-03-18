@@ -23,7 +23,11 @@ namespace Screen {
 		}
 
 	void init(SDL_Renderer* renderer,SDL_Window* win){
-		unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+		SDL_Surface* unit_surface = SDL_LoadBMP("images\\paladin_m.bmp");
+		SDL_SetColorKey(unit_surface,SDL_TRUE,SDL_MapRGB(unit_surface->format,0,0,0));
+		unit_texture = SDL_CreateTextureFromSurface(renderer,unit_surface);
+		SDL_FreeSurface(unit_surface);
+
 		background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
 		window = win;
 		setScale();
@@ -89,10 +93,13 @@ namespace Screen {
 	    SDL_Rect src;
 	    src.x=0;
 	    src.y=0;
-	    src.w=w/4;
-	    src.h=h/2;
+	    src.w=32;
+	    src.h=40;
 
-	    SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+	    if(unit->getTeam() == TEAM_B)
+	    	SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+	    else
+	    	SDL_RenderCopyEx(renderer,unit_texture,&src,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
 
 		SDL_Rect healthBar;
 		healthBar.w = rectChar.w - 20;
@@ -102,11 +109,6 @@ namespace Screen {
 		healthBar.y = rectChar.y;
 
 		SDL_SetRenderDrawColor(renderer,255,0,0,SDL_ALPHA_OPAQUE);
-	/*
-		std::cout << "HEALTH BAR *" << &healthBar << std::endl;
-		std::cout << "x=" << healthBar.x << " y= " << healthBar.y << std::endl;
-		std::cout << "w=" << healthBar.w << " h= " << healthBar.h << std::endl;
-	*/
 		SDL_RenderFillRect(renderer,&healthBar);
 
 		healthBar.w = (unit->getHp() * healthBar.w) / unit->getMaxHp();
