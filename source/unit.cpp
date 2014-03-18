@@ -170,3 +170,18 @@ void Unit::setMana(int amount){
 	if (mana > manaPool)
 		mana = manaPool;
 }
+
+void Unit::setAnimation(Animation a){
+	animation = a;
+}
+
+Animation* Unit::getAnimation(){
+	return &animation;
+}
+
+bool Unit::isAnimating(){
+	if (animation.hasEnded())
+		return false;
+
+	return true;
+}

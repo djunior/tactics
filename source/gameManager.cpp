@@ -328,7 +328,7 @@ void GameManager::processEvent(SDL_Event *event){
 						break;
 
 					// move unit
-					context = CONTEXT_UNIT_MOVE;
+					context = CONTEXT_UNIT_SELECT_MOVE;
 					showMoveOptions();
 					break;
 				case SDLK_p:
@@ -373,7 +373,7 @@ void GameManager::processEvent(SDL_Event *event){
 
 		case CONTEXT_UNIT_COMBAT:
 
-		case CONTEXT_UNIT_MOVE:
+		case CONTEXT_UNIT_SELECT_MOVE:
 			if (key == SDLK_LEFT || key == SDLK_RIGHT || key == SDLK_UP || key == SDLK_DOWN)
 				moveUnit(key);
 
@@ -401,20 +401,35 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 		return T_ERROR_UNIT_OUT_OF_MOVES;
 	}
 	Unit *unit = *activeUnit;
-	T_ERROR e;
+
+	BOARD_POINT start;
+	start.x = unit->getX();
+	start.y = unit->getY();
+
+	int x = unit->getX();
+	int y = unit->getY();
 	if (direction == SDLK_LEFT)
-		e = board->moveUnit(unit,unit->getX()-1,unit->getY());
+		x--;
 	else if (direction == SDLK_DOWN)
-		e =board->moveUnit(unit,unit->getX(),unit->getY()+1);
+		y++;
 	else if (direction== SDLK_RIGHT)
-		e = board->moveUnit(unit,unit->getX()+1,unit->getY());
+		x++;
 	else if (direction == SDLK_UP)
-		e = board->moveUnit(unit,unit->getX(),unit->getY()-1);
+		y--;
+
+	T_ERROR e = board->moveUnit(unit,x,y);
 
 	if (e == T_SUCCESS) {
 		movesPerTurn--;
-		showUnitMenu();
-		context = CONTEXT_UNIT_MENU;
+
+		BOARD_POINT end;
+		end.x = x;
+		end.y = y;
+
+		Animation a(ANIMATION_UNIT_MOVE,start,end,15);
+		unit->setAnimation(a);
+
+		context = CONTEXT_UNIT_MOVE;
 	} else {
 		std::cerr << "Posicao invalida" << std::endl;
 		showMoveOptions();
@@ -569,7 +584,8 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showMap(r);
-	if (context == CONTEXT_UNIT_MOVE){
+	Unit* unit = *activeUnit;
+	if (context == CONTEXT_UNIT_SELECT_MOVE) {
 		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
@@ -578,6 +594,13 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		area.shape = AOE_SHAPE_CROSS;
 
 		showHighlightedArea(r,&area);
+	} else if (context == CONTEXT_UNIT_MOVE) {
+		if (! unit->isAnimating()) {
+			std::cout << "TROCANDO DE CONTEXTO" << std::endl;
+			context = CONTEXT_UNIT_MENU;
+			showUnitMenu();
+			unit->setAnimation(Animation());
+		}
 	}
 
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)

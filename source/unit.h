@@ -6,6 +6,7 @@
 #include <vector>
 #include "utils/t_error.h"
 #include "utils/board_utils.h"
+#include "animation.h"
 
 #define UNIT_DEFAULT_HP 1
 #define UNIT_DEFAULT_DAMAGE 0
@@ -29,6 +30,7 @@ protected:
 	T_TEAM team;
 	AOE_SHAPE attackArea;
 	std::vector<Spell *> spellList;
+	Animation animation;
 
 public:
 	Unit (T_TEAM t);
@@ -57,6 +59,10 @@ public:
 	T_ERROR combat(std::vector<Unit *> *targetList, int *bodyCount);
 	void debug_showStats();
 	void debug_showStats(bool verbose);
+	bool isAnimating();
+
+	void setAnimation(Animation);
+	Animation* getAnimation();
 	std::vector<Spell *> *getSpellList();
 };
 

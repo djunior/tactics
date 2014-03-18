@@ -85,10 +85,32 @@ namespace Screen {
 
 	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
 
-	    rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
-	    rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
+		rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
+		rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
+
+	    if (unit->isAnimating()) {
+	    	std::cout << "IS ANIMATING" << std::endl;
+	    	Animation* animation = unit->getAnimation();
+	    	//animation.debug_showStats();
+	    	std::cout << "CURRENT FRAME " << animation->currentFrame << std::endl;
+	    	std::cout << "CURRENT FRAME/DURATION " << animation->currentFrame/animation->duration << std::endl;
+	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
+	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
+	    	std::cout <<  "DIFF X: " << diffX << std::endl;
+	    	std::cout <<  "DIFF Y: " << diffY << std::endl;
+			rectChar.x = (int)(BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale;
+			rectChar.y = (int)(BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale;
+
+			std::cout << "Animate rectChar.x=" << rectChar.x << std::endl;
+			std::cout << "Animate rectChar.y=" << rectChar.y << std::endl;
+
+			animation->currentFrame++;
+		} else {
+
+			rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
+			rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
+
+		}
 
 	    SDL_Rect src;
 	    src.x=0;
