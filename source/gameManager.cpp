@@ -15,12 +15,11 @@ GameManager::GameManager(Board* newBoard, SDL_Renderer *r){
 	board = newBoard;
 	teamABodyCount = 0;
 	teamBBodyCount = 0;
-	context = IDLE;
+	context = CONTEXT_IDLE;
 	activeSpell = 0;
 	actionsPerTurn = 0;
 	movesPerTurn = 0;
 	renderer = r;
-	context = IDLE;
 }
 
 GameManager::~GameManager(){
@@ -209,7 +208,7 @@ void GameManager::endGame(){
 	else if (teamBBodyCount == 0)
 		std::cout << "Time A venceu no turno " << turn << std::endl;
 
-	context = IDLE;
+	context = CONTEXT_IDLE;
 
 	cleanup();
 }
@@ -224,7 +223,7 @@ void GameManager::notifyDeath(T_TEAM team, int casualties){
 
 T_ERROR GameManager::startNextTurn(){
 	turn++;
-	context = BEGINNING_TURN;
+	context = CONTEXT_BEGINNING_TURN;
 	std::cout << "Começando o turno " << turn << std::endl;
 
 	// TODO: adicionar algoritmo de sort
@@ -244,7 +243,7 @@ T_ERROR GameManager::startNextTurn(){
 
 T_ERROR GameManager::endTurn(){
 	std::cout << "Terminando o turno " << turn << std::endl;
-	context = ENDING_TURN;
+	context = CONTEXT_ENDING_TURN;
 
 	// TODO: Verificar efeitos de fim de turno
 
@@ -258,7 +257,7 @@ T_ERROR GameManager::endTurn(){
 }
 
 T_ERROR GameManager::startNextUnitTurn(){
-	context = BEGINNING_UNIT_TURN;
+	context = CONTEXT_BEGINNING_UNIT_TURN;
 
 	Unit *u = *activeUnit;
 	actionsPerTurn = u->getActionsPerTurn();
@@ -267,7 +266,7 @@ T_ERROR GameManager::startNextUnitTurn(){
 	std::cout << "Iniciando turno da unidade: " << u << std::endl;
 	u->debug_showStats(true);
 
-	context = UNIT_MENU;
+	context = CONTEXT_UNIT_MENU;
 
 	// show menu
 
@@ -278,7 +277,7 @@ T_ERROR GameManager::startNextUnitTurn(){
 }
 
 T_ERROR GameManager::endUnitTurn(){
-	context = ENDING_UNIT_TURN;
+	context = CONTEXT_ENDING_UNIT_TURN;
 	// Verificar efeitos de fim de turno
 
 
@@ -307,21 +306,21 @@ void GameManager::processEvent(SDL_Event *event){
 		return;
 
 	switch(context){
-		case IDLE:
+		case CONTEXT_IDLE:
 			if (key == SDLK_s)
 				startGame();
 			break;
-		case BEGINNING_TURN:
+		case CONTEXT_BEGINNING_TURN:
 
-		case ENDING_TURN:
+		case CONTEXT_ENDING_TURN:
 
-		case BEGINNING_UNIT_TURN:
+		case CONTEXT_BEGINNING_UNIT_TURN:
 
-		case ENDING_UNIT_TURN:
+		case CONTEXT_ENDING_UNIT_TURN:
 
-		case SPELL_EFFECT:
+		case CONTEXT_SPELL_EFFECT:
 
-		case UNIT_MENU:
+		case CONTEXT_UNIT_MENU:
 			switch(key){
 				case SDLK_m:
 					//Unidade não pode mais mover
@@ -329,7 +328,7 @@ void GameManager::processEvent(SDL_Event *event){
 						break;
 
 					// move unit
-					context = UNIT_MOVE;
+					context = CONTEXT_UNIT_MOVE;
 					showMoveOptions();
 					break;
 				case SDLK_p:
@@ -343,7 +342,7 @@ void GameManager::processEvent(SDL_Event *event){
 
 					// combate
 					showAttackOptions();
-					context = UNIT_SELECT_TARGET;
+					context = CONTEXT_UNIT_SELECT_TARGET;
 					break;
 				case SDLK_s:
 					// Unidade nao pode mais usar spells
@@ -352,11 +351,11 @@ void GameManager::processEvent(SDL_Event *event){
 
 					// magias
 					showSpellMenu();
-					context = SPELL_MENU;
+					context = CONTEXT_SPELL_MENU;
 					break;
 			}
 			break;
-		case SPELL_MENU:
+		case CONTEXT_SPELL_MENU:
 			if (key == SDLK_0 || key == SDLK_1 || key == SDLK_2 || key == SDLK_3 || key == SDLK_4 ||
 				key == SDLK_5 || key == SDLK_6 || key == SDLK_7 || key == SDLK_8 || key == SDLK_9) {
 
@@ -368,24 +367,24 @@ void GameManager::processEvent(SDL_Event *event){
 					activeSpell = spell;
 
 					showTargetOptions();
-					context = SPELL_SELECT_TARGET;
+					context = CONTEXT_SPELL_SELECT_TARGET;
 			}
 			break;
 
-		case UNIT_COMBAT:
+		case CONTEXT_UNIT_COMBAT:
 
-		case UNIT_MOVE:
+		case CONTEXT_UNIT_MOVE:
 			if (key == SDLK_LEFT || key == SDLK_RIGHT || key == SDLK_UP || key == SDLK_DOWN)
 				moveUnit(key);
 
 			board->debug_showMap();
 			break;
-		case UNIT_SELECT_TARGET:
+		case CONTEXT_UNIT_SELECT_TARGET:
 			if (key == SDLK_LEFT || key == SDLK_RIGHT || key == SDLK_UP || key == SDLK_DOWN)
 				selectCombatTarget(key);
 
 			break;
-		case SPELL_SELECT_TARGET:
+		case CONTEXT_SPELL_SELECT_TARGET:
 			if (key == SDLK_LEFT || key == SDLK_RIGHT || key == SDLK_UP || key == SDLK_DOWN)
 				selectSpellTargets(key);
 
@@ -397,7 +396,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 
 	if (movesPerTurn <= 0) {
 		std::cerr << "Unidade nao pode mais mover" << std::endl;
-		context = UNIT_MENU;
+		context = CONTEXT_UNIT_MENU;
 		showUnitMenu();
 		return T_ERROR_UNIT_OUT_OF_MOVES;
 	}
@@ -415,7 +414,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	if (e == T_SUCCESS) {
 		movesPerTurn--;
 		showUnitMenu();
-		context = UNIT_MENU;
+		context = CONTEXT_UNIT_MENU;
 	} else {
 		std::cerr << "Posicao invalida" << std::endl;
 		showMoveOptions();
@@ -483,7 +482,7 @@ T_ERROR GameManager::selectCombatTarget(SDL_Keycode key){
 			break;
 	}
 
-	context = UNIT_COMBAT;
+	context = CONTEXT_UNIT_COMBAT;
 
 	if (e == T_SUCCESS)
 		e = combat(&targets);
@@ -514,7 +513,7 @@ T_ERROR GameManager::selectSpellTargets(SDL_Keycode key){
 	}
 
 	if (e == T_SUCCESS) {
-		context = SPELL_EFFECT;
+		context = CONTEXT_SPELL_EFFECT;
 		e = useSpell(&targets);
 	}
 
@@ -537,7 +536,7 @@ T_ERROR GameManager::combat(vector<Unit*> *targets){
 		return T_SUCCESS;
 	}
 
-	context = UNIT_MENU;
+	context = CONTEXT_UNIT_MENU;
 	showUnitMenu();
 	return T_SUCCESS;
 }
@@ -562,7 +561,7 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 		std::cerr << "Erro ao usar a spell " << activeSpell << " e=" << e << std::endl;
 	}
 
-	context = UNIT_MENU;
+	context = CONTEXT_UNIT_MENU;
 	showUnitMenu();
 
 	return T_SUCCESS;
@@ -570,7 +569,7 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showMap(r);
-	if (context == UNIT_MOVE){
+	if (context == CONTEXT_UNIT_MOVE){
 		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
