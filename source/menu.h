@@ -32,23 +32,15 @@
 
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
+#define MENU_BLACK {0,0,0}
 
 #define BUTTON_IMG "images\\btn_blue_sprite.gif"
 #define MAIN_MENU_BKG "images\\fft_wallpaper.png"
 
 enum MENU_ENUM {
-	MAIN,
-	UNIT,
-	SPELL,
-	EFFECT,
-	COMBAT,
-	MOVE,
-	U_SELECT_TARGET,
-	S_SELECT_TARGET,
-	B_TURN,
-	E_TURN,
-	B_UNIT_TURN,
-	E_UNIT_TURN,
+	MENU_MAIN,
+	MENU_UNIT,
+	MENU_TOOTIP
 };
 
 typedef enum MENU_ENUM MENU;

@@ -425,8 +425,6 @@ void mWindow::show()
 		setBtnPosition();
 		setTxtPosition();
 
-		SDL_Color color = SELECTED;
-
 		int xB,yB;
 		int xT,yT;
 
@@ -457,6 +455,7 @@ void mWindow::show()
 		}
 		if(menu == UNIT)
 		{
+			SDL_Color color = MENU_BLACK;
 			for (unsigned i=0; i < textList.size(); i++)
 			{
 				textList[i].setColor(color);
