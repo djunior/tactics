@@ -24,8 +24,9 @@ public:
 	BOARD_POINT startPoint, endPoint;
 	ANIMATION_TYPE type;
 	double currentFrame,duration;
+	int repeatFrame;
 
-	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,int);
+	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,double,int);
 	Animation();
 
 	bool hasStarted();

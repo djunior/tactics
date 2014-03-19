@@ -88,6 +88,12 @@ namespace Screen {
 		rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
 		rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
 
+	    SDL_Rect src;
+	    src.y=0;
+	    src.w=32;
+	    src.h=40;
+
+
 	    if (unit->isAnimating()) {
 	    	std::cout << "IS ANIMATING" << std::endl;
 	    	Animation* animation = unit->getAnimation();
@@ -104,19 +110,40 @@ namespace Screen {
 			std::cout << "Animate rectChar.x=" << rectChar.x << std::endl;
 			std::cout << "Animate rectChar.y=" << rectChar.y << std::endl;
 
+			if (animation->type == ANIMATION_UNIT_MOVE){
+				int index = ((int) animation->currentFrame) % (4 * animation->repeatFrame) / animation->repeatFrame;
+
+				if (unit->getTeam() == TEAM_A) {
+
+					src.y = src.h;
+					src.x = src.w*(3+index);
+
+				} else {
+
+					if (index <= 1) {
+						src.y = 0;
+						src.x = src.w*(5 + index);
+					} else {
+						src.y = src.h;
+						src.x = src.w*(index -2);
+					}
+
+				}
+
+
+			}
+
 			animation->currentFrame++;
 		} else {
 
 			rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
 			rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
 
+			if (unit->getTeam() == TEAM_A)
+				src.x=src.w*3;
+			else
+			    src.x=src.w;
 		}
-
-	    SDL_Rect src;
-	    src.x=0;
-	    src.y=0;
-	    src.w=32;
-	    src.h=40;
 
 	    if(unit->getTeam() == TEAM_B)
 	    	SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);

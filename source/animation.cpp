@@ -7,7 +7,7 @@
 
 #include "animation.h"
 
-Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,int dur) {
+Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,double dur,int rep) {
 	type = t;
 
 	currentFrame = 0;
@@ -15,6 +15,8 @@ Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,int dur)
 
 	startPoint = start;
 	endPoint = end;
+
+	repeatFrame = rep;
 }
 
 // Default initiation;
@@ -29,6 +31,8 @@ Animation::Animation(){
 
 	endPoint.x = 0;
 	endPoint.y = 0;
+
+	repeatFrame = 1;
 }
 
 Animation::~Animation() {
