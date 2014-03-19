@@ -67,6 +67,7 @@ class mText
 		mText(SDL_Renderer*,TTF_Font*,string,SDL_Color,float);
 		void setScale(float);
 		void setFont(TTF_Font*);
+		void setText(string);
 		void setColor(SDL_Color);
 		void setPosition(int,int);
 		void show();
@@ -118,7 +119,6 @@ class mWindow
 		float xScale;
 		float yScale;
 		MENU menu;
-		vector<mText> textList;
 		vector<mButton> buttonList;
 
 	public:
@@ -151,6 +151,7 @@ class mWindow
 			unsigned int manaPool
 			);
 		void show();
+		vector<mText> textList;
 };
 
 #endif

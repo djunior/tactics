@@ -179,3 +179,37 @@ void Unit::setMana(int amount){
 	if (mana > manaPool)
 		mana = manaPool;
 }
+
+T_ERROR Unit::statsUpdate()
+{
+	if (this->menu.textList.size() == 0)
+	{
+		cout << "Erro configurando o texto no menu da Unidade " << this->getClassName() << endl;
+		exit(T_ERROR_TEXT_NOT_INITIALIZED);
+	}
+
+	stringstream ss,s;
+
+	s << getHp();
+	ss << getMaxHp();
+
+	this->menu.textList[0].setText("Unit: " + this->getClassName());
+	this->menu.textList[2].setText("HP: " + s.str() + "/" + ss.str());
+	s.str("");
+	s << this->getAttackDamage();
+	this->menu.textList[3].setText("AD: " + s.str());
+	s.str("");
+	s << armor;
+	this->menu.textList[4].setText("Armor: " + s.str());
+	s.str("");
+	s << level;
+	this->menu.textList[5].setText("Level: " + s.str());
+	s.str("");
+	s << range;
+	this->menu.textList[6].setText("Range: " + s.str());
+	s.str("");
+	s << this->getActionsPerTurn();
+	this->menu.textList[7].setText("Actions: " + s.str());
+
+	return T_SUCCESS;
+}

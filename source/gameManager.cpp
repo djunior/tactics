@@ -437,6 +437,7 @@ void GameManager::showUnitMenu(){
 	//showMap();
 	//std::cout << "Pressione M para mover, A para atacar, S para utilizar uma magia, e P para pular" << std::endl;
 	Unit *unit = *activeUnit;
+	unit->statsUpdate();
 	unit->menu.show();
 }
 

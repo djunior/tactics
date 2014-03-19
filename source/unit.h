@@ -67,6 +67,7 @@ public:
 	void debug_showStats(bool verbose);
 	std::vector<Spell *> *getSpellList();
 	mWindow menu;
+	T_ERROR statsUpdate();
 };
 
 #endif

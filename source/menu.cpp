@@ -23,6 +23,11 @@ void mText::setFont(TTF_Font* f)
 	font = f;
 };
 
+void mText::setText(string t)
+{
+	text = t;
+}
+
 void mText::setColor(SDL_Color c)
 {
 	text_color = c;
