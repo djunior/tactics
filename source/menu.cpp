@@ -243,7 +243,7 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 	xScale = wWindow*1.0/WINDOW_INITIAL_W;
 	yScale = hWindow*1.0/WINDOW_INITIAL_H;
 
-	menu = MAIN;
+	menu = MENU_MAIN;
 
 };
 
@@ -291,13 +291,13 @@ void mWindow::setImage(string img)
 void mWindow::setBtnPosition()
 {
 	int x,y;
-	if (menu == MAIN)
+	if (menu == MENU_MAIN)
 	{
 		x = (int)MAIN_BTN_DEFAULT_X*xScale;
 		y = (int)MAIN_BTN_DEFAULT_Y*yScale;
 		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
 	}
-	if (menu == UNIT)
+	if (menu == MENU_UNIT)
 	{
 		x = (int)(rectWin.x + UNIT_BTN_DEFAULT_X)*xScale;
 		y = (int)(rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale;
@@ -311,12 +311,12 @@ void mWindow::setBtnPosition()
 void mWindow::setTxtPosition()
 {
 	int x,y;
-	if (menu == MAIN)
+	if (menu == MENU_MAIN)
 	{
 		x = (int)(rectWin.x + MAIN_TXT_DEFAULT_X)*xScale;
 		y = (int)(rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale;
 	}
-	if (menu == UNIT)
+	if (menu == MENU_UNIT)
 	{
 		x = (int)(rectWin.x + UNIT_TXT_DEFAULT_X)*xScale;
 		y = (int)(rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale;
@@ -373,7 +373,7 @@ void mWindow::mainMenu()
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
 	setScale();
-	menu = MAIN;
+	menu = MENU_MAIN;
 	setBtnPosition();
 	init(0,0);
 };
@@ -434,7 +434,7 @@ void mWindow::show()
 		xT = txtX;
 		yT = txtY;
 
-		if(menu == MAIN)
+		if(menu == MENU_MAIN)
 		{
 			TTF_Font *title;
 			loadTitle(&title);
@@ -453,7 +453,7 @@ void mWindow::show()
 				buttonList[i].show(renderer);
 			}
 		}
-		if(menu == UNIT)
+		if(menu == MENU_UNIT)
 		{
 			SDL_Color color = MENU_BLACK;
 			for (unsigned i=0; i < textList.size(); i++)

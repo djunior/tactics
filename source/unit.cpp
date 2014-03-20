@@ -30,7 +30,7 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	image = UNIT_DEFAULT_SPRITE_UNIT;
 	unit_texture = IMG_LoadTexture(renderer, image);
 
-	menu.setup(renderer,window,UNIT);
+	menu.setup(renderer,window,MENU_UNIT);
 	//menu.statsMenu();
 }
 
