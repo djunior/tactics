@@ -155,17 +155,17 @@ void mButton::show(SDL_Renderer* renderer)
 	SDL_Color colorNotSel = NOT_SELECTED;
 
 	SDL_Rect rectText;
-	rectText.x = rectBtn.x + MARGIN_X*scale;
-	rectText.y = rectBtn.y + MARGIN_Y*scale;
+	rectText.x = static_cast<int>(rectBtn.x + MARGIN_X*scale);
+	rectText.y = static_cast<int>(rectBtn.y + MARGIN_Y*scale);
 
 	rectText = simWrite(renderer,font,text,text_color,rectText,1);
 
-	rectBtn.h = (int)BUTTON_H*scale;
-	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
+	rectBtn.h = static_cast<int>(BUTTON_H*scale);
+	rectBtn.w = static_cast<int>((2*MARGIN_X + rectText.w + 5)*scale);
 
 	bHit();
 
-	rectBtn.w = (int)(MARGIN_X + rectText.w)*scale;
+	rectBtn.w = static_cast<int>((MARGIN_X + rectText.w)*scale);
 
 	if(isSelected == false) 
 	{
@@ -178,9 +178,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
-		rectBtn.h = (int)BUTTON_H*scale;
-		rectBtn.w = (int)(5 + MARGIN_X)*scale;
+		rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+		rectBtn.h = static_cast<int>(BUTTON_H*scale);
+		rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 2*BUTTON_H + 2*BUTTON_SEPARATION;
@@ -201,9 +201,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
-		rectBtn.h = (int)BUTTON_H*scale;
-		rectBtn.w = (int)(5 + MARGIN_X)*scale;
+		rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+		rectBtn.h = static_cast<int>(BUTTON_H*scale);
+		rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 3*BUTTON_H + 3*BUTTON_SEPARATION;
@@ -213,7 +213,7 @@ void mButton::show(SDL_Renderer* renderer)
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 		
 	}
-	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
+	rectBtn.w = static_cast<int>((2*MARGIN_X + rectText.w + 5)*scale);
 	setPosition(hold.x,hold.y);
 	write(renderer,font,text,text_color,rectText,scale);
 };
@@ -293,15 +293,15 @@ void mWindow::setBtnPosition()
 	int x,y;
 	if (menu == MENU_MAIN)
 	{
-		x = (int)MAIN_BTN_DEFAULT_X*xScale;
-		y = (int)MAIN_BTN_DEFAULT_Y*yScale;
-		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = static_cast<int>(MAIN_BTN_DEFAULT_X*xScale);
+		y = static_cast<int>(MAIN_BTN_DEFAULT_Y*yScale);
+		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
 	if (menu == MENU_UNIT)
 	{
-		x = (int)(rectWin.x + UNIT_BTN_DEFAULT_X)*xScale;
-		y = (int)(rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale;
-		//increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = static_cast<int>((rectWin.x + UNIT_BTN_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale);
+		//increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
 	btnX = x;
 	btnY = y;
@@ -313,14 +313,14 @@ void mWindow::setTxtPosition()
 	int x,y;
 	if (menu == MENU_MAIN)
 	{
-		x = (int)(rectWin.x + MAIN_TXT_DEFAULT_X)*xScale;
-		y = (int)(rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale;
+		x = static_cast<int>((rectWin.x + MAIN_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale);
 	}
 	if (menu == MENU_UNIT)
 	{
-		x = (int)(rectWin.x + UNIT_TXT_DEFAULT_X)*xScale;
-		y = (int)(rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale;
-		increment = (int)(TEXT_H + LINE_SEPARATION)*yScale;
+		x = static_cast<int>((rectWin.x + UNIT_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
 	}
 	txtX = x;
 	txtY = y;
