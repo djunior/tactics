@@ -35,11 +35,11 @@ namespace Screen {
 
 		setScale();
 
-		int x = (int)BOARD_INITIAL_X*xScale;
-		int y = (int)BOARD_INITIAL_Y*yScale;
+		int x = static_cast<int>(BOARD_INITIAL_X*xScale);
+		int y = static_cast<int>(BOARD_INITIAL_Y*yScale);
 
-		int endX = (int)(BOARD_INITIAL_X + BOARD_BLOCK_SIZE*board->getMaxBoardX())*xScale;
-		int endY = (int)(BOARD_INITIAL_Y + BOARD_BLOCK_SIZE*board->getMaxBoardY())*yScale;
+		int endX = static_cast<int>((BOARD_INITIAL_X + BOARD_BLOCK_SIZE*board->getMaxBoardX())*xScale);
+		int endY = static_cast<int>((BOARD_INITIAL_Y + BOARD_BLOCK_SIZE*board->getMaxBoardY())*yScale);
 
 	    SDL_RenderCopy(renderer, background_texture, NULL, NULL);
 
@@ -58,12 +58,12 @@ namespace Screen {
 		SDL_RenderDrawLine(renderer,x,endY,endX,endY);
 
 		for (unsigned int i=1; i < board->getMaxBoardX();i++){
-			unsigned int xi = x+(int)(BOARD_BLOCK_SIZE*i)*xScale;
+			unsigned int xi = x+static_cast<int>((BOARD_BLOCK_SIZE*i)*xScale);
 			SDL_RenderDrawLine(renderer,xi,y,xi,endY);
 		}
 
 		for (unsigned int i=1; i < board->getMaxBoardY();i++){
-			unsigned int yi = y+(int)(BOARD_BLOCK_SIZE*i)*yScale;
+			unsigned int yi = y+static_cast<int>((BOARD_BLOCK_SIZE*i)*yScale);
 			SDL_RenderDrawLine(renderer,x,yi,endX,yi);
 		}
 	}
@@ -83,10 +83,10 @@ namespace Screen {
 
 	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
 
-	    rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
-	    rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
+	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
+	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
+	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
+	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
 
 	    SDL_Rect src;
 	    src.x=0;
@@ -129,37 +129,37 @@ namespace Screen {
 
 		if (area->shape == AOE_SHAPE_CROSS){
 
-			int ix = area->x - area->range;
+			unsigned int ix = area->x - area->range;
 			if (ix < 0)
 				ix = 0;
 
-			int iy = area->y - area->range;
+			unsigned int iy = area->y - area->range;
 			if (iy < 0)
 				iy = 0;
 
-			int fx = area->x + area->range;
+			unsigned int fx = area->x + area->range;
 			if (fx >= board->getMaxBoardX())
 				fx = board->getMaxBoardX()-1;
 
-			int fy = area->y + area->range;
+			unsigned int fy = area->y + area->range;
 			if (fy >= board->getMaxBoardY())
 				fy = board->getMaxBoardY()-1;
 
 			SDL_Rect rect;
-		    rect.x = (int)(BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE)*xScale;
-		    rect.y = (int)(BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale;
-			rect.w = (int)BOARD_BLOCK_SIZE*xScale;
-			rect.h = (int)BOARD_BLOCK_SIZE*yScale;
+		    rect.x = static_cast<int>((BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE)*xScale);
+		    rect.y = static_cast<int>((BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale);
+			rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
+			rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
 
-			for (int x = ix; x <= fx; x++){
-				rect.x = (int)(BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale;
+			for (unsigned int x = ix; x <= fx; x++){
+				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				SDL_RenderFillRect(renderer,&rect);
 			}
 
-		    rect.x = (int)(BOARD_INITIAL_X + area->x*BOARD_BLOCK_SIZE)*xScale;
+		    rect.x = static_cast<int>((BOARD_INITIAL_X + area->x*BOARD_BLOCK_SIZE)*xScale);
 
-			for (int y = iy; y <= fy; y++){
-				rect.y = (int)(BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale;
+			for (unsigned int y = iy; y <= fy; y++){
+				rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
 				SDL_RenderFillRect(renderer,&rect);
 			}
 		}
