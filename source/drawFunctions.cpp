@@ -93,7 +93,6 @@ namespace Screen {
 	    src.w=32;
 	    src.h=40;
 
-
 	    if (unit->isAnimating()) {
 	    	std::cout << "IS ANIMATING" << std::endl;
 	    	Animation* animation = unit->getAnimation();
@@ -111,12 +110,16 @@ namespace Screen {
 			std::cout << "Animate rectChar.y=" << rectChar.y << std::endl;
 
 			if (animation->type == ANIMATION_UNIT_MOVE){
-				int index = ((int) animation->currentFrame) % (4 * animation->repeatFrame) / animation->repeatFrame;
+				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
 
 				if (unit->getTeam() == TEAM_A) {
-
-					src.y = src.h;
-					src.x = src.w*(3+index);
+					if (index <= 3) {
+						src.y = src.h;
+						src.x = src.w*(3+index);
+					} else {
+						src.y = src.h*2;
+						src.x = 0;
+					}
 
 				} else {
 

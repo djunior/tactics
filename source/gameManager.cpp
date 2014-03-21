@@ -426,7 +426,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 		end.x = x;
 		end.y = y;
 
-		Animation a(ANIMATION_UNIT_MOVE,start,end,20,4);
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
 		unit->setAnimation(a);
 
 		context = CONTEXT_UNIT_MOVE;
