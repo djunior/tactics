@@ -8,7 +8,7 @@
  */
 #include "basic_includes.h"
 
-#include "animation.h"
+#include "fps.h"
 #include "menu.h"
 
 #include "mouse.h"

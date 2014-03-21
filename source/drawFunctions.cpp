@@ -23,7 +23,11 @@ namespace Screen {
 		}
 
 	void init(SDL_Renderer* renderer,SDL_Window* win){
-		//unit_texture = IMG_LoadTexture(renderer, "images\\char_lanca.png");
+		SDL_Surface* unit_surface = SDL_LoadBMP("images\\paladin_m.bmp");
+		SDL_SetColorKey(unit_surface,SDL_TRUE,SDL_MapRGB(unit_surface->format,0,0,0));
+		unit_texture = SDL_CreateTextureFromSurface(renderer,unit_surface);
+		SDL_FreeSurface(unit_surface);
+
 		background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
 		window = win;
 		setScale();
@@ -79,22 +83,75 @@ namespace Screen {
 		int h = 0;
 		SDL_Rect rectChar;
 
-		unit_texture = unit->getTexture();
-
 	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
 
-	    rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
-	    rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
-	    rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
+		rectChar.w = (int)(BOARD_BLOCK_SIZE)*xScale;
+		rectChar.h = (int)(BOARD_BLOCK_SIZE)*yScale;
 
 	    SDL_Rect src;
-	    src.x=0;
 	    src.y=0;
-	    src.w=w/4;
-	    src.h=h/2;
+	    src.w=32;
+	    src.h=40;
 
-	    SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+	    if (unit->isAnimating()) {
+	    	std::cout << "IS ANIMATING" << std::endl;
+	    	Animation* animation = unit->getAnimation();
+	    	//animation.debug_showStats();
+	    	std::cout << "CURRENT FRAME " << animation->currentFrame << std::endl;
+	    	std::cout << "CURRENT FRAME/DURATION " << animation->currentFrame/animation->duration << std::endl;
+	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
+	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
+	    	std::cout <<  "DIFF X: " << diffX << std::endl;
+	    	std::cout <<  "DIFF Y: " << diffY << std::endl;
+			rectChar.x = (int)(BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale;
+			rectChar.y = (int)(BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale;
+
+			std::cout << "Animate rectChar.x=" << rectChar.x << std::endl;
+			std::cout << "Animate rectChar.y=" << rectChar.y << std::endl;
+
+			if (animation->type == ANIMATION_UNIT_MOVE){
+				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
+
+				if (unit->getTeam() == TEAM_A) {
+					if (index <= 3) {
+						src.y = src.h;
+						src.x = src.w*(3+index);
+					} else {
+						src.y = src.h*2;
+						src.x = 0;
+					}
+
+				} else {
+
+					if (index <= 1) {
+						src.y = 0;
+						src.x = src.w*(5 + index);
+					} else {
+						src.y = src.h;
+						src.x = src.w*(index -2);
+					}
+
+				}
+
+
+			}
+
+			animation->currentFrame++;
+		} else {
+
+			rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
+			rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
+
+			if (unit->getTeam() == TEAM_A)
+				src.x=src.w*3;
+			else
+			    src.x=src.w;
+		}
+
+	    if(unit->getTeam() == TEAM_B)
+	    	SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+	    else
+	    	SDL_RenderCopyEx(renderer,unit_texture,&src,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
 
 		SDL_Rect healthBar;
 		healthBar.w = rectChar.w - 20;
@@ -104,11 +161,6 @@ namespace Screen {
 		healthBar.y = rectChar.y;
 
 		SDL_SetRenderDrawColor(renderer,255,0,0,SDL_ALPHA_OPAQUE);
-	/*
-		std::cout << "HEALTH BAR *" << &healthBar << std::endl;
-		std::cout << "x=" << healthBar.x << " y= " << healthBar.y << std::endl;
-		std::cout << "w=" << healthBar.w << " h= " << healthBar.h << std::endl;
-	*/
 		SDL_RenderFillRect(renderer,&healthBar);
 
 		healthBar.w = (unit->getHp() * healthBar.w) / unit->getMaxHp();

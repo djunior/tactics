@@ -31,9 +31,14 @@ struct BOARD_AOE{
 	BOARD_AXIS axis;
 };
 
+struct BOARD_POINT{
+	int x,y;
+};
+
 typedef enum BOARD_AXIS BOARD_AXIS;
 typedef enum AOE_SHAPE AOE_SHAPE;
 typedef struct BOARD_AOE BOARD_AOE;
+typedef struct BOARD_POINT BOARD_POINT;
 
 class Board;
 

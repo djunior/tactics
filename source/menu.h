@@ -2,7 +2,6 @@
 #define menu_h
 
 #include "basic_includes.h"
-#include "animation.h"
 #include "mouse.h"
 
 #include <vector>

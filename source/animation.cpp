@@ -1,253 +1,57 @@
+/*
+ * animation.cpp
+ *
+ *  Created on: Mar 17, 2014
+ *      Author: djunior
+ */
+
 #include "animation.h"
 
-/*=============================
-DRAW
-==============================*/
+Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,double dur,int rep) {
+	type = t;
 
-void sdlInit()
-{
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
-		cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		exit(1);
-	}
-};
+	currentFrame = 0;
+	duration = dur;
 
-/*=============================
-WRITE
-==============================*/
+	startPoint = start;
+	endPoint = end;
 
-void textInit()
-{
-	if (TTF_Init() != 0)
-   {
-      cerr << "TTF_Init() Failed: " << TTF_GetError() << endl;
-      SDL_Quit();
-      exit(1);
-   }
-};
+	repeatFrame = rep;
+}
 
-void loadFont(TTF_Font **font)
-{
-    *font = TTF_OpenFont("images\\FinalFrontier.ttf", 24);
-    if (font == NULL)
-    {
-	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
-	    TTF_Quit();
-	    SDL_Quit();
-	    exit(1);
-    }
-};
+// Default initiation;
+Animation::Animation(){
+	type = ANIMATION_IDLE;
 
-void loadTitle(TTF_Font **font)
-{
-    *font = TTF_OpenFont("images\\finalf.ttf", 72);
-    if (font == NULL)
-    {
-	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
-	    TTF_Quit();
-	    SDL_Quit();
-	    exit(1);
-    }
-};
+	currentFrame = 1;
+	duration = 1;
 
-SDL_Surface *textContent(TTF_Font *font,char *text,SDL_Color text_color)
-{
-	SDL_Surface *textSurface;
-	textSurface = TTF_RenderText_Solid(font,
-   	text,
-   	text_color);
+	startPoint.x = 0;
+	startPoint.y = 0;
 
-   	if (textSurface == NULL)
-   	{
-      	cerr << "TTF_RenderText_Solid() Failed: " << TTF_GetError() << "\nVendo o erro:\nstring = " << text << endl;
-      	TTF_Quit();
-      	SDL_Quit();
-      	exit(1);
-   	}
-   	return textSurface;
-};
+	endPoint.x = 0;
+	endPoint.y = 0;
 
-void write(
-	SDL_Renderer* renderer,
-	TTF_Font *font, 
-	string text,
-	SDL_Color text_color,
-	SDL_Rect rectText
-	)
-{
-	SDL_Texture *tTexture;
-	SDL_Surface *tSurface;
+	repeatFrame = 1;
+}
 
-	int w=0,h=0;
+Animation::~Animation() {
+	// TODO Auto-generated destructor stub
+}
 
-    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
-    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
-    SDL_FreeSurface(tSurface);
-    rectText.w=w;
-    rectText.h=h;
+bool Animation::hasStarted(){
+	return currentFrame > 0;
+}
 
-    SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
-};
+bool Animation::hasEnded(){
+	return currentFrame >= duration;
+}
 
-SDL_Rect write(
-	SDL_Renderer* renderer,
-	TTF_Font *font, 
-	string text,
-	SDL_Color text_color,
-	SDL_Rect rectText,
-	float scale
-	)
-{
-	SDL_Texture *tTexture;
-	SDL_Surface *tSurface;
-
-	int w,h;
-	float wF,hF;
-
-    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
-    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
-    SDL_FreeSurface(tSurface);
-
-    wF = w*scale;
-    hF = h*scale;
-    w = (int)wF;
-    h = (int)hF;
-
-    rectText.w=w;
-    rectText.h=h;
-
-    SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
-
-    return rectText;
-};
-
-SDL_Rect simWrite(
-	SDL_Renderer* renderer,
-	TTF_Font *font, 
-	string text,
-	SDL_Color text_color,
-	SDL_Rect rectText,
-	float scale
-	)
-{
-	SDL_Texture *tTexture;
-	SDL_Surface *tSurface;
-
-	int w,h;
-	float wF,hF;
-
-    tSurface = textContent(font,const_cast<char*>(text.c_str()),text_color);
-    tTexture = SDL_CreateTextureFromSurface(renderer, tSurface);
-    SDL_QueryTexture(tTexture, NULL, NULL, &w, &h);
-    SDL_FreeSurface(tSurface);
-
-    wF = w*scale;
-    hF = h*scale;
-    w = (int)wF;
-    h = (int)hF;
-
-    rectText.w=w;
-    rectText.h=h;
-
-    //SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
-
-    return rectText;
-};
-
-/*=============================
-FPS
-==============================*/
-
-//CONSTRUTOR
-framesPerSecond::framesPerSecond(void)
-{
-	loop = 0.000000000;
-	start = 0;
-	end = 0;
-	frames = 0;
-	fps = 0.00;
-	rect.x = 0;
-	rect.y = 0;
-	rect.h = 0;
-	rect.w = 0;
-};
-
-//SET VARIABLES
-void framesPerSecond::setFrames(int f)
-{
-	frames = f;
-};
-time_t framesPerSecond::setStart()
-{
-	start = time(NULL);
-	return start;
-};
-time_t framesPerSecond::setEnd()
-{
-	end = time(NULL);
-	return end;
-};
-
-//GET VARIABLES
-int framesPerSecond::getFrames()
-{
-	return frames;
-};
-
-SDL_Rect framesPerSecond::getRect()
-{
-	return rect;
-};
-
-double framesPerSecond::getLoop()
-{
-	return loop;
-};
-
-//FUNCTIONS:
-void framesPerSecond::plus()
-{
-	frames++;
-};
-
-double framesPerSecond::calculate()
-{
-	loop += difftime(end,start);
-	fps = frames;
-	return fps;
-};
-void framesPerSecond::show(SDL_Renderer* renderer, TTF_Font *font)	
-{
-	SDL_Rect rectText;
-	SDL_Color text_color = {255, 255, 255};
-	string text;
-
-	ostringstream strStream;   // float to std::string
-    strStream << fps;
-    string strFPS(strStream.str());
-
-	text = "FPS: " + strFPS;
-
-    rectText.x = 0;
-    rectText.y = 0;
-
-    rect = rectText;
-
-    write(renderer,font,text,text_color,rect);
-
-};
-void framesPerSecond::fpsControl(int limit_fps) {
-	frameDuration = (float) 1000/limit_fps;
-	lastTick = SDL_GetTicks();
-};
-bool framesPerSecond::isFrameDone(){
-	float currentTick = SDL_GetTicks();
-	float duration = currentTick - lastTick;
-	if (duration >= frameDuration){
-		lastTick = currentTick;
-		return true;
-	}
-	return false;
-};
+void Animation::debug_showStats(){
+	std::cout << "Animation(" << this << ") stats:" << std::endl;
+	std::cout << "Type: " << type << std::endl;
+	std::cout << "Duration: " << duration << std::endl;
+	std::cout << "Current Frame: " << currentFrame << std::endl;
+	std::cout << "Start Point(" << &startPoint << "): (" << startPoint.x << "," << startPoint.y << ")" << std::endl;
+	std::cout << "End Point(" << &endPoint << "): (" << endPoint.x << "," << endPoint.y << ")" << std::endl;
+}

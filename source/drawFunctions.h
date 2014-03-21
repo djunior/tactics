@@ -12,7 +12,7 @@
 #include "unit.h"
 
 #include "basic_includes.h"
-#include "animation.h"
+#include "fps.h"
 
 #define BOARD_INITIAL_X 250
 #define BOARD_INITIAL_Y 230
