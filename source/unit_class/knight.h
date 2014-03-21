@@ -17,6 +17,8 @@
 #define KNIGHT_ARMOR 5
 #define KNIGHT_MANA_POOL 10
 
+#define KNIGHT_SPRITE "images\\char_lanca.png"
+
 class Knight : public Unit {
 public:
 	Knight(T_TEAM t,SDL_Renderer *r, SDL_Window *w);

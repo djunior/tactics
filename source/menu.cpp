@@ -23,6 +23,16 @@ void mText::setFont(TTF_Font* f)
 	font = f;
 };
 
+void mText::setText(string t)
+{
+	text = t;
+}
+
+void mText::setColor(SDL_Color c)
+{
+	text_color = c;
+};
+
 void mText::setPosition(int x, int y)
 {
 	rectText.x = x;
@@ -145,17 +155,17 @@ void mButton::show(SDL_Renderer* renderer)
 	SDL_Color colorNotSel = NOT_SELECTED;
 
 	SDL_Rect rectText;
-	rectText.x = rectBtn.x + MARGIN_X*scale;
-	rectText.y = rectBtn.y + MARGIN_Y*scale;
+	rectText.x = static_cast<int>(rectBtn.x + MARGIN_X*scale);
+	rectText.y = static_cast<int>(rectBtn.y + MARGIN_Y*scale);
 
 	rectText = simWrite(renderer,font,text,text_color,rectText,1);
 
-	rectBtn.h = (int)BUTTON_H*scale;
-	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
+	rectBtn.h = static_cast<int>(BUTTON_H*scale);
+	rectBtn.w = static_cast<int>((2*MARGIN_X + rectText.w + 5)*scale);
 
 	bHit();
 
-	rectBtn.w = (int)(MARGIN_X + rectText.w)*scale;
+	rectBtn.w = static_cast<int>((MARGIN_X + rectText.w)*scale);
 
 	if(isSelected == false) 
 	{
@@ -168,9 +178,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
-		rectBtn.h = (int)BUTTON_H*scale;
-		rectBtn.w = (int)(5 + MARGIN_X)*scale;
+		rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+		rectBtn.h = static_cast<int>(BUTTON_H*scale);
+		rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 2*BUTTON_H + 2*BUTTON_SEPARATION;
@@ -191,9 +201,9 @@ void mButton::show(SDL_Renderer* renderer)
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += (int)(MARGIN_X + rectText.w)*scale;
-		rectBtn.h = (int)BUTTON_H*scale;
-		rectBtn.w = (int)(5 + MARGIN_X)*scale;
+		rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+		rectBtn.h = static_cast<int>(BUTTON_H*scale);
+		rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
 
 		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
 		rectTextureBtn.y = 3*BUTTON_H + 3*BUTTON_SEPARATION;
@@ -203,7 +213,7 @@ void mButton::show(SDL_Renderer* renderer)
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 		
 	}
-	rectBtn.w = (int)(2*MARGIN_X + rectText.w + 5)*scale;
+	rectBtn.w = static_cast<int>((2*MARGIN_X + rectText.w + 5)*scale);
 	setPosition(hold.x,hold.y);
 	write(renderer,font,text,text_color,rectText,scale);
 };
@@ -214,7 +224,6 @@ MENU
 
 mWindow::mWindow(void)
 {
-	cerr << "Criando Unit.......?" << endl;
 	loadFont(&font);
 
 	int wWindow,hWindow;
@@ -234,14 +243,14 @@ mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
 	xScale = wWindow*1.0/WINDOW_INITIAL_W;
 	yScale = hWindow*1.0/WINDOW_INITIAL_H;
 
-	menu = MAIN;
+	menu = MENU_MAIN;
 
 };
 
-void mWindow::setup(SDL_Renderer* rend, string img, SDL_Window *w, MENU m)
+void mWindow::setup(SDL_Renderer* rend, SDL_Window *w, MENU m)
 {
 	renderer = rend;
-	image = const_cast<char*>(img.c_str());
+	//image = const_cast<char*>(img.c_str());
 	window = w;
 	menu = m;
 };
@@ -282,17 +291,17 @@ void mWindow::setImage(string img)
 void mWindow::setBtnPosition()
 {
 	int x,y;
-	if (menu == MAIN)
+	if (menu == MENU_MAIN)
 	{
-		x = (int)MAIN_BTN_DEFAULT_X*xScale;
-		y = (int)MAIN_BTN_DEFAULT_Y*yScale;
-		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = static_cast<int>(MAIN_BTN_DEFAULT_X*xScale);
+		y = static_cast<int>(MAIN_BTN_DEFAULT_Y*yScale);
+		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
-	if (menu == UNIT)
+	if (menu == MENU_UNIT)
 	{
-		x = (int)UNIT_BTN_DEFAULT_X*xScale;
-		y = (int)UNIT_BTN_DEFAULT_Y*yScale;
-		increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = static_cast<int>((rectWin.x + UNIT_BTN_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale);
+		//increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
 	btnX = x;
 	btnY = y;
@@ -302,16 +311,16 @@ void mWindow::setBtnPosition()
 void mWindow::setTxtPosition()
 {
 	int x,y;
-	if (menu == MAIN)
+	if (menu == MENU_MAIN)
 	{
-		x = (int)MAIN_TXT_DEFAULT_X*xScale;
-		y = (int)MAIN_TXT_DEFAULT_Y*yScale;
+		x = static_cast<int>((rectWin.x + MAIN_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale);
 	}
-	if (menu == UNIT)
+	if (menu == MENU_UNIT)
 	{
-		x = (int)UNIT_TXT_DEFAULT_X*xScale;
-		y = (int)UNIT_TXT_DEFAULT_Y*yScale;
-		//increment = (int)(BUTTON_H + BUTTON_SEPARATION)*yScale;
+		x = static_cast<int>((rectWin.x + UNIT_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
 	}
 	txtX = x;
 	txtY = y;
@@ -364,16 +373,48 @@ void mWindow::mainMenu()
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
 	setScale();
-	menu = MAIN;
+	menu = MENU_MAIN;
 	setBtnPosition();
 	init(0,0);
 };
 
-void mWindow::statsMenu()
+void mWindow::statsMenu(
+			unsigned int hp, 
+			unsigned int maxHp, 
+			unsigned int attackDamage, 
+			unsigned int armor, 
+			unsigned int level, 
+			unsigned int move, 
+			unsigned int range, 
+			unsigned int actionPerTurn, 
+			unsigned int mana, 
+			unsigned int manaPool
+			)
 {
-	addText("Testando Boladamente");
+	stringstream ss,s;
+	addText("Unit: ");
+	addText("  Stats:");
+	s << maxHp;
+	ss << hp;
+	addText("HP: " + ss.str() + "/" + s.str());
+	ss.str("");
+	ss << attackDamage;
+	addText("AD: " + ss.str());
+	ss.str("");
+	ss << armor;
+	addText("Armor: " + ss.str());
+	ss.str("");
+	ss << level;
+	addText("Level: " + ss.str());
+	ss.str("");
+	ss << range;
+	addText("Range: " + ss.str());
+	ss.str("");
+	ss << actionPerTurn;
+	addText("Actions: " + ss.str());
+	ss.str("");
 	setTxtPosition();
-	init(0,0);
+	init(0,25);
 };
 
 void mWindow::show()
@@ -393,7 +434,7 @@ void mWindow::show()
 		xT = txtX;
 		yT = txtY;
 
-		if(menu == MAIN)
+		if(menu == MENU_MAIN)
 		{
 			TTF_Font *title;
 			loadTitle(&title);
@@ -412,11 +453,16 @@ void mWindow::show()
 				buttonList[i].show(renderer);
 			}
 		}
-		if(menu == UNIT)
+		if(menu == MENU_UNIT)
 		{
-			textList[0].setPosition(xT,yT);
-			textList[0].setScale(yScale);
-			textList[0].show();
+			SDL_Color color = MENU_BLACK;
+			for (unsigned i=0; i < textList.size(); i++)
+			{
+				textList[i].setColor(color);
+				textList[i].setPosition(xT,yT + increment*i);
+				textList[i].setScale(yScale);
+				textList[i].show();
+			}
 		}
 	}
 };

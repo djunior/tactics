@@ -6,44 +6,40 @@
 
 #include <vector>
 
+#define MARGIN_X 20
+#define MARGIN_Y 15
+
 #define BUTTON_H 50
 #define BUTTON_MAX_W 600
 #define BUTTON_SEPARATION 20
 
+#define TEXT_H 23
+#define LINE_SEPARATION 10
+
 #define MAIN_BTN_DEFAULT_X 300
 #define MAIN_BTN_DEFAULT_Y 200
-
 #define UNIT_BTN_DEFAULT_X 10
 #define UNIT_BTN_DEFAULT_Y 150
 
 #define MAIN_TXT_DEFAULT_X 250
 #define MAIN_TXT_DEFAULT_Y 50
-
 #define UNIT_TXT_DEFAULT_X 10
 #define UNIT_TXT_DEFAULT_Y 10
 
-#define MARGIN_X 20
-#define MARGIN_Y 15
+#define UNIT_MENU_MAX_X 200
+#define UNIT_MENU_MAX_Y 350
 
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
+#define MENU_BLACK {0,0,0}
 
 #define BUTTON_IMG "images\\btn_blue_sprite.gif"
 #define MAIN_MENU_BKG "images\\fft_wallpaper.png"
 
 enum MENU_ENUM {
-	MAIN,
-	UNIT,
-	SPELL,
-	EFFECT,
-	COMBAT,
-	MOVE,
-	U_SELECT_TARGET,
-	S_SELECT_TARGET,
-	B_TURN,
-	E_TURN,
-	B_UNIT_TURN,
-	E_UNIT_TURN,
+	MENU_MAIN,
+	MENU_UNIT,
+	MENU_TOOTIP
 };
 
 typedef enum MENU_ENUM MENU;
@@ -57,10 +53,13 @@ class mText
 		SDL_Renderer* renderer;
 		float scale;
 		SDL_Rect rectText;
+		MENU menu;
 	public:
 		mText(SDL_Renderer*,TTF_Font*,string,SDL_Color,float);
 		void setScale(float);
 		void setFont(TTF_Font*);
+		void setText(string);
+		void setColor(SDL_Color);
 		void setPosition(int,int);
 		void show();
 };
@@ -111,13 +110,12 @@ class mWindow
 		float xScale;
 		float yScale;
 		MENU menu;
-		vector<mText> textList;
 		vector<mButton> buttonList;
 
 	public:
 		mWindow(void);
 		mWindow(TTF_Font *,SDL_Renderer*,SDL_Window*);
-		void setup(SDL_Renderer*,string,SDL_Window*,MENU);
+		void setup(SDL_Renderer*,SDL_Window*,MENU);
 		void setScale();
 		void setIsOpen(bool);
 		void setRectWin(SDL_Rect);
@@ -131,8 +129,20 @@ class mWindow
 		void addText(string);
 		void init(int,int);
 		void mainMenu();
-		void statsMenu();
+		void statsMenu(
+			unsigned int hp, 
+			unsigned int maxHp, 
+			unsigned int attackDamage, 
+			unsigned int armor, 
+			unsigned int level, 
+			unsigned int move, 
+			unsigned int range, 
+			unsigned int actionPerTurn, 
+			unsigned int mana, 
+			unsigned int manaPool
+			);
 		void show();
+		vector<mText> textList;
 };
 
 #endif
