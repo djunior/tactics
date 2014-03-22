@@ -225,11 +225,6 @@ MENU
 mWindow::mWindow(void)
 {
 	loadFont(&font);
-
-	int wWindow,hWindow;
-	SDL_GetWindowSize(window,&wWindow,&hWindow);
-	xScale = wWindow*1.0/WINDOW_INITIAL_W;
-	yScale = hWindow*1.0/WINDOW_INITIAL_H;
 };
 
 mWindow::mWindow(TTF_Font *f,SDL_Renderer* rend, SDL_Window *w)
@@ -253,6 +248,11 @@ void mWindow::setup(SDL_Renderer* rend, SDL_Window *w, MENU m)
 	//image = const_cast<char*>(img.c_str());
 	window = w;
 	menu = m;
+
+	int wWindow,hWindow;
+	SDL_GetWindowSize(window,&wWindow,&hWindow);
+	xScale = wWindow*1.0/WINDOW_INITIAL_W;
+	yScale = hWindow*1.0/WINDOW_INITIAL_H;
 };
 
 void mWindow::setScale()

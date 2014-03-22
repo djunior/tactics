@@ -30,6 +30,14 @@ enum GAME_MANAGER_CONTEXT {
 
 typedef enum GAME_MANAGER_CONTEXT GAMEMANAGER_CONTEXT;
 
+enum UNIT_CLASS {
+	UNIT_CLASS_WIZARD,
+	UNIT_CLASS_KNIGHT,
+	UNIT_CLASS_UNIT,
+};
+
+typedef enum UNIT_CLASS UNIT_CLASS;
+
 class GameManager{
 private:
 	vector<Unit *> unitList;
@@ -72,7 +80,7 @@ private:
 public:
 	GameManager(Board* newBoard,SDL_Renderer* r, SDL_Window *w);
 	~GameManager();
-	void createUnit(string unitClass,T_TEAM team);
+	void createUnit(UNIT_CLASS unitClass,T_TEAM team);
 	void startGame();
 	void startTurn();
 	void endGame();

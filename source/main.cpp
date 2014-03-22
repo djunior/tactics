@@ -82,11 +82,8 @@ int main(int argc, char *argv[]){
     // FPS Setup END
 
     // Unit create BEGIN
-    cerr << "Criando unidade 1!" << endl;
-    gm.createUnit("wizard",TEAM_A);
-
-    cerr << "Criando unidade 2!" << endl;
-    gm.createUnit("wizard",TEAM_B);
+    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_A);
+    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
 
 //    cerr << "Criando unidade 3!" << endl;
 //    gm.createUnit("knight",TEAM_A);

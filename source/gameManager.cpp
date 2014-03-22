@@ -33,17 +33,17 @@ void GameManager::cleanup(){
 	}
 }
 
-void GameManager::createUnit(string unitClass, T_TEAM team){
-	std::cout << "GameManager::createUnit class= " << unitClass << std::endl;
+void GameManager::createUnit(UNIT_CLASS unitClass, T_TEAM team){
+	std::cout << "GameManager::createUnit(): creating unit number " << unitList.size() << " class " << unitClass << std::endl;
 
-	if (unitClass == "knight") {
+	if (unitClass == UNIT_CLASS_KNIGHT) {
 		std::cout << "Creating new knight" << std::endl;
 		Knight* newUnit = new Knight(team,renderer,window);
 		std::cout << "Criou knight: typeid=" << typeid(newUnit).name() << std::endl;
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
-	} else if (unitClass == "wizard") {
+	} else if (unitClass == UNIT_CLASS_WIZARD) {
 		std::cout << "Creating new wizard" << std::endl;
 		Wizard* newUnit = new Wizard(team,renderer,window);
 		unitList.push_back(newUnit);
