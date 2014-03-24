@@ -9,10 +9,31 @@
 
 namespace Screen {
 
-	SDL_Texture* unit_texture, *background_texture;
+	SDL_Texture* background_texture, *broken_image_texture;
 	SDL_Window* window;
 	float xScale,yScale;
 	bool isInitialized = false;
+	std::map<std::string,SDL_Texture*> imageMap;
+
+	SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI){
+
+		SDL_Texture* t;
+		try {
+			t = imageMap.at(imageURI);
+		} catch(const std::out_of_range& oor) {
+			SDL_Surface* s = SDL_LoadBMP(const_cast<char*>(imageURI.c_str()));
+			if (s == NULL) {
+				std::cerr << "Failed to load image " << imageURI << std::endl;
+				return broken_image_texture;
+			}
+
+			SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,0,0,0));
+			t= SDL_CreateTextureFromSurface(renderer,s);
+			SDL_FreeSurface(s);
+			imageMap.insert(std::pair<std::string,SDL_Texture*>(imageURI,t));
+		}
+		return t;
+	}
 
 	void setScale()
 		{
@@ -23,17 +44,28 @@ namespace Screen {
 		}
 
 	void init(SDL_Renderer* renderer,SDL_Window* win){
-		SDL_Surface* unit_surface = SDL_LoadBMP("images\\paladin_m.bmp");
-		SDL_SetColorKey(unit_surface,SDL_TRUE,SDL_MapRGB(unit_surface->format,0,0,0));
-		unit_texture = SDL_CreateTextureFromSurface(renderer,unit_surface);
-		SDL_FreeSurface(unit_surface);
-
+		broken_image_texture = IMG_LoadTexture(renderer,BROKEN_IMAGE);
 		background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
+
 		window = win;
 		setScale();
 
 		isInitialized = true;
 	}	
+
+	void cleanup(){
+		// Destruindo texturas criadas individualmente
+		SDL_DestroyTexture(background_texture);
+		SDL_DestroyTexture(broken_image_texture);
+
+		// Destruindo texturas criadas pela funcao loadSprite
+		for (std::map<std::string,SDL_Texture*>::iterator it = imageMap.begin(); it != imageMap.end(); it++){
+			SDL_DestroyTexture(it->second);
+		}
+
+		// Zerando o mapa imageMap
+		imageMap.clear();
+	}
 
 	void drawBoard(SDL_Renderer *renderer, Board* board) {
 
@@ -72,7 +104,7 @@ namespace Screen {
 		}
 	}
 
-	void drawUnit(Unit *unit, SDL_Renderer *renderer, TTF_Font *font){
+	void drawUnit(Unit *unit,SDL_Texture* texture, SDL_Renderer *renderer, TTF_Font *font){
 		if (! isInitialized) {
 			std::cerr << "Falha a pintar a unidade " << unit << std::endl;
 			std::cerr << "A funcao Screen::init nao foi invocada" << std::endl;
@@ -83,7 +115,7 @@ namespace Screen {
 		int h = 0;
 		SDL_Rect rectChar;
 
-	    SDL_QueryTexture(unit_texture, NULL, NULL, &w, &h);
+	    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
 	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
 	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
@@ -151,9 +183,9 @@ namespace Screen {
 		}
 
 	    if(unit->getTeam() == TEAM_B)
-	    	SDL_RenderCopy(renderer, unit_texture, &src, &rectChar);
+	    	SDL_RenderCopy(renderer, texture, &src, &rectChar);
 	    else
-	    	SDL_RenderCopyEx(renderer,unit_texture,&src,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
+	    	SDL_RenderCopyEx(renderer,texture,&src,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
 
 		SDL_Rect healthBar;
 		healthBar.w = rectChar.w - 20;
@@ -171,6 +203,10 @@ namespace Screen {
 
 		SDL_RenderFillRect(renderer,&healthBar);
 
+	}
+
+	void drawUnit(Unit *unit, SDL_Renderer *renderer, TTF_Font *font){
+		drawUnit(unit,loadSprite(renderer,unit->getImage()),renderer,font);
 	}
 
 	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){

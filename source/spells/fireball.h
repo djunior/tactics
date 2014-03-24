@@ -9,6 +9,7 @@
 #define FIREBALL_H_
 
 #include "../spell.h"
+#include "../gameManager.h"
 
 class Fireball : public Spell {
 public:

@@ -7,8 +7,8 @@
 
 #include "gameManager.h"
 #include <typeinfo>
-#include "unit_class/Knight.h"
-#include "unit_class/Wizard.h"
+#include "unit_class/knight.h"
+#include "unit_class/wizard.h"
 
 GameManager::GameManager(Board* newBoard, SDL_Renderer *r, SDL_Window *w){
 	turn = GAMEMANAGER_INITIAL_TURN;
@@ -16,7 +16,7 @@ GameManager::GameManager(Board* newBoard, SDL_Renderer *r, SDL_Window *w){
 	teamABodyCount = 0;
 	teamBBodyCount = 0;
 	context = CONTEXT_IDLE;
-	activeSpell = 0;
+//	activeSpell = 0;
 	actionsPerTurn = 0;
 	movesPerTurn = 0;
 	renderer = r;
@@ -119,6 +119,7 @@ void  GameManager::startTurn(){
 							}
 						}
 					} else if (input == 's' && actionPerTurn > 0) {
+						/*
 						vector<Spell *> *spellList = unit->getSpellList();
 						std::cout << "Pressione o numero correspondente da spell desejada:" << std::endl;
 						for (std::vector<Spell *>::iterator it = spellList->begin(); it != spellList->end(); it++){
@@ -158,6 +159,7 @@ void  GameManager::startTurn(){
 								}
 							}
 						}
+					*/
 					} else if (input == 'm' && movePerTurn > 0) {
 						std::cout << "Pressione W, A, S, D para mover" << std::endl;
 						board->debug_showMap();
@@ -359,7 +361,7 @@ void GameManager::processEvent(SDL_Event *event){
 		case CONTEXT_SPELL_MENU:
 			if (key == SDLK_0 || key == SDLK_1 || key == SDLK_2 || key == SDLK_3 || key == SDLK_4 ||
 				key == SDLK_5 || key == SDLK_6 || key == SDLK_7 || key == SDLK_8 || key == SDLK_9) {
-
+/*
 					vector<Spell *> *spellList = (*activeUnit)->getSpellList();
 					int index = key - '0' - 1;
 					Spell* spell = spellList->at(index);
@@ -369,6 +371,7 @@ void GameManager::processEvent(SDL_Event *event){
 
 					showTargetOptions();
 					context = CONTEXT_SPELL_SELECT_TARGET;
+*/
 			}
 			break;
 
@@ -456,6 +459,7 @@ void GameManager::showUnitMenu(){
 }
 
 void GameManager::showSpellMenu(){
+	/*
 	Unit * unit = *activeUnit;
 	vector<Spell *> *spellList = unit->getSpellList();
 	std::cout << "Pressione o numero correspondente da spell desejada:" << std::endl;
@@ -463,6 +467,7 @@ void GameManager::showSpellMenu(){
 		Spell* spell = (*it);
 		std::cout << "(" << it - spellList->begin() + 1 << "): " << spell->getName() << std::endl;
 	}
+	*/
 }
 
 void GameManager::showMoveOptions(){
@@ -517,6 +522,7 @@ T_ERROR GameManager::selectSpellTargets(SDL_Keycode key){
 	vector<Unit*> targets;
 	T_ERROR e;
 	switch(key) {
+	/*
 		case SDLK_LEFT:
 			e = board->checkUnitsInAOE(unit->getX()-1,unit->getY(),activeSpell->getRange(),BOARD_AXIS_X_MINUS,activeSpell->getAreaOfEffect(),&targets);
 			break;
@@ -529,6 +535,7 @@ T_ERROR GameManager::selectSpellTargets(SDL_Keycode key){
 		case SDLK_UP:
 			e = board->checkUnitsInAOE(unit->getX(),unit->getY()-1,activeSpell->getRange(),BOARD_AXIS_Y_MINUS,activeSpell->getAreaOfEffect(),&targets);
 			break;
+		*/
 	}
 
 	if (e == T_SUCCESS) {
@@ -569,7 +576,8 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 		(*it)->debug_showStats();
 	}
 
-	T_ERROR e = activeSpell->perform(this, targets);
+	T_ERROR e = T_SUCCESS;
+			//activeSpell->perform(this, targets);
 	if (e == T_SUCCESS){
 		actionsPerTurn--;
 		if (getOtherTeamBodyCount(unit->getTeam()) == 0){
@@ -577,7 +585,7 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 			return T_SUCCESS;
 		}
 	} else {
-		std::cerr << "Erro ao usar a spell " << activeSpell << " e=" << e << std::endl;
+//		std::cerr << "Erro ao usar a spell " << activeSpell << " e=" << e << std::endl;
 	}
 
 	context = CONTEXT_UNIT_MENU;

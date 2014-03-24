@@ -70,7 +70,6 @@ int main(int argc, char *argv[]){
     mWindow menu(font,renderer,window);
     
     // FPS Setup BEGIN
-
     fps.fpsControl(60);
     
     fps.setFrames(0);
@@ -78,18 +77,14 @@ int main(int argc, char *argv[]){
     time_t actual;
     hold = fps.setStart();
     actual = hold;
-
     // FPS Setup END
 
     // Unit create BEGIN
     gm.createUnit(UNIT_CLASS_WIZARD,TEAM_A);
-    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
+    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
 
-//    cerr << "Criando unidade 3!" << endl;
-//    gm.createUnit("knight",TEAM_A);
-//
-//    cerr << "Criando unidade 4!" << endl;
-//    gm.createUnit("knight",TEAM_B);
+    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
+    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
     gameBoard.debug_showMap();
     // Unit create END

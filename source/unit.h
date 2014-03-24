@@ -21,14 +21,12 @@
 #define UNIT_DEFAULT_ACTION_PER_TURN 1
 #define UNIT_DEFAULT_MANA_POOL 0
 
-#define UNIT_DEFAULT_SPRITE_UNIT "images\\char_lanca.png"
-
-class Spell;
+#define UNIT_DEFAULT_SPRITE_UNIT "images\\paladin_m.bmp"
 
 class Unit {
 
 protected:
-	const char* image;
+	std::string image;
 	const char* menu_bkg;
 	SDL_Texture* unit_texture;
 	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
@@ -37,7 +35,7 @@ protected:
 	bool dead;
 	T_TEAM team;
 	AOE_SHAPE attackArea;
-	std::vector<Spell *> spellList;
+	//std::vector<Spell *> spellList;
 	Animation animation;
 
 public:
@@ -64,6 +62,7 @@ public:
 	void setMana(int amount);
 	AOE_SHAPE getAttackArea();
 	std::string getClassName();
+	std::string getImage();
 	int combat(std::vector<Unit *> *targetList);
 	T_ERROR combat(std::vector<Unit *> *targetList, int *bodyCount);
 	void debug_showStats();
@@ -72,7 +71,7 @@ public:
 
 	void setAnimation(Animation);
 	Animation* getAnimation();
-	std::vector<Spell *> *getSpellList();
+	//std::vector<Spell *> *getSpellList();
 	mWindow menu;
 	T_ERROR statsUpdate();
 };

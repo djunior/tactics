@@ -17,7 +17,7 @@
 #define KNIGHT_ARMOR 5
 #define KNIGHT_MANA_POOL 10
 
-#define KNIGHT_SPRITE "images\\char_lanca.png"
+#define KNIGHT_SPRITE "images\\Crusader.bmp"
 
 class Knight : public Unit {
 public:

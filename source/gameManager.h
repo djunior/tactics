@@ -46,7 +46,7 @@ private:
 	std::vector<Unit*>::iterator activeUnit;
 	int actionsPerTurn;
 	int movesPerTurn;
-	Spell* activeSpell;
+//	Spell* activeSpell;
 	unsigned int turn;
 	int teamABodyCount, teamBBodyCount;
 	GAMEMANAGER_CONTEXT context;

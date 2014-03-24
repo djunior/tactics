@@ -17,10 +17,12 @@ Wizard::Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w) : Unit(t,r,w) {
 	range = WIZARD_RANGE;
 	attackArea = AOE_SHAPE_LINE;
 	unitClassName = "Wizard";
-	Fireball *fireball = new Fireball(this);
-	spellList.push_back(fireball);
+//	Fireball *fireball = new Fireball(this);
+//	spellList.push_back(fireball);
 	mana = WIZARD_MANA_POOL;
 	manaPool = WIZARD_MANA_POOL;
+
+	image = WIZARD_SPRITE;
 
 	menu.setImage(WIZARD_SPRITE);
 	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);

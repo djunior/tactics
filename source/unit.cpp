@@ -7,7 +7,7 @@
 
 
 #include "unit.h"
-#include "spell.h"
+//#include "spell.h"
 
 Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	x = 0;
@@ -28,16 +28,15 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	dead = false;
 	team = t;
 	image = UNIT_DEFAULT_SPRITE_UNIT;
-	unit_texture = IMG_LoadTexture(renderer, image);
 
 	menu.setup(renderer,window,MENU_UNIT);
 	//menu.statsMenu();
 }
 
 Unit::~Unit(){
-	for (std::vector<Spell*>::iterator it=spellList.begin(); it != spellList.end(); it++){
-		delete (*it);
-	}
+//	for (std::vector<Spell*>::iterator it=spellList.begin(); it != spellList.end(); it++){
+//		delete (*it);
+//	}
 }
 
 unsigned int Unit::getX(){
@@ -166,9 +165,9 @@ void Unit::debug_showStats(){
 	debug_showStats(false);
 }
 
-std::vector<Spell *> *Unit::getSpellList(){
-	return &spellList;
-}
+//std::vector<Spell *> *Unit::getSpellList(){
+//	return &spellList;
+//}
 
 unsigned int Unit::getMana(){
 	return mana;
@@ -193,6 +192,10 @@ bool Unit::isAnimating(){
 		return false;
 
 	return true;
+}
+
+std::string Unit::getImage(){
+	return image;
 }
 
 T_ERROR Unit::statsUpdate()
