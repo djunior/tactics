@@ -17,21 +17,29 @@ namespace Screen {
 
 	SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI){
 
-		SDL_Texture* t;
-		try {
-			t = imageMap.at(imageURI);
-		} catch(const std::out_of_range& oor) {
-			SDL_Surface* s = SDL_LoadBMP(const_cast<char*>(imageURI.c_str()));
-			if (s == NULL) {
-				std::cerr << "Failed to load image " << imageURI << std::endl;
-				return broken_image_texture;
-			}
+		std::map<std::string,SDL_Texture*>::iterator it = imageMap.find(imageURI);
 
-			SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,0,0,0));
-			t= SDL_CreateTextureFromSurface(renderer,s);
-			SDL_FreeSurface(s);
-			imageMap.insert(std::pair<std::string,SDL_Texture*>(imageURI,t));
+		if (it != imageMap.end()){
+			return it->second;
 		}
+
+		SDL_Surface* s = SDL_LoadBMP(const_cast<char*>(imageURI.c_str()));
+		if (s == NULL) {
+			std::cerr << "Failed to load image " << imageURI << ": failed to create SDL_Surface" << std::endl;
+			return broken_image_texture;
+		}
+
+		SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,0,0,0));
+		SDL_Texture* t= SDL_CreateTextureFromSurface(renderer,s);
+		SDL_FreeSurface(s);
+
+		if (t == NULL){
+			std::cerr << "Failed to load image " << imageURI << ": failed to create SDL_Texture" << std::endl;
+			return broken_image_texture;
+		}
+
+		imageMap.insert(std::pair<std::string,SDL_Texture*>(imageURI,t));
+
 		return t;
 	}
 
