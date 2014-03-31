@@ -434,6 +434,9 @@ void mWindow::statsMenu(
 	ss << actionPerTurn;
 	addText("Actions: " + ss.str());
 	ss.str("");
+	ss << move;
+	addText("Move: " + ss.str());
+	ss.str("");
 	setTxtPosition();
 	init(0,25);
 };

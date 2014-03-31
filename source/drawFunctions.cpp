@@ -236,38 +236,32 @@ namespace Screen {
 
 		SDL_SetRenderDrawColor(renderer,0,0,255,150);
 
+		int ix = area->x - area->range;
+		if (ix < 0)
+			ix = 0;
+
+		int iy = area->y - area->range;
+		if (iy < 0)
+			iy = 0;
+
+		int fx = area->x + area->range;
+		if (fx >= board->getMaxBoardX())
+			fx = board->getMaxBoardX()-1;
+
+		int fy = area->y + area->range;
+		if (fy >= board->getMaxBoardY())
+			fy = board->getMaxBoardY()-1;
+
+		SDL_Rect rect;
+	    rect.x = static_cast<int>((BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE)*xScale);
+	    rect.y = static_cast<int>((BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale);
+		rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
+		rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
+
 		if (area->shape == AOE_SHAPE_POINT) {
-			SDL_Rect rect;
-			rect.x = static_cast<int>((BOARD_INITIAL_X + area->x*BOARD_BLOCK_SIZE)*xScale);
-			rect.y = static_cast<int>((BOARD_INITIAL_Y + area->y*BOARD_BLOCK_SIZE)*yScale);
-			rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
-			rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
-
 			SDL_RenderFillRect(renderer,&rect);
+
 		} else if (area->shape == AOE_SHAPE_CROSS){
-
-			int ix = area->x - area->range;
-			if (ix < 0)
-				ix = 0;
-
-			int iy = area->y - area->range;
-			if (iy < 0)
-				iy = 0;
-
-			int fx = area->x + area->range;
-			if (fx >= board->getMaxBoardX())
-				fx = board->getMaxBoardX()-1;
-
-			int fy = area->y + area->range;
-			if (fy >= board->getMaxBoardY())
-				fy = board->getMaxBoardY()-1;
-
-			SDL_Rect rect;
-		    rect.x = static_cast<int>((BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE)*xScale);
-		    rect.y = static_cast<int>((BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale);
-			rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
-			rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
-
 			for (int x = ix; x <= fx; x++){
 				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				SDL_RenderFillRect(renderer,&rect);
@@ -278,6 +272,59 @@ namespace Screen {
 			for (int y = iy; y <= fy; y++){
 				rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
 				SDL_RenderFillRect(renderer,&rect);
+			}
+		} else if (area->shape == AOE_SHAPE_SQUARE){
+			for (int x = ix; x <= fx; x++){
+				for (int y = iy; y <= fy; y++){
+					rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+					rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+					SDL_RenderFillRect(renderer,&rect);
+				}
+			}
+		} else if (area->shape == AOE_SHAPE_CIRCLE){
+			int lx = area->x + area->range;
+			int ly = area->y + area->range;
+			int mx = area->x;
+			int my = area->y;
+			int cx = 0;
+			int cy = 0;
+			for (int x = mx; x <= lx; x++){
+				for (int y = my; y <= ly; y++){
+					if(cy + cx <= area->range)
+					{
+						rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+						rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+						if (y <= fy && x <= fx)
+						{
+							SDL_RenderFillRect(renderer,&rect);
+						}
+						if(cy != 0 && (y-2*cy) >= 0 && (y-2*cy) <= fy)
+						{
+							rect.y = static_cast<int>((BOARD_INITIAL_Y + (y-2*cy)*BOARD_BLOCK_SIZE)*yScale);
+							if (x <= fx)
+							{
+								SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+						if(cx != 0 && (x-2*cx) >= 0)
+						{
+							rect.x = static_cast<int>((BOARD_INITIAL_X + (x-2*cx)*BOARD_BLOCK_SIZE)*xScale);
+							if ((x-2*cx) <= fx)
+							{
+								SDL_RenderFillRect(renderer,&rect);
+							}
+							if(cy != 0 && rect.y != static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale) && y <= fy)
+							{
+								rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+								SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+
+					}
+					cy++;
+				}
+				cx++;
+				cy = 0;
 			}
 		}
 

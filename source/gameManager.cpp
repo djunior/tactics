@@ -657,14 +657,17 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showMap(r);
 	Unit* unit = *activeUnit;
 	if (context == CONTEXT_UNIT_MENU) {
+		stringstream ss;
+		ss << movesPerTurn;
+		(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
 		showUnitMenu();
 	} else if (context == CONTEXT_UNIT_SELECT_MOVE) {
 		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
 		area.y = (*activeUnit)->getY();
-		area.range = 1;
-		area.shape = AOE_SHAPE_CROSS;
+		area.range = movesPerTurn;
+		area.shape = AOE_SHAPE_CIRCLE;
 
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_MOVE) {
