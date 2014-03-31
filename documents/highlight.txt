@@ -1,0 +1,16 @@
+Algumas idéias para melhoria do highlight:
+
+
+Criar um tipo HIGHLIGHT_ALGORYTHM, ou algo nessa linha. Esse tipo deve ser um enum, contendo:
+
+HIGHLIGHT_ALGORYTHM_CONTINUE
+HIGHLIGHT_ALGORYTHM_IGNORE
+HIGHLIGHT_ALGORYTHM_STOP
+HIGHLIGHT_ALGORYTHM_REINFORCE
+
+O comportamento da função que pinta o highlight deve mudar de acordo com o tipo de algoritmo escolhido. O que muda exatamente é
+o que a função de pintura faz quando encontra uma unidade. Segue o comportamento de cada valor do enum:
+
+HIGHLIGHT_ALGORYTHM_CONTINUE: pinta o highlight embaixo da unidade normalmente, como se não houvesse nada lá.
+
+HIGHLIGHT_ALGORYTHM_STOP: não pinta o highlight embaixo da unidade
