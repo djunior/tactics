@@ -597,13 +597,14 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showMap(r);
 	Unit* unit = *activeUnit;
+	stringstream ss;
 	if (context == CONTEXT_UNIT_SELECT_MOVE) {
 		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
 		area.y = (*activeUnit)->getY();
-		area.range = 1;
-		area.shape = AOE_SHAPE_CROSS;
+		area.range = movesPerTurn;
+		area.shape = AOE_SHAPE_CIRCLE;
 
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_MOVE) {
@@ -614,6 +615,8 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 			unit->setAnimation(Animation());
 		}
 	}
+	ss << movesPerTurn;
+	(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
 	showUnitMenu();
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
