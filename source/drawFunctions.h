@@ -33,6 +33,7 @@ namespace Screen {
 	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*);
 	extern void drawUnit(Unit*,SDL_Texture*,SDL_Renderer*,TTF_Font*);
 	extern void drawUnit(Unit*, SDL_Renderer*, TTF_Font*);
+	extern void drawEndGame(T_TEAM,int);
 	extern void cleanup();
 }
 #endif /* DRAWFUNCTIONS_H_ */

@@ -81,15 +81,15 @@ int main(int argc, char *argv[]){
 
     // Unit create BEGIN
     gm.createUnit(UNIT_CLASS_WIZARD,TEAM_A);
-    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
+//    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
 
     gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
-    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
+//    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
     gameBoard.debug_showMap();
     // Unit create END
 
-    menu.mainMenu();
+   menu.mainMenu();
 
     while (Starting)
     {

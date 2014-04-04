@@ -297,11 +297,16 @@ void mWindow::setBtnPosition()
 		y = static_cast<int>(MAIN_BTN_DEFAULT_Y*yScale);
 		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
-	if (menu == MENU_UNIT)
+	else if (menu == MENU_UNIT)
 	{
 		x = static_cast<int>((rectWin.x + UNIT_BTN_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + UNIT_BTN_DEFAULT_Y)*yScale);
 		//increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
+	}
+	else if (menu == MENU_END_GAME){
+		x = static_cast<int>(END_GAME_DEFAULT_X*xScale);
+		y = static_cast<int>(END_GAME_DEFAULT_Y*yScale);
+		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
 	btnX = x;
 	btnY = y;
@@ -316,12 +321,18 @@ void mWindow::setTxtPosition()
 		x = static_cast<int>((rectWin.x + MAIN_TXT_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale);
 	}
-	if (menu == MENU_UNIT)
+	else if (menu == MENU_UNIT)
 	{
 		x = static_cast<int>((rectWin.x + UNIT_TXT_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + UNIT_TXT_DEFAULT_Y)*yScale);
 		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
 	}
+	else if (menu == MENU_END_GAME) {
+		x = static_cast<int>((rectWin.x + END_GAME_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + END_GAME_TXT_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
+	}
+
 	txtX = x;
 	txtY = y;
 
@@ -417,6 +428,24 @@ void mWindow::statsMenu(
 	init(0,25);
 };
 
+void mWindow::endMenu(T_TEAM winningTeam,int turn){
+	stringstream turnStr, teamStr;
+	addText("Fim de jogo!");
+	turnStr << turn;
+	teamStr << (winningTeam == TEAM_A ? "A" : "B");
+	addText("O time " + teamStr.str() + " venceu a partida no turno " + turnStr.str());
+
+	addButton("Jogar novamente");
+	addButton("Sair");
+
+	setImage(MAIN_MENU_BKG);
+	setScale();
+	menu = MENU_END_GAME;
+	setTxtPosition();
+	setBtnPosition();
+	init(0,25);
+}
+
 void mWindow::show()
 {
 	if (getIsOpen())
@@ -463,6 +492,47 @@ void mWindow::show()
 				textList[i].setScale(yScale);
 				textList[i].show();
 			}
+		}
+		else if (menu == MENU_END_GAME)
+		{
+
+			SDL_Rect bck = {
+				END_GAME_TXT_DEFAULT_X-50,
+				END_GAME_TXT_DEFAULT_Y-30,
+				450,
+				350
+			};
+
+			SDL_Rect bckBorder = {
+				bck.x+1,
+				bck.y+1,
+				bck.w-2,
+				bck.h-2
+			};
+
+			SDL_SetRenderDrawColor(renderer,0,51,102,255);
+			SDL_RenderFillRect(renderer,&bck);
+
+			SDL_SetRenderDrawColor(renderer,58,63,78,255);
+			SDL_RenderDrawRect(renderer,&bck);
+			SDL_RenderDrawRect(renderer,&bckBorder);
+
+			SDL_Color color = MENU_BLACK;
+			for (unsigned i=0; i < textList.size(); i++)
+			{
+				textList[i].setColor(color);
+				textList[i].setPosition(xT,yT + increment*i);
+				textList[i].setScale(yScale);
+				textList[i].show();
+			}
+
+			for (unsigned i=0; i < buttonList.size(); i++)
+			{
+				buttonList[i].setPosition(xB,yB + (BUTTON_H + 10)*i);
+				buttonList[i].setScale(yScale);
+				buttonList[i].show(renderer);
+			}
+
 		}
 	}
 };

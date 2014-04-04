@@ -3,7 +3,7 @@
 
 #include "basic_includes.h"
 #include "mouse.h"
-
+#include "utils/t_team.h"
 #include <vector>
 
 #define MARGIN_X 20
@@ -29,6 +29,12 @@
 #define UNIT_MENU_MAX_X 200
 #define UNIT_MENU_MAX_Y 350
 
+#define END_GAME_DEFAULT_X 415
+#define END_GAME_DEFAULT_Y 200
+
+#define END_GAME_TXT_DEFAULT_X 250
+#define END_GAME_TXT_DEFAULT_Y 50
+
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
 #define MENU_BLACK {0,0,0}
@@ -39,7 +45,8 @@
 enum MENU_ENUM {
 	MENU_MAIN,
 	MENU_UNIT,
-	MENU_TOOTIP
+	MENU_TOOTIP,
+	MENU_END_GAME,
 };
 
 typedef enum MENU_ENUM MENU;
@@ -129,6 +136,7 @@ class mWindow
 		void addText(string);
 		void init(int,int);
 		void mainMenu();
+		void endMenu(T_TEAM winningTeam,int turn);
 		void statsMenu(
 			unsigned int hp, 
 			unsigned int maxHp, 

@@ -3,7 +3,7 @@ Algumas idéias para melhoria do highlight:
 
 Criar um tipo HIGHLIGHT_ALGORYTHM, ou algo nessa linha. Esse tipo deve ser um enum, contendo:
 
-HIGHLIGHT_ALGORYTHM_CONTINUE
+HIGHLIGHT_ALGORYTHM_DEFAULT
 HIGHLIGHT_ALGORYTHM_IGNORE
 HIGHLIGHT_ALGORYTHM_STOP
 HIGHLIGHT_ALGORYTHM_REINFORCE
@@ -11,6 +11,33 @@ HIGHLIGHT_ALGORYTHM_REINFORCE
 O comportamento da função que pinta o highlight deve mudar de acordo com o tipo de algoritmo escolhido. O que muda exatamente é
 o que a função de pintura faz quando encontra uma unidade. Segue o comportamento de cada valor do enum:
 
-HIGHLIGHT_ALGORYTHM_CONTINUE: pinta o highlight embaixo da unidade normalmente, como se não houvesse nada lá.
+HIGHLIGHT_ALGORYTHM_DEFAULT: pinta o highlight embaixo da unidade normalmente, como se não houvesse nada lá.
 
-HIGHLIGHT_ALGORYTHM_STOP: não pinta o highlight embaixo da unidade
+HIGHLIGHT_ALGORYTHM_IGNORE: não pinta o highlight embaixo da unidade, e continua pintando a próxima posição no mapa normalmente.
+
+HIGHLIGHT_ALGORYTHM_STOP: não pinta o highlight embaixo da unidade, e para as iterações naquela linha. Esse tipo de algoritmo só faz sentido para
+algumas formas de AOE, (linha, cruz). A idéia que isso seja usado para pintar o highlight dos movimentos (que para quando encontrar uma unidade no caminho)
+
+HIGHLIGHT_ALGORYTHM_REINFORCE: pinta o highlight duas vezes nas posições do mapa que encontrar uma unidade. Útil para pintar AOE de 
+spells e ataques, para reforçar que uma unidade está dentro do AOE
+
+Mudanças necessárias:
+
+O tipo HIGHLIGHT_ALGORITHM deve ser definido, ou no board_utils.h ou no drawFunctions.h
+
+A função drawHighlightedArea agora deve receber um parâmetro adicional, do tipo HIGHLIGHT_ALGORITHM. 
+A função com o header antigo (SDL_Renderer*, Board*, BOARD_AOE) pode ser mantida, fazendo ela chamar a função com o header novo, 
+passando o HIGHLIGHT_ALGORITHM_DEFAULT
+
+A função drawHighlightedArea deve ser alterada para obedecer o tipo selecionado:
+
+durantes a iteração pelo mapa:
+	- Verificar se um espaço tem uma unidade (talvez seja necessário criar uma função Board::at, que retorne NULL ou o Unit* daquela posição do mapa
+	- Se o retorno de Board::at for NULL ou se o algoritmo é HIGHLIGHT_ALGORYTHM_DEFAULT ou HIGHLIGHT_ALGORYTHM_REINFORCE. Se sim, deve-se pintar o highlight naquela posição.
+	- Se o retorno do Board::at não for NULL e o algoritmo for HIGHLIGHT_ALGORYTHM_STOP, deve-se chamar um break para interromper a iteração atual. Essa verificação pode não ser válida para todos os BOARD_AOEs
+	- Se o retorno do Board::at não for NULL e o algoritmo for HIGHLIGHT_ALGORYTHM_REINFORCE, deve-se pintar novamente o highlight na mesma posição
+	
+
+
+
+

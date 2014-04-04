@@ -28,7 +28,7 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	dead = false;
 	team = t;
 	image = UNIT_DEFAULT_SPRITE_UNIT;
-
+	std::cout << "Mais um teste!" << std::endl;
 	menu.setup(renderer,window,MENU_UNIT);
 	//menu.statsMenu();
 }

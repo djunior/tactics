@@ -217,6 +217,9 @@ namespace Screen {
 		drawUnit(unit,loadSprite(renderer,unit->getImage()),renderer,font);
 	}
 
+	void drawEndGame(T_TEAM winningTeam, int turn){
+	}
+
 	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
 
 		setScale();

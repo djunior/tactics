@@ -26,6 +26,7 @@ enum GAME_MANAGER_CONTEXT {
 	CONTEXT_ENDING_TURN,
 	CONTEXT_BEGINNING_UNIT_TURN,
 	CONTEXT_ENDING_UNIT_TURN,
+	CONTEXT_END_GAME,
 };
 
 typedef enum GAME_MANAGER_CONTEXT GAMEMANAGER_CONTEXT;
@@ -52,6 +53,8 @@ private:
 	GAMEMANAGER_CONTEXT context;
 	SDL_Renderer* renderer;
 	SDL_Window* window;
+	T_TEAM winningTeam;
+	mWindow menu;
 
 	void cleanup();
 	int getOtherTeamBodyCount(T_TEAM team);
@@ -76,6 +79,7 @@ private:
 	void showAttackOptions();
 	void showTargetOptions();
 	void showHighlightedArea(SDL_Renderer*,BOARD_AOE*);
+	void showEndScreen();
 
 public:
 	GameManager(Board* newBoard,SDL_Renderer* r, SDL_Window *w);

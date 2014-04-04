@@ -21,6 +21,9 @@ GameManager::GameManager(Board* newBoard, SDL_Renderer *r, SDL_Window *w){
 	movesPerTurn = 0;
 	renderer = r;
 	window = w;
+	winningTeam = TEAM_A;
+
+	menu.setup(r,w,MENU_END_GAME);
 }
 
 GameManager::~GameManager(){
@@ -206,14 +209,17 @@ int GameManager::getOtherTeamBodyCount(T_TEAM team) {
 }
 
 void GameManager::endGame(){
-	if (teamABodyCount == 0)
+	if (teamABodyCount == 0) {
 		std::cout << "Time B venceu no turno " << turn << std::endl;
-	else if (teamBBodyCount == 0)
+		winningTeam = TEAM_B;
+	} else if (teamBBodyCount == 0) {
 		std::cout << "Time A venceu no turno " << turn << std::endl;
+		winningTeam = TEAM_A;
+	}
 
-	context = CONTEXT_IDLE;
+	context = CONTEXT_END_GAME;
 
-	cleanup();
+	menu.endMenu(winningTeam,turn);
 }
 
 void GameManager::notifyDeath(T_TEAM team, int casualties){
@@ -594,7 +600,16 @@ T_ERROR GameManager::useSpell(vector<Unit*> *targets){
 	return T_SUCCESS;
 }
 
+void GameManager::showEndScreen(){
+	//Screen::drawEndScreen(winningTeam,turn);
+	menu.show();
+}
+
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
+	// Nao desenha nada no contexto idle
+	if (context == CONTEXT_IDLE)
+		return;
+
 	showMap(r);
 	Unit* unit = *activeUnit;
 	if (context == CONTEXT_UNIT_SELECT_MOVE) {
@@ -617,6 +632,10 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	showUnitMenu();
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
+
+	if (context == CONTEXT_END_GAME){
+		showEndScreen();
+	}
 
 }
 
