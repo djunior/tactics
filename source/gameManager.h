@@ -55,6 +55,7 @@ private:
 	SDL_Window* window;
 	T_TEAM winningTeam;
 	mWindow menu;
+	mWindow menuUnitAction;
 
 	void cleanup();
 	int getOtherTeamBodyCount(T_TEAM team);
@@ -90,6 +91,7 @@ public:
 	void endGame();
 	void notifyDeath(T_TEAM team, int casualties);
 	void processEvent(SDL_Event* event);
+	void processMouseEvent(SDL_Event* event);
 	void update(SDL_Renderer*,TTF_Font*,SDL_Rect*);
 	unsigned int getTurn();
 };

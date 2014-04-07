@@ -18,11 +18,11 @@
 
 #define MAIN_BTN_DEFAULT_X 300
 #define MAIN_BTN_DEFAULT_Y 200
-#define UNIT_BTN_DEFAULT_X 10
-#define UNIT_BTN_DEFAULT_Y 150
-
 #define MAIN_TXT_DEFAULT_X 250
 #define MAIN_TXT_DEFAULT_Y 50
+
+#define UNIT_BTN_DEFAULT_X 10
+#define UNIT_BTN_DEFAULT_Y 150
 #define UNIT_TXT_DEFAULT_X 10
 #define UNIT_TXT_DEFAULT_Y 10
 
@@ -31,9 +31,13 @@
 
 #define END_GAME_DEFAULT_X 415
 #define END_GAME_DEFAULT_Y 200
-
 #define END_GAME_TXT_DEFAULT_X 250
 #define END_GAME_TXT_DEFAULT_Y 50
+
+#define UNIT_ACTION_TXT_DEFAULT_X 100
+#define UNIT_ACTION_TXT_DEFAULT_Y 0
+#define UNIT_ACTION_DEFAULT_X 100
+#define UNIT_ACTION_DEFAULT_Y 60
 
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
@@ -47,6 +51,7 @@ enum MENU_ENUM {
 	MENU_UNIT,
 	MENU_TOOTIP,
 	MENU_END_GAME,
+	MENU_UNIT_ACTION,
 };
 
 typedef enum MENU_ENUM MENU;
@@ -136,6 +141,7 @@ class mWindow
 		void addText(string);
 		void init(int,int);
 		void mainMenu();
+		void unitActionMenu(int,int);
 		void endMenu(T_TEAM winningTeam,int turn);
 		void statsMenu(
 			unsigned int hp, 
@@ -150,6 +156,7 @@ class mWindow
 			unsigned int manaPool
 			);
 		void show();
+		void setXY(int,int);
 		vector<mText> textList;
 };
 

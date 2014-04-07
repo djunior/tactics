@@ -35,5 +35,7 @@ namespace Screen {
 	extern void drawUnit(Unit*, SDL_Renderer*, TTF_Font*);
 	extern void drawEndGame(T_TEAM,int);
 	extern void cleanup();
+	extern int getScreenBoardX(int);
+	extern int getScreenBoardY(int);
 }
 #endif /* DRAWFUNCTIONS_H_ */
