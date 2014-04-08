@@ -1,0 +1,111 @@
+Nova classe no menu.h/menu.cpp
+
+mGenericWindow: menu generico, que possui qualquer texto ou botões, configurados após instânciar um objeto da classe.
+
+Construtor:
+
+mGenericWindow::mGenericWindow(int width, int height)
+mGenericWindow::mGenericWindow(int width, int height, MENU_ALIGNMENT alignment)
+mGenericWindow::mGenericWindow(int width, int height, int horizontalBorder, int verticalBorder)
+mGenericWindow::mGenericWindow(int width, int height, int horizontalBorder, int verticalBorder, MENU_ALIGNMENT alignment)
+
+Métodos:
+
+setX(int)
+getX()
+
+setY(int)
+getY()
+
+setWidth(int)
+getWidth()
+
+setHeight(int)
+getHeight()
+
+setAlignment(MENU_ALIGNMENT)
+getAlignment()
+
+setBorder(int horizontal,int vertical)
+setHorizontalBorder(int)
+setVerticalBorder(int)
+getHorizontalBorder()
+getVerticalBorder()
+
+setBackgroundImage(string)
+setBackgroundColor(SDL_Color)
+
+disableButton(int index)
+enableButton(int index)
+
+addText(string)
+addButton(string)
+
+show(SDL_Renderer*)
+
+Atributos:
+vector<mElement> elementList : lista de elementos (mText ou mButton), na ordem que eles aparecem na tela
+
+
+Mudanças necessárias:
+
+criar função Screen::getImage(string) para cachear um SDL_Texture no imageMap do Screen
+criar função Screen::getXScale() e Screen::getYScale()
+
+criar enum MENU_ALIGNMENT
+MENU_ALIGNMENT{
+  MENU_ALIGNMENT_LEFT,
+  MENU_ALIGNMENT_CENTER,
+  MENU_ALIGNMENT_RIGHT,
+}
+
+criar classe mElement. Alterar mButton e mText para extenderem a classe mElement.
+
+
+Algoritmo do método mGenericWindow::show(SDL_Renderer*):
+
+  escala o x, width e o horizontalBorder usando a função Screen::getXScale()
+  escala o y, height e o verticalBorder usando a função Screen::getYScale()
+
+  se tiver backgroundImage
+    pega um SDL_Texture usando Screen::getImage(backgroundImage)
+    desenhar o SDL_Texture na tela
+  senao
+    pinta o background se acordo com o backgroundColor
+    
+  varrer o vetor de mElement's
+    calcula o x e y baseado no indice, no alinhamento do menu e nas bordas (horizontalBorder e verticalBorder)
+    desenha cada item do vetor
+    
+  fim
+  
+  
+  
+Uso da classe:
+
+mGenericWindow menu(200,300,10,10,CENTER)
+menu.addText("Titulo")
+menu.addText("Escolha uma opção:")
+menu.addButton("Opção 1")
+menu.addButton("Opção 2")
+menu.addButton("Opção 3")
+menu.addText("lorem ipsum dolor")
+menu.show(renderer)
+
+Resultado esperado:
+   ___________________
+  |                   |
+  |       Titulo      |
+  | Escolha uma opção |
+  |      bOpção 1     |
+  |      bOpção 2     |
+  |      bOpção 3     |
+  | lorem ipsum dolor |
+  |___________________|
+  
+
+Observação:
+  Pode ser utilizado a convenção de que se o width e/ou height forem 0, o menu se ajusta para ficar do tamanho necessário
+  para caber os elementos dele. Talvez esse seja um melhor aproach para a classe.
+
+
