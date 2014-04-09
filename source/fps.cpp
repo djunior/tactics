@@ -89,6 +89,7 @@ void write(
     rectText.h=h;
 
     SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+    SDL_DestroyTexture(tTexture);
 };
 
 SDL_Rect write(
@@ -120,6 +121,7 @@ SDL_Rect write(
     rectText.h=h;
 
     SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+    SDL_DestroyTexture(tTexture);
 
     return rectText;
 };
@@ -153,6 +155,7 @@ SDL_Rect simWrite(
     rectText.h=h;
 
     //SDL_RenderCopy(renderer, tTexture, NULL, &rectText);
+    SDL_DestroyTexture(tTexture);
 
     return rectText;
 };
