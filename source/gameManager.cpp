@@ -24,6 +24,9 @@ GameManager::GameManager(Board* newBoard, SDL_Renderer *r, SDL_Window *w){
 	winningTeam = TEAM_A;
 
 	menu.setup(r,w,MENU_END_GAME);
+
+	menuUnitAction.setup(r,w,MENU_UNIT_ACTION);
+	menuUnitAction.unitActionMenu(-100,350);
 }
 
 GameManager::~GameManager(){
@@ -37,7 +40,7 @@ void GameManager::cleanup(){
 }
 
 void GameManager::createUnit(UNIT_CLASS unitClass, T_TEAM team){
-	std::cout << "GameManager::createUnit(): creating unit number " << unitList.size() << " class " << unitClass << std::endl;
+	//std::cout << "GameManager::createUnit(): creating unit number " << unitList.size() << " class " << unitClass << std::endl;
 
 	if (unitClass == UNIT_CLASS_KNIGHT) {
 		std::cout << "Creating new knight" << std::endl;
@@ -47,7 +50,7 @@ void GameManager::createUnit(UNIT_CLASS unitClass, T_TEAM team){
 		board->addUnit(newUnit);
 		std::cout << "New Unit (x,y) = (" << newUnit->getX() << "," << newUnit->getY() << ")" << std::endl;
 	} else if (unitClass == UNIT_CLASS_WIZARD) {
-		std::cout << "Creating new wizard" << std::endl;
+	//	std::cout << "Creating new wizard" << std::endl;
 		Wizard* newUnit = new Wizard(team,renderer,window);
 		unitList.push_back(newUnit);
 		board->addUnit(newUnit);
@@ -280,7 +283,7 @@ T_ERROR GameManager::startNextUnitTurn(){
 	// show menu
 
 	//TODO: alterar aqui para exibi o menu na tela
-	showUnitMenu();
+	//showUnitMenu();
 
 	return T_SUCCESS;
 }
@@ -305,6 +308,44 @@ T_ERROR GameManager::endUnitTurn(){
 
 	// Começar o turno da proxima unidade
 	return startNextUnitTurn();
+}
+
+void GameManager::processMouseEvent(SDL_Event *event){
+	if (! event->type == SDL_MOUSEBUTTONDOWN)
+		return;
+
+	if (! event->button.button == SDL_BUTTON_LEFT)
+		return;
+
+	switch(context){
+		case CONTEXT_UNIT_MENU:
+			switch(menuUnitAction.btnHit())
+			{
+				case 0:
+					//Unidade não pode mais mover
+					if (movesPerTurn <= 0)
+						break;
+
+					// move unit
+					context = CONTEXT_UNIT_SELECT_MOVE;
+					showMoveOptions();
+					break;
+				case 1:
+					// Unidade nao pode mais atacar
+					if (actionsPerTurn <= 0)
+						break;
+
+					// combate
+					showAttackOptions();
+					context = CONTEXT_UNIT_SELECT_TARGET;
+					break;
+				case 2:
+					// fim do turno da unidade
+					endUnitTurn();
+					break;
+			}
+			break;
+	}
 }
 
 void GameManager::processEvent(SDL_Event *event){
@@ -462,6 +503,9 @@ void GameManager::showUnitMenu(){
 	Unit *unit = *activeUnit;
 	unit->statsUpdate();
 	unit->menu.show();
+
+	menuUnitAction.setXY(Screen::getScreenBoardX(unit->getX()),Screen::getScreenBoardY(unit->getY()));
+	menuUnitAction.show();
 }
 
 void GameManager::showSpellMenu(){
@@ -612,7 +656,9 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 
 	showMap(r);
 	Unit* unit = *activeUnit;
-	if (context == CONTEXT_UNIT_SELECT_MOVE) {
+	if (context == CONTEXT_UNIT_MENU) {
+		showUnitMenu();
+	} else if (context == CONTEXT_UNIT_SELECT_MOVE) {
 		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
@@ -629,7 +675,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 			unit->setAnimation(Animation());
 		}
 	}
-	showUnitMenu();
+
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
 

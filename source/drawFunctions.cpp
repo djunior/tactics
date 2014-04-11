@@ -112,6 +112,14 @@ namespace Screen {
 		}
 	}
 
+	int getScreenBoardX(int x){
+		return static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+	}
+
+	int getScreenBoardY(int y){
+		return static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+	}
+
 	void drawUnit(Unit *unit,SDL_Texture* texture, SDL_Renderer *renderer, TTF_Font *font){
 		if (! isInitialized) {
 			std::cerr << "Falha a pintar a unidade " << unit << std::endl;
@@ -228,7 +236,15 @@ namespace Screen {
 
 		SDL_SetRenderDrawColor(renderer,0,0,255,150);
 
-		if (area->shape == AOE_SHAPE_CROSS){
+		if (area->shape == AOE_SHAPE_POINT) {
+			SDL_Rect rect;
+			rect.x = static_cast<int>((BOARD_INITIAL_X + area->x*BOARD_BLOCK_SIZE)*xScale);
+			rect.y = static_cast<int>((BOARD_INITIAL_Y + area->y*BOARD_BLOCK_SIZE)*yScale);
+			rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
+			rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
+
+			SDL_RenderFillRect(renderer,&rect);
+		} else if (area->shape == AOE_SHAPE_CROSS){
 
 			int ix = area->x - area->range;
 			if (ix < 0)

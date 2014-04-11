@@ -308,9 +308,14 @@ void mWindow::setBtnPosition()
 		y = static_cast<int>(END_GAME_DEFAULT_Y*yScale);
 		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
+	else if (menu == MENU_UNIT_ACTION)
+	{
+		x = static_cast<int>((rectWin.x + UNIT_ACTION_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_ACTION_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
+	}
 	btnX = x;
 	btnY = y;
-
 };
 
 void mWindow::setTxtPosition()
@@ -330,6 +335,11 @@ void mWindow::setTxtPosition()
 	else if (menu == MENU_END_GAME) {
 		x = static_cast<int>((rectWin.x + END_GAME_TXT_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + END_GAME_TXT_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
+	}
+	else if (menu == MENU_UNIT_ACTION) {
+		x = static_cast<int>((rectWin.x + UNIT_ACTION_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + UNIT_ACTION_TXT_DEFAULT_Y)*yScale);
 		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
 	}
 
@@ -446,6 +456,21 @@ void mWindow::endMenu(T_TEAM winningTeam,int turn){
 	init(0,25);
 }
 
+void mWindow::unitActionMenu(int x,int y){
+	menu = MENU_UNIT_ACTION;
+
+	setImage(MAIN_MENU_BKG);
+	setScale();
+	init(x,y);
+	setTxtPosition();
+	setBtnPosition();
+
+	addText("Escolha uma acao:");
+	addButton("Mover");
+	addButton("Atacar");
+	addButton("Terminar turno");
+}
+
 void mWindow::show()
 {
 	if (getIsOpen())
@@ -534,6 +559,55 @@ void mWindow::show()
 			}
 
 		}
+
+		else if (menu == MENU_UNIT_ACTION)
+		{
+			SDL_Rect bck = {
+				xT,
+				yT,
+				220*xScale,
+				250*yScale
+			};
+
+			SDL_Rect bckBorder = {
+				bck.x+1,
+				bck.y+1,
+				bck.w-2,
+				bck.h-2
+			};
+
+			SDL_SetRenderDrawColor(renderer,0,51,102,255);
+			SDL_RenderFillRect(renderer,&bck);
+
+			SDL_SetRenderDrawColor(renderer,58,63,78,255);
+			SDL_RenderDrawRect(renderer,&bck);
+			SDL_RenderDrawRect(renderer,&bckBorder);
+
+			SDL_Color color = MENU_BLACK;
+			for (unsigned i=0; i < textList.size(); i++)
+			{
+				if (&textList[i] != NULL) {
+					textList[i].setColor(color);
+					textList[i].setPosition(xT+10,yT + 20 + increment*i);
+					textList[i].setScale(yScale);
+					textList[i].show();
+				}
+			}
+			for (unsigned i=0; i < buttonList.size(); i++)
+			{
+				buttonList[i].setPosition(xB + 10,yB + (BUTTON_H + 10)*i);
+				buttonList[i].setScale(yScale);
+				buttonList[i].show(renderer);
+			}
+		}
 	}
 };
+
+void mWindow::setXY(int x, int y){
+	rectWin.x = x;
+	rectWin.y = y;
+
+	setTxtPosition();
+	setBtnPosition();
+}
 

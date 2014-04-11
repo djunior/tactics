@@ -176,6 +176,8 @@ int main(int argc, char *argv[]){
 							{
 								case SDL_BUTTON_LEFT:
 									SDL_GetMouseState(&x, &y);
+									gm.processMouseEvent(&Event);
+									break;
 							}
 							break;
 					}
