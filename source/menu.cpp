@@ -389,7 +389,10 @@ void mWindow::init(int x, int y)
 
 void mWindow::mainMenu()
 {
+	TTF_Font *title;
+	loadTitle(&title);
 	addText("TACTICS");
+	textList[0].setFont(title);
 	addButton("Start Game");
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
@@ -493,12 +496,8 @@ void mWindow::show()
 
 		if(menu == MENU_MAIN)
 		{
-			TTF_Font *title;
-			loadTitle(&title);
-
 			SDL_RenderCopy(renderer, mTexture, NULL, NULL);
 
-			textList[0].setFont(title);
 			textList[0].setPosition(xT,yT);
 			textList[0].setScale(yScale);
 			textList[0].show();
