@@ -358,9 +358,7 @@ namespace Screen {
 		rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
 
 		for (int x = 0; x <= board->getMaxBoardX()-1; x++){
-			for (int y = 0; y <= board->getMaxBoardY()-1; y++){
-				cout << "x  " << x << endl;
-				cout << "y  " << y << endl;
+			for (int y = 0; y <= board->getMaxBoardY()-1; y++){;
 				rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
 				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				if(hit(rect)){
@@ -368,8 +366,6 @@ namespace Screen {
 					area->y = y;
 					area->range = 0;
 					area->shape = AOE_SHAPE_POINT;
-					cout << "mouse x " << mouse_x << endl;
-					cout << "mouse y " << mouse_y << endl;
 					return T_SUCCESS;
 				}
 			}
