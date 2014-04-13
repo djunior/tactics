@@ -271,10 +271,7 @@ namespace Screen {
 		if (area->shape == AOE_SHAPE_POINT) {
 			SDL_RenderFillRect(renderer,&rect);
 
-		}
-
-		if (area->shape == AOE_SHAPE_CROSS){
-
+		} else if (area->shape == AOE_SHAPE_CROSS){
 			for (int x = ix; x <= fx; x++){
 				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				SDL_RenderFillRect(renderer,&rect);
@@ -295,6 +292,63 @@ namespace Screen {
 				}
 			}
 		} else if (area->shape == AOE_SHAPE_CIRCLE){
+			int lx = area->x + area->range;
+			int ly = area->y + area->range;
+			int mx = area->x;
+			int my = area->y;
+			int cx = 0;
+			int cy = 0;
+			for (int x = mx; x <= lx; x++){
+				for (int y = my; y <= ly; y++){
+					if(cy + cx <= area->range)
+					{
+						rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+						rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+						if (y <= fy && x <= fx)
+						{
+							SDL_RenderFillRect(renderer,&rect);
+						}
+						if(cy != 0 && (y-2*cy) >= 0 && (y-2*cy) <= fy)
+						{
+							rect.y = static_cast<int>((BOARD_INITIAL_Y + (y-2*cy)*BOARD_BLOCK_SIZE)*yScale);
+							if (x <= fx)
+							{
+								SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+						if(cx != 0 && (x-2*cx) >= 0)
+						{
+							rect.x = static_cast<int>((BOARD_INITIAL_X + (x-2*cx)*BOARD_BLOCK_SIZE)*xScale);
+							if ((x-2*cx) <= fx)
+							{
+								SDL_RenderFillRect(renderer,&rect);
+							}
+							if(cy != 0 && rect.y != static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale) && y <= fy)
+							{
+								rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+								SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+
+					}
+					cy++;
+				}
+				cx++;
+				cy = 0;
+			}
+		}
+
+		if (area->shape == AOE_SHAPE_SQUARE){
+			for (int x = ix; x <= fx; x++){
+				for (int y = iy; y <= fy; y++){
+					rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+					rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+					SDL_RenderFillRect(renderer,&rect);
+				}
+			}
+		}
+
+		if (area->shape == AOE_SHAPE_CIRCLE){
 			int lx = area->x + area->range;
 			int ly = area->y + area->range;
 			int mx = area->x;

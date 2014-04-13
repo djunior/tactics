@@ -656,6 +656,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 
 	showMap(r);
 	Unit* unit = *activeUnit;
+
 	if (context == CONTEXT_UNIT_MENU) {
 		stringstream ss;
 		ss << movesPerTurn;
@@ -687,9 +688,6 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 			unit->setAnimation(Animation());
 		}
 	}
-
-	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
-		showUnit(*it,r,font);
 
 	if (context == CONTEXT_END_GAME){
 		showEndScreen();
