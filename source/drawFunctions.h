@@ -18,6 +18,9 @@
 #include <stdexcept>
 #include <map>
 
+#include "utils/t_error.h"
+#include "mouse.h"
+
 #define BOARD_INITIAL_X 250
 #define BOARD_INITIAL_Y 230
 #define BOARD_BLOCK_SIZE 100
@@ -37,5 +40,6 @@ namespace Screen {
 	extern void cleanup();
 	extern int getScreenBoardX(int);
 	extern int getScreenBoardY(int);
+	extern T_ERROR mouseBoardPosition(Board*, BOARD_AOE*);
 }
 #endif /* DRAWFUNCTIONS_H_ */

@@ -650,20 +650,23 @@ void GameManager::showEndScreen(){
 }
 
 void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
-	// Nao desenha nada no contexto idle
+
 	if (context == CONTEXT_IDLE)
 		return;
 
 	showMap(r);
+	showHighlightedMouse(r);
+	
 	Unit* unit = *activeUnit;
+	BOARD_AOE area;
 
 	if (context == CONTEXT_UNIT_MENU) {
 		stringstream ss;
 		ss << movesPerTurn;
 		(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
+
 		showUnitMenu();
 	} else if (context == CONTEXT_UNIT_SELECT_MOVE) {
-		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
 		area.y = (*activeUnit)->getY();
@@ -672,7 +675,6 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_SELECT_TARGET) {
-		BOARD_AOE area;
 
 		area.x = (*activeUnit)->getX();
 		area.y = (*activeUnit)->getY();
@@ -688,7 +690,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 			unit->setAnimation(Animation());
 		}
 	}
-
+	
 	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
 		showUnit(*it,r,font);
 
@@ -704,4 +706,11 @@ void GameManager::showUnit(Unit* unit,SDL_Renderer *r, TTF_Font* font){
 
 void GameManager::showHighlightedArea(SDL_Renderer*r,BOARD_AOE* area){
 	Screen::drawHighlightedArea(r,board,area,context);
+}
+
+void GameManager::showHighlightedMouse(SDL_Renderer*r){
+	BOARD_AOE area;
+	if (Screen::mouseBoardPosition(board,&area) == T_SUCCESS){
+		Screen::drawHighlightedArea(r,board,&area,CONTEXT_IDLE);
+	}
 }

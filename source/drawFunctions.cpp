@@ -237,11 +237,11 @@ namespace Screen {
 		{
 			SDL_SetRenderDrawColor(renderer,0,0,255,150);
 		}
-		if (context == CONTEXT_IDLE)
+		else if (context == CONTEXT_IDLE)
 		{
 			SDL_SetRenderDrawColor(renderer,255,215,0,150);
 		}
-		if (context == CONTEXT_UNIT_SELECT_TARGET)
+		else if (context == CONTEXT_UNIT_SELECT_TARGET)
 		{
 			SDL_SetRenderDrawColor(renderer,255,69,0,150);
 		}
@@ -337,64 +337,44 @@ namespace Screen {
 				cy = 0;
 			}
 		}
+	}
 
-		if (area->shape == AOE_SHAPE_SQUARE){
-			for (int x = ix; x <= fx; x++){
-				for (int y = iy; y <= fy; y++){
-					rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
-					rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
-					SDL_RenderFillRect(renderer,&rect);
+	T_ERROR mouseBoardPosition(Board* board, BOARD_AOE* area) {
+
+		SDL_Rect rect;
+	    rect.x = static_cast<int>((BOARD_INITIAL_X)*xScale);
+	    rect.y = static_cast<int>((BOARD_INITIAL_Y)*yScale);
+		rect.w = static_cast<int>((board->getMaxBoardX()*BOARD_BLOCK_SIZE)*xScale);
+		rect.h = static_cast<int>((board->getMaxBoardY()*BOARD_BLOCK_SIZE)*yScale);
+
+		int mouse_x,mouse_y;
+		SDL_GetMouseState(&mouse_x, &mouse_y);		
+
+		if (!hit(rect)){
+			return T_ERROR_OUT_OF_BOUNDS;
+		}
+
+		rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
+		rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
+
+		for (int x = 0; x <= board->getMaxBoardX()-1; x++){
+			for (int y = 0; y <= board->getMaxBoardY()-1; y++){
+				cout << "x  " << x << endl;
+				cout << "y  " << y << endl;
+				rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+				if(hit(rect)){
+					area->x = x;
+					area->y = y;
+					area->range = 0;
+					area->shape = AOE_SHAPE_POINT;
+					cout << "mouse x " << mouse_x << endl;
+					cout << "mouse y " << mouse_y << endl;
+					return T_SUCCESS;
 				}
 			}
 		}
-
-		if (area->shape == AOE_SHAPE_CIRCLE){
-			int lx = area->x + area->range;
-			int ly = area->y + area->range;
-			int mx = area->x;
-			int my = area->y;
-			int cx = 0;
-			int cy = 0;
-			for (int x = mx; x <= lx; x++){
-				for (int y = my; y <= ly; y++){
-					if(cy + cx <= area->range)
-					{
-						rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
-						rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
-						if (y <= fy && x <= fx)
-						{
-							SDL_RenderFillRect(renderer,&rect);
-						}
-						if(cy != 0 && (y-2*cy) >= 0 && (y-2*cy) <= fy)
-						{
-							rect.y = static_cast<int>((BOARD_INITIAL_Y + (y-2*cy)*BOARD_BLOCK_SIZE)*yScale);
-							if (x <= fx)
-							{
-								SDL_RenderFillRect(renderer,&rect);
-							}
-						}
-						if(cx != 0 && (x-2*cx) >= 0)
-						{
-							rect.x = static_cast<int>((BOARD_INITIAL_X + (x-2*cx)*BOARD_BLOCK_SIZE)*xScale);
-							if ((x-2*cx) <= fx)
-							{
-								SDL_RenderFillRect(renderer,&rect);
-							}
-							if(cy != 0 && rect.y != static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale) && y <= fy)
-							{
-								rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
-								SDL_RenderFillRect(renderer,&rect);
-							}
-						}
-
-					}
-					cy++;
-				}
-				cx++;
-				cy = 0;
-			}
-		}
-
+		return T_ERROR_UNKNOWN;
 	}
 
 }

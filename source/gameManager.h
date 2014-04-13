@@ -81,6 +81,7 @@ private:
 	void showAttackOptions();
 	void showTargetOptions();
 	void showHighlightedArea(SDL_Renderer*,BOARD_AOE*);
+	void showHighlightedMouse(SDL_Renderer*);
 	void showEndScreen();
 
 public:
