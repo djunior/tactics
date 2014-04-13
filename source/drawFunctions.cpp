@@ -228,13 +228,23 @@ namespace Screen {
 	void drawEndGame(T_TEAM winningTeam, int turn){
 	}
 
-	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
-
+	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area, GAMEMANAGER_CONTEXT context){
 		setScale();
 
 		SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
-		SDL_SetRenderDrawColor(renderer,0,0,255,150);
+		if (context == CONTEXT_UNIT_SELECT_MOVE)
+		{
+			SDL_SetRenderDrawColor(renderer,0,0,255,150);
+		}
+		if (context == CONTEXT_IDLE)
+		{
+			SDL_SetRenderDrawColor(renderer,255,215,0,150);
+		}
+		if (context == CONTEXT_UNIT_SELECT_TARGET)
+		{
+			SDL_SetRenderDrawColor(renderer,255,69,0,150);
+		}
 
 		int ix = area->x - area->range;
 		if (ix < 0)
@@ -261,7 +271,10 @@ namespace Screen {
 		if (area->shape == AOE_SHAPE_POINT) {
 			SDL_RenderFillRect(renderer,&rect);
 
-		} else if (area->shape == AOE_SHAPE_CROSS){
+		}
+
+		if (area->shape == AOE_SHAPE_CROSS){
+
 			for (int x = ix; x <= fx; x++){
 				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				SDL_RenderFillRect(renderer,&rect);

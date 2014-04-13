@@ -16,3 +16,8 @@ bool hit(SDL_Rect screen_position)
 	else
 		return false;
 };
+
+/*BOARD_AOE mouseBoardPosition()
+{
+	return BOARD_AOE area;
+}*/
