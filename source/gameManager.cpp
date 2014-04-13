@@ -607,6 +607,15 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		area.shape = AOE_SHAPE_CIRCLE;
 
 		showHighlightedArea(r,&area);
+	} else if (context == CONTEXT_UNIT_SELECT_TARGET) {
+		BOARD_AOE area;
+
+		area.x = (*activeUnit)->getX();
+		area.y = (*activeUnit)->getY();
+		area.range = (*activeUnit)->getRange();
+		area.shape = AOE_SHAPE_CIRCLE;
+
+		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_MOVE) {
 		if (! unit->isAnimating()) {
 			std::cout << "TROCANDO DE CONTEXTO" << std::endl;
@@ -628,5 +637,5 @@ void GameManager::showUnit(Unit* unit,SDL_Renderer *r, TTF_Font* font){
 }
 
 void GameManager::showHighlightedArea(SDL_Renderer*r,BOARD_AOE* area){
-	Screen::drawHighlightedArea(r,board,area);
+	Screen::drawHighlightedArea(r,board,area,context);
 }

@@ -30,7 +30,7 @@ namespace Screen {
 	extern void setScale();
 	extern void init(SDL_Renderer*, SDL_Window*);
 	extern void drawBoard(SDL_Renderer*, Board*);
-	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*);
+	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*,GAMEMANAGER_CONTEXT);
 	extern void drawUnit(Unit*,SDL_Texture*,SDL_Renderer*,TTF_Font*);
 	extern void drawUnit(Unit*, SDL_Renderer*, TTF_Font*);
 	extern void cleanup();

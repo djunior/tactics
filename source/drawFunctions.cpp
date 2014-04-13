@@ -217,13 +217,24 @@ namespace Screen {
 		drawUnit(unit,loadSprite(renderer,unit->getImage()),renderer,font);
 	}
 
-	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area){
+	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area, GAMEMANAGER_CONTEXT context){
 
 		setScale();
 
 		SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
-		SDL_SetRenderDrawColor(renderer,0,0,255,150);
+		if (context == CONTEXT_UNIT_SELECT_MOVE)
+		{
+			SDL_SetRenderDrawColor(renderer,0,0,255,150);
+		}
+		if (context == CONTEXT_IDLE)
+		{
+			SDL_SetRenderDrawColor(renderer,255,215,0,150);
+		}
+		if (context == CONTEXT_UNIT_SELECT_TARGET)
+		{
+			SDL_SetRenderDrawColor(renderer,255,69,0,150);
+		}
 
 		int ix = area->x - area->range;
 		if (ix < 0)
@@ -246,6 +257,10 @@ namespace Screen {
 	    rect.y = static_cast<int>((BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale);
 		rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
 		rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
+
+		if (area->shape == AOE_SHAPE_POINT) {
+			SDL_RenderFillRect(renderer,&rect);
+		}
 
 		if (area->shape == AOE_SHAPE_CROSS){
 			for (int x = ix; x <= fx; x++){
