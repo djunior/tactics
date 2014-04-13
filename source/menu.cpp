@@ -568,8 +568,8 @@ void mWindow::show()
 			SDL_Rect bck = {
 				xT,
 				yT,
-				220*xScale,
-				250*yScale
+				static_cast<int>(220*xScale),
+				static_cast<int>(250*yScale)
 			};
 
 			SDL_Rect bckBorder = {

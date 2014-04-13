@@ -153,8 +153,8 @@ namespace Screen {
 	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
 	    	std::cout <<  "DIFF X: " << diffX << std::endl;
 	    	std::cout <<  "DIFF Y: " << diffY << std::endl;
-			rectChar.x = (int)(BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale;
-			rectChar.y = (int)(BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale;
+			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
+			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
 
 			std::cout << "Animate rectChar.x=" << rectChar.x << std::endl;
 			std::cout << "Animate rectChar.y=" << rectChar.y << std::endl;
@@ -189,8 +189,8 @@ namespace Screen {
 			animation->currentFrame++;
 		} else {
 
-			rectChar.x = (int)(BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale;
-			rectChar.y = (int)(BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale;
+			rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
+			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
 
 			if (unit->getTeam() == TEAM_A)
 				src.x=src.w*3;
@@ -358,7 +358,7 @@ namespace Screen {
 		rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
 
 		for (int x = 0; x <= board->getMaxBoardX()-1; x++){
-			for (int y = 0; y <= board->getMaxBoardY()-1; y++){;
+			for (int y = 0; y <= board->getMaxBoardY()-1; y++){
 				rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
 				rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
 				if(hit(rect)){
