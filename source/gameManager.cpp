@@ -689,6 +689,9 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		}
 	}
 
+	for (std::vector<Unit*>::iterator it=unitList.begin(); it != unitList.end(); it++)
+		showUnit(*it,r,font);
+
 	if (context == CONTEXT_END_GAME){
 		showEndScreen();
 	}
