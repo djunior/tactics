@@ -490,7 +490,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	return T_SUCCESS;
 }
 
-/*T_ERROR GameManager::moveUnit(){
+T_ERROR GameManager::moveUnit(){
 
 	if (movesPerTurn <= 0) {
 		std::cerr << "Unidade nao pode mais mover" << std::endl;
@@ -508,8 +508,11 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	int y = unit->getY();
 
 	BOARD_AOE area;
-	if (mouseBoardPosition(board,&area) == T_SUCCESS)
-		BOARD_POINT 
+	if (mouseBoardPosition(board,&area) == T_SUCCESS){
+		BOARD_POINT mouse;
+		mouse.x = area.x;
+		mouse.y = area.y;
+	}
 
 	T_ERROR e = board->moveUnit(unit,x,y);
 
@@ -530,7 +533,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	}
 
 	return T_SUCCESS;
-}*/
+}
 
 void GameManager::showMap(){
 	board->debug_showMap();

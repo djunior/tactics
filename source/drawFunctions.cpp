@@ -373,4 +373,104 @@ namespace Screen {
 		return T_ERROR_UNKNOWN;
 	}
 
+	T_ERROR mouseCheckArea(Board* board, BOARD_AOE* area, BOARD_AOE* mouse) {
+
+		T_ERROR e = mouseBoardPosition(board,mouse);
+
+		if (e != T_SUCCESS)
+			return e;
+
+		int ix = area->x - area->range;
+		if (ix < 0)
+			ix = 0;
+
+		int iy = area->y - area->range;
+		if (iy < 0)
+			iy = 0;
+
+		int fx = area->x + area->range;
+		if (fx >= board->getMaxBoardX())
+			fx = board->getMaxBoardX()-1;
+
+		int fy = area->y + area->range;
+		if (fy >= board->getMaxBoardY())
+			fy = board->getMaxBoardY()-1;
+
+		if (area->shape == AOE_SHAPE_POINT) {
+			if(mouse->x == area->x && mouse->y == area->y)
+				return T_SUCCESS;
+			else
+				return T_ERROR_OUT_OF_RANGE;
+
+		} else if (area->shape == AOE_SHAPE_CROSS){
+			for (int x = ix; x <= fx; x++){
+				if(mouse->x == x && mouse->y == area->y)
+					return T_SUCCESS;
+			}
+
+			for (int y = iy; y <= fy; y++){
+				if(mouse->x == area->x && mouse->y == y)
+					return T_SUCCESS;
+			}
+			return T_ERROR_OUT_OF_RANGE;
+
+		} else if (area->shape == AOE_SHAPE_SQUARE){
+			for (int x = ix; x <= fx; x++){
+				for (int y = iy; y <= fy; y++){
+					if(mouse->x == x && mouse->y == y)
+						return T_SUCCESS;
+				}
+			}
+			return T_ERROR_OUT_OF_RANGE;
+
+		} else if (area->shape == AOE_SHAPE_CIRCLE){
+			int lx = area->x + area->range;
+			int ly = area->y + area->range;
+			int mx = area->x;
+			int my = area->y;
+			int cx = 0;
+			int cy = 0;
+			for (int x = mx; x <= lx; x++){
+				for (int y = my; y <= ly; y++){
+					if(cy + cx <= area->range)
+					{
+						rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+						rect.x = static_cast<int>((BOARD_INITIAL_X + x*BOARD_BLOCK_SIZE)*xScale);
+						if (y <= fy && x <= fx)
+						{
+							if(mouse->x == x && mouse->y == y)
+								return T_SUCCESS;
+						}
+						if(cy != 0 && (y-2*cy) >= 0 && (y-2*cy) <= fy)
+						{
+							rect.y = static_cast<int>((BOARD_INITIAL_Y + (y-2*cy)*BOARD_BLOCK_SIZE)*yScale);
+							if (x <= fx)
+							{
+								//SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+						if(cx != 0 && (x-2*cx) >= 0)
+						{
+							rect.x = static_cast<int>((BOARD_INITIAL_X + (x-2*cx)*BOARD_BLOCK_SIZE)*xScale);
+							if ((x-2*cx) <= fx)
+							{
+								//SDL_RenderFillRect(renderer,&rect);
+							}
+							if(cy != 0 && rect.y != static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale) && y <= fy)
+							{
+								rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
+								//SDL_RenderFillRect(renderer,&rect);
+							}
+						}
+
+					}
+					cy++;
+				}
+				cx++;
+				cy = 0;
+			}
+			return T_ERROR_OUT_OF_RANGE;
+		}
+	}
+
 }

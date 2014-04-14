@@ -66,6 +66,7 @@ private:
 	T_ERROR startNextTurn();
 	T_ERROR endTurn();
 	T_ERROR moveUnit(SDL_Keycode);
+	T_ERROR moveUnit();
 	T_ERROR selectCombatTarget(SDL_Keycode key);
 	T_ERROR combat(vector<Unit*> *targets);
 	T_ERROR useSpell(vector<Unit*> *targets);
