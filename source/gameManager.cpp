@@ -459,6 +459,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 
 	int x = unit->getX();
 	int y = unit->getY();
+
 	if (direction == SDLK_LEFT)
 		x--;
 	else if (direction == SDLK_DOWN)
@@ -489,6 +490,48 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 	return T_SUCCESS;
 }
 
+/*T_ERROR GameManager::moveUnit(){
+
+	if (movesPerTurn <= 0) {
+		std::cerr << "Unidade nao pode mais mover" << std::endl;
+		context = CONTEXT_UNIT_MENU;
+		showUnitMenu();
+		return T_ERROR_UNIT_OUT_OF_MOVES;
+	}
+	Unit *unit = *activeUnit;
+
+	BOARD_POINT start;
+	start.x = unit->getX();
+	start.y = unit->getY();
+
+	int x = unit->getX();
+	int y = unit->getY();
+
+	BOARD_AOE area;
+	if (mouseBoardPosition(board,&area) == T_SUCCESS)
+		BOARD_POINT 
+
+	T_ERROR e = board->moveUnit(unit,x,y);
+
+	if (e == T_SUCCESS) {
+		movesPerTurn--;
+
+		BOARD_POINT end;
+		end.x = x;
+		end.y = y;
+
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+		unit->setAnimation(a);
+
+		context = CONTEXT_UNIT_MOVE;
+	} else {
+		std::cerr << "Posicao invalida" << std::endl;
+		showMoveOptions();
+	}
+
+	return T_SUCCESS;
+}*/
+
 void GameManager::showMap(){
 	board->debug_showMap();
 }
@@ -504,7 +547,11 @@ void GameManager::showUnitMenu(){
 	unit->statsUpdate();
 	unit->menu.show();
 
-	menuUnitAction.setXY(Screen::getScreenBoardX(unit->getX()),Screen::getScreenBoardY(unit->getY()));
+	//menuUnitAction.setXY(Screen::getScreenBoardX(unit->getX()),Screen::getScreenBoardY(unit->getY()));
+	stringstream ss;
+	ss << movesPerTurn;
+	(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
+
 	menuUnitAction.show();
 }
 
@@ -661,10 +708,6 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 	BOARD_AOE area;
 
 	if (context == CONTEXT_UNIT_MENU) {
-		stringstream ss;
-		ss << movesPerTurn;
-		(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
-
 		showUnitMenu();
 	} else if (context == CONTEXT_UNIT_SELECT_MOVE) {
 
@@ -673,6 +716,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		area.range = movesPerTurn;
 		area.shape = AOE_SHAPE_CIRCLE;
 
+		showUnitMenu();
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_SELECT_TARGET) {
 
@@ -681,6 +725,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		area.range = (*activeUnit)->getRange();
 		area.shape = AOE_SHAPE_CIRCLE;
 
+		showUnitMenu();
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_MOVE) {
 		if (! unit->isAnimating()) {

@@ -34,10 +34,10 @@
 #define END_GAME_TXT_DEFAULT_X 250
 #define END_GAME_TXT_DEFAULT_Y 50
 
-#define UNIT_ACTION_TXT_DEFAULT_X 100
-#define UNIT_ACTION_TXT_DEFAULT_Y 0
-#define UNIT_ACTION_DEFAULT_X 100
-#define UNIT_ACTION_DEFAULT_Y 60
+#define UNIT_ACTION_TXT_DEFAULT_X 0
+#define UNIT_ACTION_TXT_DEFAULT_Y 200
+#define UNIT_ACTION_DEFAULT_X 0
+#define UNIT_ACTION_DEFAULT_Y 250
 
 #define SELECTED {255,255,255}
 #define NOT_SELECTED {70,70,70}
@@ -106,6 +106,7 @@ class mButton
 		mButton(SDL_Renderer*, TTF_Font*, int, int);
 		mButton(SDL_Renderer*, TTF_Font*, int, int, string);
 		void setScale(float);
+		void setFont();
 		void setIsSelected(bool);
 		void setPosition(int,int);
 		void setColor(SDL_Color);

@@ -95,6 +95,18 @@ void mButton::setScale(float mult)
 	scale = mult;
 };
 
+void mButton::setFont()
+{
+	font = TTF_OpenFont("images\\FinalFrontier.ttf", 12);
+    if (font == NULL)
+    {
+	    cerr << "TTF_OpenFont() Failed: " << TTF_GetError() << endl;
+	    TTF_Quit();
+	    SDL_Quit();
+	    exit(1);
+    }
+};
+
 void mButton::setIsSelected(bool sel)
 {
 	isSelected = sel;
@@ -340,7 +352,7 @@ void mWindow::setTxtPosition()
 	else if (menu == MENU_UNIT_ACTION) {
 		x = static_cast<int>((rectWin.x + UNIT_ACTION_TXT_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + UNIT_ACTION_TXT_DEFAULT_Y)*yScale);
-		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
+		//increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
 	}
 
 	txtX = x;
@@ -467,14 +479,16 @@ void mWindow::unitActionMenu(int x,int y){
 
 	setImage(MAIN_MENU_BKG);
 	setScale();
-	init(x,y);
+	init(0,150);
 	setTxtPosition();
 	setBtnPosition();
 
 	addText("Escolha uma acao:");
 	addButton("Mover");
+
 	addButton("Atacar");
 	addButton("Terminar turno");
+	addButton("Cancelar");
 }
 
 void mWindow::show()
@@ -597,8 +611,9 @@ void mWindow::show()
 			}
 			for (unsigned i=0; i < buttonList.size(); i++)
 			{
-				buttonList[i].setPosition(xB + 10,yB + (BUTTON_H + 10)*i);
-				buttonList[i].setScale(yScale);
+				//buttonList[i].setFont();
+				buttonList[i].setPosition(xB + 10,yB + static_cast<int>(increment*i*0.75));
+				buttonList[i].setScale(yScale*0.75);
 				buttonList[i].show(renderer);
 			}
 		}
