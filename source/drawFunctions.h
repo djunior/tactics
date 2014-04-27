@@ -41,5 +41,6 @@ namespace Screen {
 	extern int getScreenBoardX(int);
 	extern int getScreenBoardY(int);
 	extern T_ERROR mouseBoardPosition(Board*, BOARD_AOE*);
+	extern T_ERROR mouseCheckArea(Board*, BOARD_AOE*, BOARD_AOE*);
 }
 #endif /* DRAWFUNCTIONS_H_ */

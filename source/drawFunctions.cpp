@@ -424,6 +424,13 @@ namespace Screen {
 			return T_ERROR_OUT_OF_RANGE;
 
 		} else if (area->shape == AOE_SHAPE_CIRCLE){
+
+			SDL_Rect rect;
+		    rect.x = static_cast<int>((BOARD_INITIAL_X + 1 + area->x*BOARD_BLOCK_SIZE)*xScale);
+		    rect.y = static_cast<int>((BOARD_INITIAL_Y + 1 + area->y*BOARD_BLOCK_SIZE)*yScale);
+			rect.w = static_cast<int>(BOARD_BLOCK_SIZE*xScale);
+			rect.h = static_cast<int>(BOARD_BLOCK_SIZE*yScale);
+			
 			int lx = area->x + area->range;
 			int ly = area->y + area->range;
 			int mx = area->x;
@@ -446,7 +453,8 @@ namespace Screen {
 							rect.y = static_cast<int>((BOARD_INITIAL_Y + (y-2*cy)*BOARD_BLOCK_SIZE)*yScale);
 							if (x <= fx)
 							{
-								//SDL_RenderFillRect(renderer,&rect);
+								if(mouse->x == x && mouse->y == (y-2*cy))
+									return T_SUCCESS;
 							}
 						}
 						if(cx != 0 && (x-2*cx) >= 0)
@@ -454,12 +462,14 @@ namespace Screen {
 							rect.x = static_cast<int>((BOARD_INITIAL_X + (x-2*cx)*BOARD_BLOCK_SIZE)*xScale);
 							if ((x-2*cx) <= fx)
 							{
-								//SDL_RenderFillRect(renderer,&rect);
+								if(mouse->x == (x-2*cx) && mouse->y == y)
+									return T_SUCCESS;
 							}
 							if(cy != 0 && rect.y != static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale) && y <= fy)
 							{
 								rect.y = static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
-								//SDL_RenderFillRect(renderer,&rect);
+								if(mouse->x == (x-2*cx) && mouse->y == y)
+									return T_SUCCESS;
 							}
 						}
 

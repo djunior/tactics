@@ -345,6 +345,9 @@ void GameManager::processMouseEvent(SDL_Event *event){
 					break;
 			}
 			break;
+		case CONTEXT_UNIT_SELECT_MOVE:
+			moveUnit();
+			break;
 	}
 }
 
@@ -500,38 +503,108 @@ T_ERROR GameManager::moveUnit(){
 	}
 	Unit *unit = *activeUnit;
 
+	T_ERROR e;
+
 	BOARD_POINT start;
 	start.x = unit->getX();
 	start.y = unit->getY();
 
+	BOARD_POINT end = start;
+
 	int x = unit->getX();
 	int y = unit->getY();
+	int tryMoves;
 
 	BOARD_AOE area;
-	if (mouseBoardPosition(board,&area) == T_SUCCESS){
+	e = Screen::mouseBoardPosition(board,&area);
+
+	if (e == T_SUCCESS){
 		BOARD_POINT mouse;
 		mouse.x = area.x;
 		mouse.y = area.y;
+		x -= mouse.x;
+		y -= mouse.y;
+
+		std::cerr << "x: " << x << endl;
+		std::cerr << "y: " << y << endl;
+
+		if(x<0) {
+			x *= -1;
+		}
+		if(y<0)
+			y *= -1;
+
+		tryMoves = x+y;
+
+		if(tryMoves > movesPerTurn) {
+			std::cerr << "Unidade nao pode se mover tanto assim" << std::endl;
+			context = CONTEXT_UNIT_MENU;
+			showUnitMenu();
+			return T_ERROR_UNIT_OUT_OF_MOVES;
+		}
+		x = unit->getX();
+		y = unit->getY();
+		x -= mouse.x;
+		y -= mouse.y;
 	}
-
-	T_ERROR e = board->moveUnit(unit,x,y);
-
-	if (e == T_SUCCESS) {
-		movesPerTurn--;
-
-		BOARD_POINT end;
-		end.x = x;
-		end.y = y;
-
-		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
-		unit->setAnimation(a);
-
-		context = CONTEXT_UNIT_MOVE;
-	} else {
+	else {
 		std::cerr << "Posicao invalida" << std::endl;
 		showMoveOptions();
+		return e;
 	}
 
+	for (int i=1; i<=tryMoves ;i++) {
+		cerr << "dentro do for" << endl;
+		std::cerr << "x: " << x << endl;
+		std::cerr << "y: " << y << endl;
+		std::cerr << "i: " << i << endl;
+		if(x<0) {
+			e = board->moveUnit(unit,start.x+i,start.y);
+
+			if (e == T_SUCCESS) {
+				movesPerTurn--;
+				end.x++;
+
+				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+				unit->setAnimation(a);
+				x--;
+			}
+		} else if(x>0) {
+			e = board->moveUnit(unit,start.x-i,start.y);
+
+			if (e == T_SUCCESS) {
+				movesPerTurn--;
+				end.x--;
+
+				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+				unit->setAnimation(a);
+				x++;
+			}
+		}else if(y<0) {
+			e = board->moveUnit(unit,start.x,start.y+i);
+
+			if (e == T_SUCCESS) {
+				movesPerTurn--;
+				end.y++;
+
+				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+				unit->setAnimation(a);
+			}
+		} else if(y>0) {
+			e = board->moveUnit(unit,start.x,start.y-i);
+
+			if (e == T_SUCCESS) {
+				movesPerTurn--;
+				end.y--;
+
+				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+				unit->setAnimation(a);
+			}
+		}
+	}
+
+	cerr << "fora do for!" << endl;
+	context = CONTEXT_UNIT_MOVE;
 	return T_SUCCESS;
 }
 
