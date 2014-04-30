@@ -140,7 +140,11 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 			return T_ERROR_INVALID_UNIT;
 
 		targetList->push_back(boardMap[y][x]);
-
+	} else if (shape == AOE_SHAPE_CROSS) {
+		checkUnitsInAOE(x+1,y,range,BOARD_AXIS_X,AOE_SHAPE_LINE,targetList);
+		checkUnitsInAOE(x,y+1,range,BOARD_AXIS_Y,AOE_SHAPE_LINE,targetList);
+		checkUnitsInAOE(x-1,y,range,BOARD_AXIS_X_MINUS,AOE_SHAPE_LINE,targetList);
+		checkUnitsInAOE(x,y-1,range,BOARD_AXIS_Y_MINUS,AOE_SHAPE_LINE,targetList);
 	} else if (shape == AOE_SHAPE_LINE) {
 
 		if (axis == BOARD_AXIS_X_MINUS)
