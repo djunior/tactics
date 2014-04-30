@@ -68,6 +68,7 @@ private:
 	T_ERROR moveUnit(SDL_Keycode);
 	T_ERROR moveUnit();
 	T_ERROR selectCombatTarget(SDL_Keycode key);
+	T_ERROR selectCombatTarget();
 	T_ERROR combat(vector<Unit*> *targets);
 	T_ERROR useSpell(vector<Unit*> *targets);
 	T_ERROR selectSpellTargets(SDL_Keycode key);

@@ -245,6 +245,9 @@ namespace Screen {
 		{
 			SDL_SetRenderDrawColor(renderer,255,69,0,150);
 		}
+		else if (context == CONTEXT_UNIT_MENU){
+			SDL_SetRenderDrawColor(renderer,255,255,255,150);
+		}
 
 		int ix = area->x - area->range;
 		if (ix < 0)

@@ -348,6 +348,9 @@ void GameManager::processMouseEvent(SDL_Event *event){
 		case CONTEXT_UNIT_SELECT_MOVE:
 			moveUnit();
 			break;
+		case CONTEXT_UNIT_SELECT_TARGET:
+			selectCombatTarget();
+			break;
 	}
 }
 
@@ -553,57 +556,17 @@ T_ERROR GameManager::moveUnit(){
 		return e;
 	}
 
-	for (int i=1; i<=tryMoves ;i++) {
-		cerr << "dentro do for" << endl;
-		std::cerr << "x: " << x << endl;
-		std::cerr << "y: " << y << endl;
-		std::cerr << "i: " << i << endl;
-		if(x<0) {
-			e = board->moveUnit(unit,start.x+i,start.y);
+	//board->moveUnit(unit,)
 
-			if (e == T_SUCCESS) {
-				movesPerTurn--;
-				end.x++;
-
-				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
-				unit->setAnimation(a);
-				x--;
-			}
-		} else if(x>0) {
-			e = board->moveUnit(unit,start.x-i,start.y);
-
-			if (e == T_SUCCESS) {
-				movesPerTurn--;
-				end.x--;
-
-				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
-				unit->setAnimation(a);
-				x++;
-			}
-		}else if(y<0) {
-			e = board->moveUnit(unit,start.x,start.y+i);
-
-			if (e == T_SUCCESS) {
-				movesPerTurn--;
-				end.y++;
-
-				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
-				unit->setAnimation(a);
-			}
-		} else if(y>0) {
-			e = board->moveUnit(unit,start.x,start.y-i);
-
-			if (e == T_SUCCESS) {
-				movesPerTurn--;
-				end.y--;
-
-				Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
-				unit->setAnimation(a);
-			}
-		}
+	e = board->moveUnit(unit,start.x-x,start.y-y);
+	if (e == T_SUCCESS) {
+		movesPerTurn-=tryMoves;
+		end.x -= x;
+		end.y -= y;
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+		unit->setAnimation(a);
 	}
 
-	cerr << "fora do for!" << endl;
 	context = CONTEXT_UNIT_MOVE;
 	return T_SUCCESS;
 }
@@ -687,6 +650,52 @@ T_ERROR GameManager::selectCombatTarget(SDL_Keycode key){
 		std::cout << "Alvo invalido" << std::endl;
 		showAttackOptions();
 	}
+	return T_SUCCESS;
+}
+
+T_ERROR GameManager::selectCombatTarget(){
+
+	Unit *unit = *activeUnit;
+	vector<Unit*> targets;
+	vector<Unit*> possibleTargets;
+	BOARD_AOE area;
+	T_ERROR	e = Screen::mouseBoardPosition(board,&area);
+
+	if (! e == T_SUCCESS){
+		showAttackOptions();
+		context = CONTEXT_UNIT_MENU;
+		return e;
+	}
+
+	int x = unit->getX() - area.x;
+	int y = unit->getY() - area.y;
+
+
+	e = board->checkUnitsInAOE(unit->getX()-x,unit->getY()-y,0,BOARD_AXIS_X,AOE_SHAPE_POINT,&targets);
+	if (! e == T_SUCCESS){
+		//Nao selecionou nenhuma unidade com o clique
+		showAttackOptions();
+		context = CONTEXT_UNIT_MENU;
+		return e;
+	}
+
+	e = board->checkUnitsInAOE(unit->getX(),unit->getY(),unit->getRange(),BOARD_AXIS_X,AOE_SHAPE_CROSS,&possibleTargets);
+
+	context = CONTEXT_UNIT_COMBAT;
+
+	if (e == T_SUCCESS) {
+		//Esse loop pega todas as unidades dentro do AOE da unidade atacante,
+		//e verifica se a unidade selecionada com o mouse esta dentro dessa area
+		for (vector<Unit*>::iterator it=possibleTargets.begin(); it != possibleTargets.end(); it++){
+			if ((*it) == targets.front()){
+				e = combat(&targets);
+				return T_SUCCESS;
+			}
+		}
+		//TODO: Fazer alguma coisa com o erro
+	}
+	showAttackOptions();
+	context = CONTEXT_UNIT_MENU;
 	return T_SUCCESS;
 }
 
@@ -785,6 +794,13 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 
 	if (context == CONTEXT_UNIT_MENU) {
 		showUnitMenu();
+
+		area.x = (*activeUnit)->getX();
+		area.y = (*activeUnit)->getY();
+		area.range = 0;
+		area.shape = AOE_SHAPE_POINT;
+
+		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_SELECT_MOVE) {
 
 		area.x = (*activeUnit)->getX();
@@ -805,7 +821,8 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		showHighlightedArea(r,&area);
 	} else if (context == CONTEXT_UNIT_MOVE) {
 		if (! unit->isAnimating()) {
-			std::cout << "TROCANDO DE CONTEXTO" << std::endl;
+			//Fim da animacao de movimento
+			//Trocando de contexto
 			context = CONTEXT_UNIT_MENU;
 			showUnitMenu();
 			unit->setAnimation(Animation());
