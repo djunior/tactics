@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
     gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
 
     gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
-//    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
+    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
     gameBoard.debug_showMap();
     // Unit create END
