@@ -28,8 +28,10 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	dead = false;
 	team = t;
 	image = UNIT_DEFAULT_SPRITE_UNIT;
+
 	std::cout << "Mais um teste!" << std::endl;
 	menu.setup(renderer,window,MENU_UNIT);
+	sprite.setup(UNIT_DEFAULT_SPRITE_UNIT, SPRITE_TYPE_1);
 	//menu.statsMenu();
 }
 
@@ -230,4 +232,8 @@ T_ERROR Unit::statsUpdate()
 	this->menu.textList[7].setText("Actions: " + s.str());
 
 	return T_SUCCESS;
+}
+
+Sprite* Unit::getSprite(){
+	return &sprite;
 }

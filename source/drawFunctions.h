@@ -8,10 +8,13 @@
 #ifndef DRAWFUNCTIONS_H_
 #define DRAWFUNCTIONS_H_
 
+#include <math.h>
+
 #include "board.h"
 #include "unit.h"
 #include "unit_class/wizard.h"
 #include "unit_class/knight.h"
+#include "utils/sprite.h"
 
 #include "basic_includes.h"
 #include "fps.h"
@@ -29,7 +32,8 @@
 #define BROKEN_IMAGE "images\\broken_image.png"
 
 namespace Screen {
-	extern SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI);
+	extern SDL_Texture* loadImage (SDL_Renderer* renderer, std::string imageURI);
+	extern SDL_Texture* loadSprite(SDL_Renderer* renderer, std::string imageURI);
 	extern void setScale();
 	extern void init(SDL_Renderer*, SDL_Window*);
 	extern void drawBoard(SDL_Renderer*, Board*);

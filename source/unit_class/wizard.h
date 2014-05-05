@@ -11,6 +11,7 @@
 #include "../unit.h"
 #include "../utils/t_team.h"
 //#include "../spells/fireball.h"
+#include "../utils/sprite.h"
 
 #define WIZARD_HP 40
 #define WIZARD_DAMAGE 10
@@ -19,7 +20,7 @@
 #define WIZARD_ARMOR 1
 #define WIZARD_MANA_POOL 20
 
-#define WIZARD_SPRITE "images\\bmm.bmp"
+#define WIZARD_SPRITE "images\\wmm.bmp"
 
 class Wizard : public Unit{
 public:

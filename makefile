@@ -8,6 +8,7 @@ RM := rm -f
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include source/utils/subdir.mk
 -include source/unit_class/subdir.mk
 -include source/spells/subdir.mk
 -include source/subdir.mk
@@ -52,7 +53,11 @@ tactics.exe: $(OBJS) $(USER_OBJS)
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) tactics.exe
+	@rm source/*.o
+	@rm source/utils/*.o
+	@rm source/unit_class/*.o
+	@rm source/spells/*.o
+	@rm tactics.exe
 	-@echo ' '
 
 .PHONY: all clean dependents

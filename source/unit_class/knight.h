@@ -9,6 +9,7 @@
 #define KNIGHT_H_
 #include "../unit.h"
 #include "../utils/t_team.h"
+#include "../utils/sprite.h"
 
 #define KNIGHT_HP 80
 #define KNIGHT_DAMAGE 20

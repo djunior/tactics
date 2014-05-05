@@ -7,6 +7,7 @@
 #include <vector>
 #include "utils/t_error.h"
 #include "utils/board_utils.h"
+#include "utils/sprite.h"
 
 #include "menu.h"
 #include "animation.h"
@@ -27,6 +28,7 @@ class Unit {
 
 protected:
 	std::string image;
+	Sprite sprite;
 	const char* menu_bkg;
 	SDL_Texture* unit_texture;
 	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
@@ -59,6 +61,7 @@ public:
 	unsigned int getAttackDamage();
 	unsigned int getActionsPerTurn();
 	unsigned int getMana();
+
 	void setMana(int amount);
 	AOE_SHAPE getAttackArea();
 	std::string getClassName();
@@ -74,6 +77,8 @@ public:
 	//std::vector<Spell *> *getSpellList();
 	mWindow menu;
 	T_ERROR statsUpdate();
+
+	Sprite* getSprite();
 };
 
 #endif
