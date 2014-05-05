@@ -176,14 +176,7 @@ namespace Screen {
 
 			if (animation->type == ANIMATION_UNIT_MOVE){
 				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
-				int armIndex = ((int) animation->currentFrame) % (3 * animation->repeatFrame) / animation->repeatFrame;
-
-
-				std::cout << "sin(armIndex*2*M_PI/3)= " << sin(armIndex*2*M_PI/3) << std::endl;
-				std::cout << "sin(armIndex*2*M_PI/3)*3/2= " << sin(armIndex*2*M_PI/3)*3/2 << std::endl;
-				std::cout << "sin(armIndex*2*M_PI/3)*(3/2) + (3/2)= " << sin(armIndex*2*M_PI/3)*(3/2) + (3/2) << std::endl;
-
-			    armIndex = sin(armIndex*2*M_PI/3)*(3/2) + (3/2);
+				int armIndex = ((int) animation->currentFrame) % (2 * animation->repeatFrame) / animation->repeatFrame;
 
 				if (unit->getTeam() == TEAM_A) {
 
