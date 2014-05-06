@@ -23,13 +23,13 @@ namespace Screen {
 			return it->second;
 		}
 
-		SDL_Surface* s = SDL_LoadBMP(const_cast<char*>(imageURI.c_str()));
+		SDL_Surface* s = IMG_Load(const_cast<char*>(imageURI.c_str()));
 		if (s == NULL) {
 			std::cerr << "Screen::loadSprite(): Failed to load image " << imageURI << ": failed to create SDL_Surface" << std::endl;
 			return broken_image_texture;
 		}
 
-		SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,0,0,0));
+		SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,184,184,169));
 		SDL_Texture* t = SDL_CreateTextureFromSurface(renderer,s);
 		SDL_FreeSurface(s);
 
@@ -139,30 +139,35 @@ namespace Screen {
 
 		int w = 0;
 		int h = 0;
-		SDL_Rect srcChar,srcLeftArm, srcRightArm,rectChar,destArm;
+		SDL_Rect srcChar,srcHead, rectChar,destHead;
 
 	    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
-	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
-	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
-	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
+	    SDL_Texture* headTexture = loadSprite(renderer,"images\\M_Head_Black.png");
 
-	    srcChar.y=0;
-	    srcChar.w=32;
-	    srcChar.h=40;
+	    srcChar.w=44;
+	    srcChar.h=72;
+	    srcChar.x = 30 - (srcChar.w/2);
+	    srcChar.y=10;
 
-	    srcLeftArm.w = 24;
-	    srcLeftArm.h = 23;
+	    srcHead.w = 26;
+	    srcHead.h = 24;
+	    srcHead.x = 73 - (srcHead.w/2 -1);
+	    srcHead.y = 22 - (srcHead.h/2);
 
-	    srcRightArm.w = 24;
-	    srcRightArm.h = 23;
+	    float w_percent = static_cast<float>(srcHead.w) / static_cast<float>(srcChar.w);
+	    float h_percent = static_cast<float>(srcHead.h) / static_cast<float>(srcChar.h);
 
-    	float w_percent = static_cast<float>(srcRightArm.w) / static_cast<float>(srcChar.w);
-    	float h_percent = static_cast<float>(srcRightArm.h) / static_cast<float>(srcChar.h);
+	    float iw_percent = 1 - w_percent;
+	    float ih_percent = 1 - h_percent;
 
-    	destArm.w = rectChar.w * w_percent;
-    	destArm.h = rectChar.h * h_percent;
+	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.8)*xScale);
+	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.8)*yScale);
+	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
+	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
+
+	    destHead.w = rectChar.w * w_percent * 0.9;
+	    destHead.h = rectChar.h * h_percent * 0.9;
 
 	    if (unit->isAnimating()) {
 
@@ -171,85 +176,76 @@ namespace Screen {
 	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
 	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
 
-			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
-			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
+			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
+			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
+
 
 			if (animation->type == ANIMATION_UNIT_MOVE){
-				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
-				int armIndex = ((int) animation->currentFrame) % (2 * animation->repeatFrame) / animation->repeatFrame;
+				int index = ((int) animation->currentFrame) % (8 * animation->repeatFrame) / animation->repeatFrame;
 
-				if (unit->getTeam() == TEAM_A) {
+				srcChar.y = 312;
+				srcChar.h = 70;
 
-					if (index <= 3) {
-						srcChar.y = srcChar.h;
-						srcChar.x = srcChar.w*(3+index);
-					} else {
-						srcChar.y = srcChar.h*2;
-						srcChar.x = 0;
-					}
+			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.7)*xScale);
+			    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.7)*yScale);
 
-					srcLeftArm.y = 80 + srcLeftArm.h;
-					srcRightArm.y = 80 + srcRightArm.h;
-
-				} else {
-
-					if (index <= 1) {
-						srcChar.y = 0;
-						srcChar.x = srcChar.w*(5 + index);
-					} else {
-						srcChar.y = srcChar.h;
-						srcChar.x = srcChar.w*(index -2);
-					}
-
-					srcLeftArm.y = 80;
-					srcRightArm.y = 80;
-				}
-				std::cout << "ARM INDEX: " << 1 - armIndex << std::endl;
-				armIndex = 2*(1 - armIndex);
-				srcLeftArm.x = 32 + srcLeftArm.w*(2 + armIndex);
-				srcRightArm.x = 32 + srcRightArm.w*(3 + armIndex);
+				switch(index){
+					case 0:
+						srcChar.w = 25;
+						srcChar.x = 25 - (srcChar.w/2);
+						break;
+					case 1:
+						srcChar.w = 32;
+						srcChar.x = 66 - (srcChar.w/2);
+						break;
+					case 2:
+						srcChar.w = 44;
+						srcChar.x = 116 - (srcChar.w/2);
+						break;
+					case 3:
+						srcChar.w = 36;
+						srcChar.x = 166 - (srcChar.w/2);
+						break;
+					case 4:
+						srcChar.w = 25;
+						srcChar.x = 210 - (srcChar.w/2);
+						break;
+					case 5:
+						srcChar.w = 32;
+						srcChar.x = 251 - (srcChar.w/2);
+						break;
+					case 6:
+						srcChar.w = 43;
+						srcChar.x = 301 - (srcChar.w/2);
+						break;
+					case 7:
+						srcChar.w = 37;
+						srcChar.x = 351 - (srcChar.w/2);
+						break;
+				};
 
 			} else if (animation->type == ANIMATION_UNIT_ATTACK){
 
 				int armIndex = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
-
-
 
 			}
 
 			animation->currentFrame++;
 		} else {
 
-			rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
-			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
+		    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
+		    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
 
-			if (unit->getTeam() == TEAM_A)
-				srcChar.x=srcChar.w*3;
-			else
-			    srcChar.x=srcChar.w;
+			destHead.x = rectChar.x + (rectChar.w - destHead.w)/2;
+		    destHead.y = rectChar.y - destHead.h*4/5;
 		}
 
-    	destArm.x = rectChar.x + rectChar.w - destArm.w;
-    	if (unit->getSprite()->getType() == SPRITE_TYPE_2){
-    		destArm.x += 5;
-    	}
-
-    	destArm.y = rectChar.y + rectChar.h/3 - 3;
-
-    	SDL_Rect destLeftArm;
-    	destLeftArm.w = destArm.w;
-    	destLeftArm.h = destArm.h;
-    	destLeftArm.y = destArm.y - 8;
-    	destLeftArm.x = rectChar.x + 8;
-
 	    if(unit->getTeam() == TEAM_B) {
-	    	SDL_RenderCopy(renderer, texture, &srcLeftArm, &destLeftArm);
 	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);
-	    	SDL_RenderCopy(renderer, texture, &srcRightArm, &destArm);
+	    	SDL_RenderCopy(renderer, headTexture, &srcHead, &destHead);
 	    } else {
-	    	SDL_RenderCopyEx(renderer, texture, &srcLeftArm, &destLeftArm,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    	SDL_RenderCopyEx(renderer,texture,&srcChar,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
-	    	SDL_RenderCopyEx(renderer, texture, &srcRightArm, &destArm,0.0,NULL,SDL_FLIP_HORIZONTAL);
+	    	SDL_RenderCopyEx(renderer, headTexture, &srcHead, &destHead,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    }
 
 		SDL_Rect healthBar;
@@ -257,7 +253,7 @@ namespace Screen {
 		healthBar.h = 5;
 
 		healthBar.x = rectChar.x + (rectChar.w - healthBar.w)/2;
-		healthBar.y = rectChar.y;
+		healthBar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
 
 		SDL_SetRenderDrawColor(renderer,255,0,0,SDL_ALPHA_OPAQUE);
 		SDL_RenderFillRect(renderer,&healthBar);
