@@ -79,6 +79,9 @@ public:
 	T_ERROR statsUpdate();
 
 	Sprite* getSprite();
+
+	virtual void selectFrame(int,ANIMATION_TYPE,SDL_Rect*);
+	virtual void positionHead(int,ANIMATION_TYPE,SDL_Rect*, SDL_Rect*);
 };
 
 #endif

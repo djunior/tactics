@@ -679,9 +679,8 @@ T_ERROR GameManager::selectCombatTarget(){
 		return e;
 	}
 
-	e = board->checkUnitsInAOE(unit->getX(),unit->getY(),unit->getRange(),BOARD_AXIS_X,AOE_SHAPE_CROSS,&possibleTargets);
-
 	context = CONTEXT_UNIT_COMBAT;
+	e = board->checkUnitsInAOE(unit->getX(),unit->getY(),unit->getRange(),BOARD_AXIS_X,AOE_SHAPE_CROSS,&possibleTargets);
 
 	if (e == T_SUCCESS) {
 		//Esse loop pega todas as unidades dentro do AOE da unidade atacante,
@@ -689,13 +688,24 @@ T_ERROR GameManager::selectCombatTarget(){
 		for (vector<Unit*>::iterator it=possibleTargets.begin(); it != possibleTargets.end(); it++){
 			if ((*it) == targets.front()){
 				e = combat(&targets);
+				if ( e == T_SUCCESS) {
+					BOARD_POINT point;
+					point.x = unit->getX();
+					point.y = unit->getY();
+
+					Animation a(ANIMATION_UNIT_ATTACK,point,point,36,6);
+					unit->setAnimation(a);
+				} else {
+					context = CONTEXT_UNIT_MENU;
+				}
 				return T_SUCCESS;
 			}
 		}
 		//TODO: Fazer alguma coisa com o erro
+	} else {
+		context = CONTEXT_UNIT_MENU;
 	}
-	showAttackOptions();
-	context = CONTEXT_UNIT_MENU;
+
 	return T_SUCCESS;
 }
 
@@ -823,6 +833,12 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		if (! unit->isAnimating()) {
 			//Fim da animacao de movimento
 			//Trocando de contexto
+			context = CONTEXT_UNIT_MENU;
+			showUnitMenu();
+			unit->setAnimation(Animation());
+		}
+	} else if (context == CONTEXT_UNIT_COMBAT){
+		if (! unit->isAnimating()){
 			context = CONTEXT_UNIT_MENU;
 			showUnitMenu();
 			unit->setAnimation(Animation());

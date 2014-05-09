@@ -53,11 +53,11 @@ tactics.exe: $(OBJS) $(USER_OBJS)
 
 # Other Targets
 clean:
-	@rm source/*.o
-	@rm source/utils/*.o
-	@rm source/unit_class/*.o
-	@rm source/spells/*.o
-	@rm tactics.exe
+	@del source/*.o
+	@del source/utils/*.o
+	@del source/unit_class/*.o
+	@del source/spells/*.o
+	@del tactics.exe
 	-@echo ' '
 
 .PHONY: all clean dependents

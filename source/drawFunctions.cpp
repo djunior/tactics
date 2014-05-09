@@ -6,7 +6,7 @@
  */
 
 #include "drawFunctions.h"
-
+#include <typeinfo>
 namespace Screen {
 
 	SDL_Texture* background_texture, *broken_image_texture;
@@ -141,14 +141,12 @@ namespace Screen {
 		int h = 0;
 		SDL_Rect srcChar,srcHead, rectChar,destHead;
 
+		// Configurando o srcChar para o seu valor default
+		unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
+
 	    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
 	    SDL_Texture* headTexture = loadSprite(renderer,"images\\M_Head_Black.png");
-
-	    srcChar.w=44;
-	    srcChar.h=72;
-	    srcChar.x = 30 - (srcChar.w/2);
-	    srcChar.y=10;
 
 	    srcHead.w = 26;
 	    srcHead.h = 24;
@@ -158,16 +156,8 @@ namespace Screen {
 	    float w_percent = static_cast<float>(srcHead.w) / static_cast<float>(srcChar.w);
 	    float h_percent = static_cast<float>(srcHead.h) / static_cast<float>(srcChar.h);
 
-	    float iw_percent = 1 - w_percent;
-	    float ih_percent = 1 - h_percent;
-
-	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.8)*xScale);
-	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.8)*yScale);
-	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
-	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
-
-	    destHead.w = rectChar.w * w_percent * 0.9;
-	    destHead.h = rectChar.h * h_percent * 0.9;
+	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.65)*xScale);
+	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.65)*yScale);
 
 	    if (unit->isAnimating()) {
 
@@ -176,69 +166,40 @@ namespace Screen {
 	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
 	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
 
-			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
-			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
-
+			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*xScale);
+			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.35)*yScale);
 
 			if (animation->type == ANIMATION_UNIT_MOVE){
 				int index = ((int) animation->currentFrame) % (8 * animation->repeatFrame) / animation->repeatFrame;
 
-				srcChar.y = 312;
-				srcChar.h = 70;
+			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.6)*xScale);
+			    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.6)*yScale);
 
-			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE* 0.7)*xScale);
-			    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE* 0.7)*yScale);
+			    unit->selectFrame(index,animation->type,&srcChar);
 
-				switch(index){
-					case 0:
-						srcChar.w = 25;
-						srcChar.x = 25 - (srcChar.w/2);
-						break;
-					case 1:
-						srcChar.w = 32;
-						srcChar.x = 66 - (srcChar.w/2);
-						break;
-					case 2:
-						srcChar.w = 44;
-						srcChar.x = 116 - (srcChar.w/2);
-						break;
-					case 3:
-						srcChar.w = 36;
-						srcChar.x = 166 - (srcChar.w/2);
-						break;
-					case 4:
-						srcChar.w = 25;
-						srcChar.x = 210 - (srcChar.w/2);
-						break;
-					case 5:
-						srcChar.w = 32;
-						srcChar.x = 251 - (srcChar.w/2);
-						break;
-					case 6:
-						srcChar.w = 43;
-						srcChar.x = 301 - (srcChar.w/2);
-						break;
-					case 7:
-						srcChar.w = 37;
-						srcChar.x = 351 - (srcChar.w/2);
-						break;
-				};
 
 			} else if (animation->type == ANIMATION_UNIT_ATTACK){
 
-				int armIndex = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
+				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
+				unit->selectFrame(index,animation->type,&srcChar);
 
 			}
 
 			animation->currentFrame++;
 		} else {
 
-		    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.1)*xScale);
-		    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*yScale);
+		    unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
 
-			destHead.x = rectChar.x + (rectChar.w - destHead.w)/2;
-		    destHead.y = rectChar.y - destHead.h*4/5;
+		    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.2)*xScale);
+		    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE + BOARD_BLOCK_SIZE*0.35)*yScale);
+
 		}
+
+	    destHead.w = rectChar.w * w_percent * 1.2;
+	    destHead.h = rectChar.h * h_percent * 1.2;
+
+		destHead.x = rectChar.x + (rectChar.w - destHead.w)/2;
+	    destHead.y = rectChar.y - destHead.h*4/5;
 
 	    if(unit->getTeam() == TEAM_B) {
 	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);

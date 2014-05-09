@@ -23,8 +23,20 @@
 #define WIZARD_SPRITE "images\\M_Wizard.png"
 
 class Wizard : public Unit{
+private:
+	void selectFrameIdle(SDL_Rect*);
+	void selectFrameMove(int, SDL_Rect *);
+	void selectFrameAttack(int,SDL_Rect*);
+
+	void positionHeadIdle(SDL_Rect*, SDL_Rect*);
+	void positionHeadMove(int, SDL_Rect*, SDL_Rect*);
+	void positionHeadAttack(int,SDL_Rect*, SDL_Rect*);
 public:
 	Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w);
+
+	void selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect);
+	void positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head);
+
 	virtual ~Wizard();
 };
 
