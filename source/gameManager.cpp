@@ -698,7 +698,7 @@ T_ERROR GameManager::selectCombatTarget(){
 				} else {
 					context = CONTEXT_UNIT_MENU;
 				}
-				return T_SUCCESS;
+				return e;
 			}
 		}
 		//TODO: Fazer alguma coisa com o erro
@@ -754,7 +754,6 @@ T_ERROR GameManager::combat(vector<Unit*> *targets){
 		return T_SUCCESS;
 	}
 
-	context = CONTEXT_UNIT_MENU;
 	showUnitMenu();
 	return T_SUCCESS;
 }

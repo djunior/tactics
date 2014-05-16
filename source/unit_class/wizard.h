@@ -20,7 +20,7 @@
 #define WIZARD_ARMOR 1
 #define WIZARD_MANA_POOL 20
 
-#define WIZARD_SPRITE "images\\M_Wizard.png"
+#define WIZARD_SPRITE "images\\RBA_Wizard.png"
 
 class Wizard : public Unit{
 private:

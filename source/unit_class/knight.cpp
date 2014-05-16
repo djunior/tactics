@@ -32,82 +32,41 @@ Knight::~Knight() {
 
 // Configura um SDL_Rect para apontar um frame da unidade parada.
 void Knight::selectFrameIdle(SDL_Rect *rect){
-    rect->w=44;
-    rect->h=72;
-    rect->x = 30 - (rect->w/2);
-    rect->y=10;
+    rect->x = 181;
+    rect->y = 3;
+    rect->w = 136;
+    rect->h = 123;
 }
 
 // Configura um SDL_Rect para apontar um frame da animacao de movimento, baseado no valor de frameIndex
 void Knight::selectFrameMove(int frameIndex, SDL_Rect* rect){
 
-	rect->y = 312;
-	rect->h = 70;
+	rect->w = 136;
+	rect->h = 111;
 
-	switch(frameIndex){
-		case 0:
-			rect->w = 25;
-			rect->x = 10;
-			break;
-		case 1:
-			rect->w = 32;
-			rect->x = 47;
-			break;
-		case 2:
-			rect->w = 44;
-			rect->x = 91;
-			break;
-		case 3:
-			rect->w = 36;
-			rect->x = 146;
-			break;
-		case 4:
-			rect->w = 25;
-			rect->x = 195;
-			break;
-		case 5:
-			rect->w = 32;
-			rect->x = 232;
-			break;
-		case 6:
-			rect->w = 43;
-			rect->x = 276;
-			break;
-		case 7:
-			rect->w = 37;
-			rect->x = 331;
-			break;
-	};
+	rect->x = 0 + (44 + rect->w)*(frameIndex);
+	rect->y = 188;
+
 }
 
 // Configura um SDL_Rect para apontar um frame da animacao de ataque, baseado no valor de frameIndex
 void Knight::selectFrameAttack(int frameIndex, SDL_Rect* rect){
 
-	rect->y = 612;
-	rect->h = 71;
+//	if (frameIndex < 6){
+//		rect->w = 136;
+//		rect->h = 107;
+//
+//		rect->x = (44 + rect->w)*(frameIndex);
+//		rect->y = 372;
+//
+//	} else {
+		rect->w = 136;
+		rect->h = 122;
 
-	switch(frameIndex){
-		case 0:
-			rect->w = 45;
-			rect->x = 32 - (rect->w/2);
-			break;
-		case 1:
-			rect->w = 41;
-			rect->x = 87 - (rect->w/2);
-			break;
-		case 2:
-			rect->w = 43;
-			rect->x = 136 - (rect->w/2);
-			break;
-		case 3:
-			rect->w = 47;
-			rect->x = 192 - (rect->w/2);
-			break;
-		case 4:
-			rect->w = 47;
-			rect->x = 251 - (rect->w/2);
-			break;
-	};
+		rect->x = 181 + (44 + rect->w)*(frameIndex);
+		rect->y = 733;
+//	}
+
 }
 
 void Knight::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
@@ -127,16 +86,38 @@ void Knight::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
 	};
 }
 
-void Knight::positionHeadIdle(SDL_Rect*, SDL_Rect*){
-
+void Knight::positionHeadIdle(SDL_Rect* body, SDL_Rect* head){
+	head->x = body->x + (body->w - head->w)/2;
+	head->y = body->y - head->h*4/5;
 }
 
-void Knight::positionHeadMove(int, SDL_Rect*, SDL_Rect*){
-
+void Knight::positionHeadMove(int frameIndex, SDL_Rect* body, SDL_Rect* head){
+	positionHeadIdle(body,head);
 }
 
-void Knight::positionHeadAttack(int,SDL_Rect*, SDL_Rect*){
-
+void Knight::positionHeadAttack(int frameIndex ,SDL_Rect* body, SDL_Rect* head){
+	switch(frameIndex){
+		case 0:
+			head->x = body->x + (body->w - head->w)/2;
+			head->y = body->y - head->h/4;
+			break;
+		case 1:
+			head->x = body->x + (body->w - head->w)/2;
+			head->y = body->y - head->h/4;
+			break;
+		case 2:
+			head->x = body->x + (body->w - head->w)/2;
+			head->y = body->y - head->h/4;
+			break;
+		case 3:
+			head->x = body->x + (body->w - head->w)/2;
+			head->y = body->y - head->h/4;
+			break;
+		case 4:
+			head->x = body->x + (body->w - head->w)/2;
+			head->y = body->y - head->h/4;
+			break;
+	};
 }
 
 void Knight::positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head){
