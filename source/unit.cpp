@@ -28,6 +28,7 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	dead = false;
 	team = t;
 	image = UNIT_DEFAULT_SPRITE_UNIT;
+	projectileImage = "";
 
 	std::cout << "Mais um teste!" << std::endl;
 	menu.setup(renderer,window,MENU_UNIT);
@@ -136,6 +137,16 @@ T_ERROR Unit::combat(std::vector<Unit *> *targetList,int *bodyCount){
 	if (target->takeDamage(getAttackDamage()))
 		(*bodyCount)--;
 
+	BOARD_POINT point,targetPoint;
+	point.x = getX();
+	point.y = getY();
+
+	targetPoint.x = target->getX();
+	targetPoint.y = target->getY();
+
+	Animation a(ANIMATION_UNIT_ATTACK,point,targetPoint,36,6);
+	setAnimation(a);
+
 	return T_SUCCESS;
 }
 
@@ -236,4 +247,8 @@ T_ERROR Unit::statsUpdate()
 
 Sprite* Unit::getSprite(){
 	return &sprite;
+}
+
+std::string Unit::getProjectileImage(){
+	return projectileImage;
 }

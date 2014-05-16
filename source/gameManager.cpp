@@ -689,12 +689,12 @@ T_ERROR GameManager::selectCombatTarget(){
 			if ((*it) == targets.front()){
 				e = combat(&targets);
 				if ( e == T_SUCCESS) {
-					BOARD_POINT point;
-					point.x = unit->getX();
-					point.y = unit->getY();
-
-					Animation a(ANIMATION_UNIT_ATTACK,point,point,36,6);
-					unit->setAnimation(a);
+//					BOARD_POINT point;
+//					point.x = unit->getX();
+//					point.y = unit->getY();
+//
+//					Animation a(ANIMATION_UNIT_ATTACK,point,point,36,6);
+//					unit->setAnimation(a);
 				} else {
 					context = CONTEXT_UNIT_MENU;
 				}

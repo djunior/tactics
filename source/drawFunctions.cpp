@@ -139,7 +139,7 @@ namespace Screen {
 
 		int w = 0;
 		int h = 0;
-		SDL_Rect srcChar,srcHead, rectChar,destHead;
+		SDL_Rect srcChar,srcHead, rectChar,destHead, srcProjectile, destProjectile;
 
 		// Configurando o srcChar para o seu valor default
 		unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
@@ -147,6 +147,10 @@ namespace Screen {
 	    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
 	    SDL_Texture* headTexture = loadSprite(renderer,"images\\M_Head_Black.png");
+	    SDL_Texture* projectileTexture;
+
+	    if (unit->getRange() > 1)
+	    	projectileTexture = loadImage(renderer,unit->getProjectileImage());
 
 	    srcHead.w = 26;
 	    srcHead.h = 24;
@@ -159,6 +163,9 @@ namespace Screen {
 	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
 	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
 
+	    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
+	    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
+
 	    if (unit->isAnimating()) {
 
 	    	Animation* animation = unit->getAnimation();
@@ -166,10 +173,11 @@ namespace Screen {
 	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
 	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
 
-			rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
-			rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
-
 			if (animation->type == ANIMATION_UNIT_MOVE){
+
+				rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
+				rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
+
 				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
 
 			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
@@ -184,6 +192,19 @@ namespace Screen {
 				unit->selectFrame(index,animation->type,&srcChar);
 
 				//rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX + 0.4)* BOARD_BLOCK_SIZE)*xScale);
+				if (unit->getRange() > 1){
+					srcProjectile.x = 0;
+					srcProjectile.y = 0;
+					srcProjectile.w = 48;
+					srcProjectile.h = 24;
+
+					destProjectile.w = 48;
+					destProjectile.h = 24;
+
+					destProjectile.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
+					destProjectile.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE + (BOARD_BLOCK_SIZE - destProjectile.h)/2)*yScale);
+
+				}
 
 			}
 
@@ -191,9 +212,6 @@ namespace Screen {
 		} else {
 
 		    unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
-
-		    rectChar.x = static_cast<int>((BOARD_INITIAL_X + unit->getX()*BOARD_BLOCK_SIZE)*xScale);
-		    rectChar.y = static_cast<int>((BOARD_INITIAL_Y + unit->getY()*BOARD_BLOCK_SIZE)*yScale);
 
 		}
 
@@ -206,9 +224,13 @@ namespace Screen {
 	    if(unit->getTeam() == TEAM_A) {
 	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);
 	    	//SDL_RenderCopy(renderer, headTexture, &srcHead, &destHead);
+	    	if (unit->getRange() > 1)
+	    		SDL_RenderCopy(renderer, projectileTexture, &srcProjectile, &destProjectile);
 	    } else {
 	    	SDL_RenderCopyEx(renderer,texture,&srcChar,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    	//SDL_RenderCopyEx(renderer, headTexture, &srcHead, &destHead,0.0,NULL,SDL_FLIP_HORIZONTAL);
+	    	if (unit->getRange() > 1)
+	    		SDL_RenderCopyEx(renderer, projectileTexture, &srcProjectile, &destProjectile,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    }
 
 		SDL_Rect healthBar;

@@ -27,7 +27,7 @@
 class Unit {
 
 protected:
-	std::string image;
+	std::string image, projectileImage;
 	Sprite sprite;
 	const char* menu_bkg;
 	SDL_Texture* unit_texture;
@@ -66,6 +66,7 @@ public:
 	AOE_SHAPE getAttackArea();
 	std::string getClassName();
 	std::string getImage();
+	std::string getProjectileImage();
 	int combat(std::vector<Unit *> *targetList);
 	T_ERROR combat(std::vector<Unit *> *targetList, int *bodyCount);
 	void debug_showStats();

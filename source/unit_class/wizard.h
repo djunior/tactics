@@ -21,6 +21,7 @@
 #define WIZARD_MANA_POOL 20
 
 #define WIZARD_SPRITE "images\\RBA_Wizard.png"
+#define WIZARD_PROJECTILE_SPRITE "images\\missile.png"
 
 class Wizard : public Unit{
 private:
