@@ -36,7 +36,7 @@ public:
 	Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w);
 
 	void selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect);
-	void positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head);
+	void positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head); // Deprecated
 
 	virtual ~Wizard();
 };

@@ -15,7 +15,9 @@ namespace Screen {
 	bool isInitialized = false;
 	std::map<std::string,SDL_Texture*> imageMap;
 
-	SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI){
+	// Carrega um sprite no mapa de SDL_Textures. O Sprite é carregado substituindo sua cor de fundo por
+	// transparente. A cor de fundo deve ser especificada nos parametros r,b,g
+	SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI, int r, int g, int b){
 
 		std::map<std::string,SDL_Texture*>::iterator it = imageMap.find(imageURI);
 
@@ -29,7 +31,7 @@ namespace Screen {
 			return broken_image_texture;
 		}
 
-		SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,50,150,200));
+		SDL_SetColorKey(s,SDL_TRUE,SDL_MapRGB(s->format,r,g,b));
 		SDL_Texture* t = SDL_CreateTextureFromSurface(renderer,s);
 		SDL_FreeSurface(s);
 
@@ -42,6 +44,12 @@ namespace Screen {
 		return t;
 	}
 
+	// Carrega um sprite utilizando a cor de fundo (50,150,200)
+	SDL_Texture* loadSprite(SDL_Renderer* renderer, std::string imageURI){
+		return loadSprite(renderer, imageURI,50,150,200);
+	}
+
+	// Carrega uma imagem no mapa de SDL_Textures sem fazer qualquer modificação no seu fundo
 	SDL_Texture* loadImage(SDL_Renderer* renderer, std::string imageURI){
 		SDL_Texture *t = IMG_LoadTexture(renderer,const_cast<char*>(imageURI.c_str()));
 		if (t == NULL){
@@ -61,6 +69,7 @@ namespace Screen {
 			yScale = (float)hWindow/WINDOW_INITIAL_H;
 		}
 
+	// Inicializa o Screen
 	void init(SDL_Renderer* renderer,SDL_Window* win){
 		broken_image_texture = IMG_LoadTexture(renderer,BROKEN_IMAGE);
 		background_texture = IMG_LoadTexture(renderer, "images\\FFIV_PSP_Forest_Battle.png");
@@ -71,6 +80,7 @@ namespace Screen {
 		isInitialized = true;
 	}	
 
+	// Destroi as SDL_Textures criadas
 	void cleanup(){
 		// Destruindo texturas criadas individualmente
 		SDL_DestroyTexture(background_texture);
@@ -85,6 +95,7 @@ namespace Screen {
 		imageMap.clear();
 	}
 
+	// Desenha o tabuleiro de jogo
 	void drawBoard(SDL_Renderer *renderer, Board* board) {
 
 		setScale();
@@ -130,6 +141,9 @@ namespace Screen {
 		return static_cast<int>((BOARD_INITIAL_Y + y*BOARD_BLOCK_SIZE)*yScale);
 	}
 
+
+	// Desenha uma unidade na tela. Se a unidade tiver um objeto Animation associado a ela,
+	// a unidade sera pintada animando
 	void drawUnit(Unit *unit,SDL_Texture* texture, SDL_Renderer *renderer, TTF_Font *font){
 		if (! isInitialized) {
 			std::cerr << "Falha a pintar a unidade " << unit << std::endl;
@@ -146,7 +160,6 @@ namespace Screen {
 
 	    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-	    SDL_Texture* headTexture = loadSprite(renderer,"images\\M_Head_Black.png");
 	    SDL_Texture* projectileTexture;
 
 	    if (unit->getRange() > 1)
@@ -223,12 +236,10 @@ namespace Screen {
 
 	    if(unit->getTeam() == TEAM_A) {
 	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);
-	    	//SDL_RenderCopy(renderer, headTexture, &srcHead, &destHead);
 	    	if (unit->getRange() > 1)
 	    		SDL_RenderCopy(renderer, projectileTexture, &srcProjectile, &destProjectile);
 	    } else {
 	    	SDL_RenderCopyEx(renderer,texture,&srcChar,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
-	    	//SDL_RenderCopyEx(renderer, headTexture, &srcHead, &destHead,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    	if (unit->getRange() > 1)
 	    		SDL_RenderCopyEx(renderer, projectileTexture, &srcProjectile, &destProjectile,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    }
@@ -258,6 +269,7 @@ namespace Screen {
 	void drawEndGame(T_TEAM winningTeam, int turn){
 	}
 
+	// Desenha uma area na tela realçada
 	void drawHighlightedArea(SDL_Renderer *renderer, Board* board, BOARD_AOE* area, GAMEMANAGER_CONTEXT context){
 		setScale();
 
