@@ -31,9 +31,9 @@ protected:
 	Sprite sprite;
 	const char* menu_bkg;
 	SDL_Texture* unit_texture;
-	unsigned int x, y, hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
+	unsigned int x, y, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool;
 	std::string unitClassName;
-	int speed;
+	int speed, hp;
 	bool dead;
 	T_TEAM team;
 	AOE_SHAPE attackArea;
@@ -55,7 +55,7 @@ public:
 	void kill();
 	int getSpeed();
 	unsigned int getMove();
-	unsigned int getHp();
+	int getHp();
 	unsigned int getMaxHp();
 	unsigned int getRange();
 	unsigned int getAttackDamage();

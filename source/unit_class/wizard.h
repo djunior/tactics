@@ -15,7 +15,7 @@
 
 #define WIZARD_HP 40
 #define WIZARD_DAMAGE 10
-#define WIZARD_RANGE 2
+#define WIZARD_RANGE 3
 #define WIZARD_MOVE 1
 #define WIZARD_ARMOR 1
 #define WIZARD_MANA_POOL 20

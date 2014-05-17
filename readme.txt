@@ -24,14 +24,11 @@ Tópicos:
 2. Sobre o projeto
 3. Dados técnicos
 4. Dependências
-
+5. Misc
 
 
 
 1. Versões:
-0.1a - Primeiro commit da aplicação
-
-
 
 
 2. Sobre o projeto
@@ -59,8 +56,8 @@ E o que mais nós pensarmos ao longo do caminho
 
 3. Dados técnicos:
 
-Linguagem primária: C++
-Ambiente gráfico: SDL (C++) - http://www.libsdl.org/
+Linguagem primária: C/C++
+Ambiente gráfico: SDL 2.0 (C++) - http://www.libsdl.org/
 
 
 
@@ -74,4 +71,13 @@ Nesse link estão as principais dependências do projeto, que são:
 - Lib SDL2
 
 Além disso, encontra-se no link o Sublime e o Eclipse, dois SDK's que podem ser usados para o desenvolvimento do projeto.
+
+
+
+
+
+5. Misc
+
+Sprites dos personagens obtidos de http://spritedatabase.net/game/.
+Software de edição de imagens utilizado GIMP (http://www.gimp.org/)
 

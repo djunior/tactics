@@ -272,6 +272,12 @@ T_ERROR GameManager::startNextUnitTurn(){
 	context = CONTEXT_BEGINNING_UNIT_TURN;
 
 	Unit *u = *activeUnit;
+
+	if (u->isDead()){
+		endUnitTurn();
+		return T_SUCCESS;
+	}
+
 	actionsPerTurn = u->getActionsPerTurn();
 	movesPerTurn = u->getMove();
 
@@ -563,7 +569,12 @@ T_ERROR GameManager::moveUnit(){
 		movesPerTurn-=tryMoves;
 		end.x -= x;
 		end.y -= y;
-		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+
+		int durationScale = ( ( abs(end.x - start.x) )^2 + ( abs(end.y - start.y) )^2 )^(1/2);
+		if (durationScale < 1)
+			durationScale = 1;
+
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36 * durationScale,6);
 		unit->setAnimation(a);
 	}
 
