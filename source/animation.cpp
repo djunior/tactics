@@ -7,7 +7,7 @@
 
 #include "animation.h"
 
-Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,double dur,int rep) {
+Animation::Animation(ANIMATION_TYPE t, BOARD_POINT start, BOARD_POINT end, double dur, int rep, int frames) {
 	type = t;
 
 	currentFrame = 0;
@@ -17,10 +17,12 @@ Animation::Animation(ANIMATION_TYPE t,BOARD_POINT start,BOARD_POINT end,double d
 	endPoint = end;
 
 	repeatFrame = rep;
+
+	numberFrames = frames;
 }
 
 // Default initiation;
-Animation::Animation(){
+Animation::Animation() {
 	type = ANIMATION_IDLE;
 
 	currentFrame = 1;
@@ -33,25 +35,30 @@ Animation::Animation(){
 	endPoint.y = 0;
 
 	repeatFrame = 1;
+
+	numberFrames = 1;
 }
 
 Animation::~Animation() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Animation::hasStarted(){
+bool Animation::hasStarted() {
 	return currentFrame > 0;
 }
 
-bool Animation::hasEnded(){
+bool Animation::hasEnded() {
 	return currentFrame >= duration;
 }
 
-void Animation::debug_showStats(){
+void Animation::debug_showStats() {
 	std::cout << "Animation(" << this << ") stats:" << std::endl;
 	std::cout << "Type: " << type << std::endl;
+	std::cout << "Number of frames: " << numberFrames << std::endl;
 	std::cout << "Duration: " << duration << std::endl;
 	std::cout << "Current Frame: " << currentFrame << std::endl;
-	std::cout << "Start Point(" << &startPoint << "): (" << startPoint.x << "," << startPoint.y << ")" << std::endl;
-	std::cout << "End Point(" << &endPoint << "): (" << endPoint.x << "," << endPoint.y << ")" << std::endl;
+	std::cout << "Start Point(" << &startPoint << "): (" << startPoint.x << ","
+			<< startPoint.y << ")" << std::endl;
+	std::cout << "End Point(" << &endPoint << "): (" << endPoint.x << ","
+			<< endPoint.y << ")" << std::endl;
 }

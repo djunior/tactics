@@ -153,6 +153,7 @@ namespace Screen {
 
 		int w = 0;
 		int h = 0;
+		bool invert = (unit->getTeam() == TEAM_B);
 		SDL_Rect srcChar,srcHead, rectChar,destHead, srcProjectile, destProjectile;
 
 		// Configurando o srcChar para o seu valor default
@@ -186,12 +187,21 @@ namespace Screen {
 	    	float diffX = animation->startPoint.x + (animation->currentFrame/animation->duration)* (animation->endPoint.x - animation->startPoint.x);
 	    	float diffY = animation->startPoint.y + (animation->currentFrame/animation->duration)* (animation->endPoint.y - animation->startPoint.y);
 
+			int index = ((int) animation->currentFrame) % (animation->numberFrames * animation->repeatFrame) / animation->repeatFrame;
+
+			if ((animation->endPoint.x - animation->startPoint.x) < 0){
+				if (unit->getTeam() == TEAM_A)
+					invert = true;
+			} else {
+				if (unit->getTeam() == TEAM_B)
+					invert = false;
+			}
+
 			if (animation->type == ANIMATION_UNIT_MOVE){
 
 				rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
 				rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
 
-				int index = ((int) animation->currentFrame) % (5 * animation->repeatFrame) / animation->repeatFrame;
 
 			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
 			    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
@@ -201,7 +211,6 @@ namespace Screen {
 
 			} else if (animation->type == ANIMATION_UNIT_ATTACK){
 
-				int index = ((int) animation->currentFrame) % (4 * animation->repeatFrame) / animation->repeatFrame;
 				unit->selectFrame(index,animation->type,&srcChar);
 
 				//rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX + 0.4)* BOARD_BLOCK_SIZE)*xScale);
@@ -226,6 +235,11 @@ namespace Screen {
 
 		    unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
 
+			if (unit->getTeam() == TEAM_B)
+				invert = true;
+			else
+				invert = false;
+
 		}
 
 	    destHead.w = rectChar.w * w_percent * 1.2;
@@ -234,14 +248,14 @@ namespace Screen {
 		destHead.x = rectChar.x + (rectChar.w - destHead.w)/2;
 	    destHead.y = rectChar.y - destHead.h*4/5;
 
-	    if(unit->getTeam() == TEAM_A) {
-	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);
-	    	if (unit->getRange() > 1)
-	    		SDL_RenderCopy(renderer, projectileTexture, &srcProjectile, &destProjectile);
-	    } else {
+	    if (invert == true) {
 	    	SDL_RenderCopyEx(renderer,texture,&srcChar,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);
 	    	if (unit->getRange() > 1)
 	    		SDL_RenderCopyEx(renderer, projectileTexture, &srcProjectile, &destProjectile,0.0,NULL,SDL_FLIP_HORIZONTAL);
+	    } else {
+	    	SDL_RenderCopy(renderer, texture, &srcChar, &rectChar);
+	    	if (unit->getRange() > 1)
+	    		SDL_RenderCopy(renderer, projectileTexture, &srcProjectile, &destProjectile);
 	    }
 
 		SDL_Rect healthBar;

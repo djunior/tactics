@@ -83,6 +83,7 @@ public:
 
 	virtual void selectFrame(int,ANIMATION_TYPE,SDL_Rect*) = 0;
 	virtual void positionHead(int,ANIMATION_TYPE,SDL_Rect*, SDL_Rect*) = 0; // Deprecated
+	virtual int getFramesAnimation(ANIMATION_TYPE type) = 0;
 };
 
 #endif

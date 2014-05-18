@@ -144,7 +144,7 @@ T_ERROR Unit::combat(std::vector<Unit *> *targetList,int *bodyCount){
 	targetPoint.x = target->getX();
 	targetPoint.y = target->getY();
 
-	Animation a(ANIMATION_UNIT_ATTACK,point,targetPoint,24,6);
+	Animation a(ANIMATION_UNIT_ATTACK,point,targetPoint,24,6,getFramesAnimation(ANIMATION_UNIT_ATTACK));
 	setAnimation(a);
 
 	return T_SUCCESS;

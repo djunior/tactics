@@ -133,3 +133,18 @@ void Knight::positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, S
 			break;
 	};
 }
+
+int Knight::getFramesAnimation(ANIMATION_TYPE type){
+	switch(type){
+		case ANIMATION_IDLE:
+			return 1;
+		case ANIMATION_UNIT_MOVE:
+			return 6;
+		case ANIMATION_UNIT_ATTACK:
+			return 4;
+		default:
+			return 1;
+	};
+
+	return 1;
+}

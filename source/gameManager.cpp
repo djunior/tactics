@@ -490,7 +490,7 @@ T_ERROR GameManager::moveUnit(SDL_Keycode direction){
 		end.x = x;
 		end.y = y;
 
-		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6);
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36,6,unit->getFramesAnimation(ANIMATION_UNIT_MOVE));
 		unit->setAnimation(a);
 
 		context = CONTEXT_UNIT_MOVE;
@@ -574,7 +574,7 @@ T_ERROR GameManager::moveUnit(){
 		if (durationScale < 1)
 			durationScale = 1;
 
-		Animation a(ANIMATION_UNIT_MOVE,start,end,36 * durationScale,6);
+		Animation a(ANIMATION_UNIT_MOVE,start,end,36 * durationScale,6,unit->getFramesAnimation(ANIMATION_UNIT_MOVE));
 		unit->setAnimation(a);
 	}
 
@@ -835,7 +835,7 @@ void GameManager::update(SDL_Renderer* r,TTF_Font *font,SDL_Rect*drawArea){
 		area.x = (*activeUnit)->getX();
 		area.y = (*activeUnit)->getY();
 		area.range = (*activeUnit)->getRange();
-		area.shape = AOE_SHAPE_CIRCLE;
+		area.shape = AOE_SHAPE_CROSS;
 
 		showUnitMenu();
 		showHighlightedArea(r,&area);
