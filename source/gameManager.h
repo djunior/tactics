@@ -93,10 +93,12 @@ public:
 	void startTurn();
 	void endGame();
 	void notifyDeath(T_TEAM team, int casualties);
-	void processEvent(SDL_Event* event);
-	void processMouseEvent(SDL_Event* event);
 	void update(SDL_Renderer*,TTF_Font*,SDL_Rect*);
 	unsigned int getTurn();
+
+	// O valor de retorno indica se o programa desse ser encerrado (true) ou não (false)
+	bool processEvent(SDL_Event* event);
+	bool processMouseEvent(SDL_Event* event);
 };
 
 #endif

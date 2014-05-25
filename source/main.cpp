@@ -84,13 +84,15 @@ int main(int argc, char *argv[]){
     gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
 
     gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
-    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
+  / gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
     gameBoard.debug_showMap();
     // Unit create END
 
    menu.mainMenu();
 
+
+   bool close;
     while (Starting)
     {
     	if (fps.isFrameDone())
@@ -168,7 +170,12 @@ int main(int argc, char *argv[]){
 									Starting = true;
 									break;
 								default:
-									gm.processEvent(&Event);
+									// GameManager.processEvent retorna true caso o programa deva fechar
+									if (gm.processEvent(&Event)){
+										Starting = false;
+										Running = false;
+									}
+									break;
 							}
 							break;
 						case SDL_MOUSEBUTTONDOWN:
@@ -176,7 +183,12 @@ int main(int argc, char *argv[]){
 							{
 								case SDL_BUTTON_LEFT:
 									SDL_GetMouseState(&x, &y);
-									gm.processMouseEvent(&Event);
+
+									// GameManager.processMouseEvent retorna true caso o programa deva fechar
+									if (gm.processMouseEvent(&Event)) {
+										Starting = false;
+										Running = false;
+									}
 									break;
 							}
 							break;

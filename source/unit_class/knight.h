@@ -36,6 +36,8 @@ public:
 	void positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head); // Deprecated
 	int getFramesAnimation(ANIMATION_TYPE type);
 	virtual ~Knight();
+
+	void initUnitStats();
 };
 
 #endif /* KNIGHT_H_ */

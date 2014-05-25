@@ -8,6 +8,19 @@
 #include "knight.h"
 
 Knight::Knight(T_TEAM t,SDL_Renderer *r, SDL_Window *w)  : Unit (t,r,w) {
+	initUnitStats();
+
+	menu.setImage(KNIGHT_SPRITE);
+	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);
+
+	sprite.setup(KNIGHT_SPRITE,SPRITE_TYPE_1);
+}
+
+Knight::~Knight() {
+	// TODO Auto-generated destructor stub
+}
+
+void Knight::initUnitStats(){
 	hp = KNIGHT_HP;
 	maxHp = KNIGHT_HP;
 	attackDamage = KNIGHT_DAMAGE;
@@ -19,15 +32,6 @@ Knight::Knight(T_TEAM t,SDL_Renderer *r, SDL_Window *w)  : Unit (t,r,w) {
 	manaPool = KNIGHT_MANA_POOL;
 
 	image = KNIGHT_SPRITE;
-
-	menu.setImage(KNIGHT_SPRITE);
-	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);
-
-	sprite.setup(KNIGHT_SPRITE,SPRITE_TYPE_1);
-}
-
-Knight::~Knight() {
-	// TODO Auto-generated destructor stub
 }
 
 // Configura um SDL_Rect para apontar um frame da unidade parada.

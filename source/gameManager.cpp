@@ -316,13 +316,13 @@ T_ERROR GameManager::endUnitTurn(){
 	return startNextUnitTurn();
 }
 
-void GameManager::processMouseEvent(SDL_Event *event){
+bool GameManager::processMouseEvent(SDL_Event *event){
 	if (! event->type == SDL_MOUSEBUTTONDOWN)
-		return;
+		return false;
 
 	if (! event->button.button == SDL_BUTTON_LEFT)
-		return;
-
+		return false;
+	bool close = false;
 	switch(context){
 		case CONTEXT_UNIT_MENU:
 			switch(menuUnitAction.btnHit())
@@ -357,15 +357,25 @@ void GameManager::processMouseEvent(SDL_Event *event){
 		case CONTEXT_UNIT_SELECT_TARGET:
 			selectCombatTarget();
 			break;
+		case CONTEXT_END_GAME:
+			switch(menu.btnHit()) 	{
+				case 0:
+				case 1:
+					close = true;
+					break;
+			};
+			break;
 	}
+
+	return close;
 }
 
-void GameManager::processEvent(SDL_Event *event){
+bool GameManager::processEvent(SDL_Event *event){
 	SDL_Keycode key;
 	if (event->type == SDL_KEYDOWN)
 		key = event->key.keysym.sym;
 	else
-		return;
+		return false;
 
 	switch(context){
 		case CONTEXT_IDLE:
@@ -453,6 +463,8 @@ void GameManager::processEvent(SDL_Event *event){
 
 			break;
 	}
+
+	return false;
 }
 
 T_ERROR GameManager::moveUnit(SDL_Keycode direction){

@@ -9,6 +9,19 @@
 
 Wizard::Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w) : Unit(t,r,w) {
 
+	initUnitStats();
+
+	menu.setImage(WIZARD_SPRITE);
+	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);
+
+	sprite.setup(WIZARD_SPRITE,SPRITE_TYPE_2);
+}
+
+Wizard::~Wizard() {
+	// TODO Auto-generated destructor stub
+}
+
+void Wizard::initUnitStats(){
 	hp = WIZARD_HP;
 	maxHp = WIZARD_HP;
 	attackDamage = WIZARD_DAMAGE;
@@ -24,17 +37,7 @@ Wizard::Wizard(T_TEAM t,SDL_Renderer *r, SDL_Window *w) : Unit(t,r,w) {
 
 	image = WIZARD_SPRITE;
 	projectileImage = WIZARD_PROJECTILE_SPRITE;
-
-	menu.setImage(WIZARD_SPRITE);
-	menu.statsMenu(hp, maxHp, attackDamage, armor, level, move, range, actionPerTurn, mana, manaPool);
-
-	sprite.setup(WIZARD_SPRITE,SPRITE_TYPE_2);
 }
-
-Wizard::~Wizard() {
-	// TODO Auto-generated destructor stub
-}
-
 
 // Configura um SDL_Rect para apontar um frame da unidade parada.
 void Wizard::selectFrameIdle(SDL_Rect *rect){
