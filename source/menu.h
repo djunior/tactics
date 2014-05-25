@@ -76,12 +76,12 @@ class mText
 		string text;
 		SDL_Color text_color;
 		SDL_Renderer* renderer;
-		float scale;
+		float xScale, yScale;
 		SDL_Rect rectText;
 		MENU menu;
 	public:
 		mText(SDL_Renderer*,TTF_Font*,string,SDL_Color,float);
-		void setScale(float);
+		void setScale(float,float);
 		void setFont(TTF_Font*);
 		void setText(string);
 		void setColor(SDL_Color);
@@ -100,13 +100,13 @@ class mButton
 		string text;
 		SDL_Color text_color;
 		TTF_Font *font;
-		float scale;
+		float xScale, yScale;
 
 	public:
 		mButton(SDL_Renderer*, TTF_Font*);
 		mButton(SDL_Renderer*, TTF_Font*, int, int);
 		mButton(SDL_Renderer*, TTF_Font*, int, int, string);
-		void setScale(float);
+		void setScale(float,float);
 		void setFont();
 		void setIsSelected(bool);
 		void setPosition(int,int);
