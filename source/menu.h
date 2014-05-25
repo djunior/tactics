@@ -23,7 +23,7 @@
 
 #define UNIT_BTN_DEFAULT_X 10
 #define UNIT_BTN_DEFAULT_Y 150
-#define UNIT_TXT_DEFAULT_X 10
+#define UNIT_TXT_DEFAULT_X 0
 #define UNIT_TXT_DEFAULT_Y 10
 
 #define UNIT_MENU_MAX_X 200
@@ -93,6 +93,7 @@ class mButton
 {
 	private:
 		bool isSelected;
+		bool isEnabled;
 		SDL_Rect rectBtn;
 		SDL_Rect rectTextureBtn;
 		SDL_Texture *bTexture;
@@ -116,6 +117,8 @@ class mButton
 		string getText();
 		bool bHit();
 		void show(SDL_Renderer*);
+		void disable();
+		void enable();
 };
 
 class mWindow
@@ -172,6 +175,8 @@ class mWindow
 		void show();
 		void setXY(int,int);
 		vector<mText> textList;
+		bool enableButton(int);
+		bool disableButton(int);
 };
 
 #endif

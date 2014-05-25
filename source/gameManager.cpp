@@ -614,6 +614,16 @@ void GameManager::showUnitMenu(){
 	ss << movesPerTurn;
 	(*activeUnit)->menu.textList[TEXTLIST_MOVE].setText("Move: " + ss.str());
 
+	if (movesPerTurn > 0)
+		menuUnitAction.enableButton(0);
+	else
+		menuUnitAction.disableButton(0);
+
+	if (actionsPerTurn > 0)
+		menuUnitAction.enableButton(1);
+	else
+		menuUnitAction.disableButton(1);
+
 	menuUnitAction.show();
 }
 

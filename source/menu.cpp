@@ -57,6 +57,7 @@ mButton::mButton(SDL_Renderer* renderer, TTF_Font *f)
 	rectBtn.h = h;
 	rectBtn.w = w;
 	isSelected = false;
+	isEnabled = true;
 	font = f;
 	scale = 1;
 };
@@ -71,6 +72,7 @@ mButton::mButton(SDL_Renderer* renderer, TTF_Font *f,int x, int y)
 	rectBtn.x = x;
 	rectBtn.y = y;
 	isSelected = false;
+	isEnabled = true;
 	font = f;
 	scale = 1;
 };
@@ -86,9 +88,18 @@ mButton::mButton(SDL_Renderer* renderer, TTF_Font *f,int x, int y, string btnTex
 	rectBtn.y = y;
 	text = btnText;
 	isSelected = false;
+	isEnabled = true;
 	font = f;
 	scale = 1;
 };
+
+void mButton::enable(){
+	isEnabled = true;
+}
+
+void mButton::disable(){
+	isEnabled = false;
+}
 
 void mButton::setScale(float mult)
 {
@@ -148,6 +159,7 @@ string mButton::getText()
 
 bool mButton::bHit()
 {
+
 	if (hit(rectBtn))
 	{
 		setIsSelected(true);
@@ -156,7 +168,7 @@ bool mButton::bHit()
 	{
 		setIsSelected(false);
 	}
-	return hit(rectBtn);
+	return (isEnabled && hit(rectBtn));
 };
 
 void mButton::show(SDL_Renderer* renderer)
@@ -179,8 +191,8 @@ void mButton::show(SDL_Renderer* renderer)
 
 	rectBtn.w = static_cast<int>((MARGIN_X + rectText.w)*scale);
 
-	if(isSelected == false) 
-	{
+	if (isEnabled == false) {
+
 		setColor(colorNotSel);
 
 		rectTextureBtn.x = 0;
@@ -199,31 +211,58 @@ void mButton::show(SDL_Renderer* renderer)
 		rectTextureBtn.h = BUTTON_H;
 		rectTextureBtn.w = MARGIN_X;
 
-		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
-		
-	}
-	else
-	{
-		setColor(colorSel);
-
-		rectTextureBtn.x = 0;
-		rectTextureBtn.y = BUTTON_H + BUTTON_SEPARATION;
-		rectTextureBtn.h = BUTTON_H;
-		rectTextureBtn.w = MARGIN_X + rectText.w;
+		SDL_SetTextureColorMod(bTexture,50,50,50);
 
 		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
 
-		rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
-		rectBtn.h = static_cast<int>(BUTTON_H*scale);
-		rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
+	} else {
+		SDL_SetTextureColorMod(bTexture,255,255,255);
+		if(isSelected == false)
+		{
+			setColor(colorNotSel);
 
-		rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
-		rectTextureBtn.y = 3*BUTTON_H + 3*BUTTON_SEPARATION;
-		rectTextureBtn.h = BUTTON_H;
-		rectTextureBtn.w = MARGIN_X;
+			rectTextureBtn.x = 0;
+			rectTextureBtn.y = 0;
+			rectTextureBtn.h = BUTTON_H;
+			rectTextureBtn.w = MARGIN_X + rectText.w;
 
-		SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
-		
+			SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
+
+			rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+			rectBtn.h = static_cast<int>(BUTTON_H*scale);
+			rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
+
+			rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
+			rectTextureBtn.y = 2*BUTTON_H + 2*BUTTON_SEPARATION;
+			rectTextureBtn.h = BUTTON_H;
+			rectTextureBtn.w = MARGIN_X;
+
+			SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
+
+		}
+		else
+		{
+			setColor(colorSel);
+
+			rectTextureBtn.x = 0;
+			rectTextureBtn.y = BUTTON_H + BUTTON_SEPARATION;
+			rectTextureBtn.h = BUTTON_H;
+			rectTextureBtn.w = MARGIN_X + rectText.w;
+
+			SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
+
+			rectBtn.x += static_cast<int>((MARGIN_X + rectText.w)*scale);
+			rectBtn.h = static_cast<int>(BUTTON_H*scale);
+			rectBtn.w = static_cast<int>((5 + MARGIN_X)*scale);
+
+			rectTextureBtn.x = BUTTON_MAX_W - MARGIN_X;
+			rectTextureBtn.y = 3*BUTTON_H + 3*BUTTON_SEPARATION;
+			rectTextureBtn.h = BUTTON_H;
+			rectTextureBtn.w = MARGIN_X;
+
+			SDL_RenderCopy(renderer, bTexture, &rectTextureBtn, &rectBtn);
+
+		}
 	}
 	rectBtn.w = static_cast<int>((2*MARGIN_X + rectText.w + 5)*scale);
 	setPosition(hold.x,hold.y);
@@ -390,6 +429,22 @@ void mWindow::addText(string text)
 	textList.push_back(textLine);
 }
 
+bool mWindow::enableButton(int index){
+	if (index > buttonList.size())
+		return false;
+
+	buttonList[index].enable();
+	return true;
+}
+
+bool mWindow::disableButton(int index){
+	if (index > buttonList.size())
+		return false;
+
+	buttonList[index].disable();
+	return true;
+}
+
 void mWindow::init(int x, int y)
 {
 	mTexture = IMG_LoadTexture(renderer,image);
@@ -453,7 +508,7 @@ void mWindow::statsMenu(
 	addText("Move: " + ss.str());
 	ss.str("");
 	setTxtPosition();
-	init(0,25);
+	init(0,20);
 };
 
 void mWindow::endMenu(T_TEAM winningTeam,int turn){
@@ -525,12 +580,34 @@ void mWindow::show()
 		}
 		if(menu == MENU_UNIT)
 		{
+
+			SDL_Rect bck = {
+				xT,
+				yT,
+				static_cast<int>(220*xScale),
+				static_cast<int>(350*yScale)
+			};
+
+			SDL_Rect bckBorder = {
+				bck.x+1,
+				bck.y+1,
+				bck.w-2,
+				bck.h-2
+			};
+
+			SDL_SetRenderDrawColor(renderer,0,51,102,255);
+			SDL_RenderFillRect(renderer,&bck);
+
+			SDL_SetRenderDrawColor(renderer,58,63,78,255);
+			SDL_RenderDrawRect(renderer,&bck);
+			SDL_RenderDrawRect(renderer,&bckBorder);
+
 			SDL_Color color = MENU_BLACK;
 			for (unsigned i=0; i < textList.size(); i++)
 			{
 				textList[i].setColor(color);
-				textList[i].setPosition(xT,yT + increment*i);
-				textList[i].setScale(yScale);
+				textList[i].setPosition(xT+10,yT + increment*i);
+				textList[i].setScale(xScale);
 				textList[i].show();
 			}
 		}
@@ -582,7 +659,7 @@ void mWindow::show()
 				xT,
 				yT,
 				static_cast<int>(220*xScale),
-				static_cast<int>(250*yScale)
+				static_cast<int>(350*yScale)
 			};
 
 			SDL_Rect bckBorder = {
@@ -605,7 +682,7 @@ void mWindow::show()
 				if (&textList[i] != NULL) {
 					textList[i].setColor(color);
 					textList[i].setPosition(xT+10,yT + 20 + increment*i);
-					textList[i].setScale(yScale);
+					textList[i].setScale(xScale);
 					textList[i].show();
 				}
 			}
@@ -613,7 +690,7 @@ void mWindow::show()
 			{
 				//buttonList[i].setFont();
 				buttonList[i].setPosition(xB + 10,yB + static_cast<int>(increment*i*0.75));
-				buttonList[i].setScale(yScale*0.75);
+				buttonList[i].setScale(xScale*0.75);
 				buttonList[i].show(renderer);
 			}
 		}

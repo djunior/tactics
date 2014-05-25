@@ -51,6 +51,12 @@ namespace Screen {
 
 	// Carrega uma imagem no mapa de SDL_Textures sem fazer qualquer modificação no seu fundo
 	SDL_Texture* loadImage(SDL_Renderer* renderer, std::string imageURI){
+
+		std::map<std::string,SDL_Texture*>::iterator it = imageMap.find(imageURI);
+		if (it != imageMap.end()){
+			return it->second;
+		}
+
 		SDL_Texture *t = IMG_LoadTexture(renderer,const_cast<char*>(imageURI.c_str()));
 		if (t == NULL){
 			std::cerr << "Screen::loadImage(): Failed to load image " << imageURI << ": failed to create SDL_Texture" << std::endl;
