@@ -525,6 +525,9 @@ void mWindow::endMenu(T_TEAM winningTeam,int turn){
 	addText("O time " + teamStr.str() + " venceu a partida no turno " + turnStr.str());
 
 	addButton("Jogar novamente");
+
+	disableButton(0);
+
 	addButton("Sair");
 
 	setImage(MAIN_MENU_BKG);

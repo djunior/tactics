@@ -41,10 +41,17 @@ void Wizard::initUnitStats(){
 
 // Configura um SDL_Rect para apontar um frame da unidade parada.
 void Wizard::selectFrameIdle(SDL_Rect *rect){
-    rect->x = 299;
-    rect->y = 0;
-	rect->w = 136;
-    rect->h = 120;
+	if (isDead() == true){
+		rect->x = 664;
+		rect->y = 725;
+		rect->w = 136;
+		rect->h = 120;
+	} else {
+		rect->x = 299;
+		rect->y = 0;
+		rect->w = 136;
+		rect->h = 120;
+	}
 }
 
 // Configura um SDL_Rect para apontar um frame da animacao de movimento, baseado no valor de frameIndex
