@@ -19,6 +19,60 @@ Animation::Animation(ANIMATION_TYPE t, BOARD_POINT start, BOARD_POINT end, doubl
 	repeatFrame = rep;
 
 	numberFrames = frames;
+
+	value = 0.0;
+	valueString = "";
+}
+
+Animation::Animation(ANIMATION_TYPE t, BOARD_POINT start, BOARD_POINT end, double dur, int rep, int frames, float v) {
+	type = t;
+
+	currentFrame = 0;
+	duration = dur;
+
+	startPoint = start;
+	endPoint = end;
+
+	repeatFrame = rep;
+
+	numberFrames = frames;
+
+	value = v;
+	valueString = "";
+}
+
+Animation::Animation(ANIMATION_TYPE t, BOARD_POINT start, BOARD_POINT end, double dur, int rep, int frames, std::string s) {
+	type = t;
+
+	currentFrame = 0;
+	duration = dur;
+
+	startPoint = start;
+	endPoint = end;
+
+	repeatFrame = rep;
+
+	numberFrames = frames;
+
+	value = 0.0;
+	valueString = s;
+}
+
+Animation::Animation(ANIMATION_TYPE t, BOARD_POINT start, BOARD_POINT end, double dur, int rep, int frames, float v, std::string s) {
+	type = t;
+
+	currentFrame = 0;
+	duration = dur;
+
+	startPoint = start;
+	endPoint = end;
+
+	repeatFrame = rep;
+
+	numberFrames = frames;
+
+	value = v;
+	valueString = s;
 }
 
 // Default initiation;
@@ -37,6 +91,9 @@ Animation::Animation() {
 	repeatFrame = 1;
 
 	numberFrames = 1;
+
+	value = 0.0;
+	valueString = "";
 }
 
 Animation::~Animation() {

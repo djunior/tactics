@@ -108,10 +108,19 @@ bool Unit::takeDamage(unsigned int rawDamage){
 	std::cout << "Unidade: " << this << " com " << hp << " de hp recebendo " << rawDamage << " de dano" << std::endl;
 	// Essa formula de dano pode ser alterada caso seja implementado
 	// stats defensivos, como armor, armor class, etc
-	hp -= rawDamage;
+
+	unsigned int actualDamage = rawDamage;
+
+	hp -= actualDamage;
 	std::cout << "Unidade " << this << " com " << hp << " de hp apos o combate" << std::endl;
 	if (hp <= 0)
 		kill();
+
+	BOARD_POINT p;
+	p.x = getX();
+	p.y = getY();
+
+	setAnimation(Animation(ANIMATION_UNIT_TAKE_DAMAGE,p,p,30,5,6,static_cast<float>(actualDamage)));
 
 	return isDead();
 }

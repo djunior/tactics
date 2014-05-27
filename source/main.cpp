@@ -60,7 +60,6 @@ int main(int argc, char *argv[]){
 
     Board gameBoard(8,4);
     GameManager gm(&gameBoard, renderer, window);
-
     
     //Load Content
     int x,y;

@@ -14,7 +14,8 @@
 enum ANIMATION_TYPE{
 	ANIMATION_IDLE,
 	ANIMATION_UNIT_MOVE,
-	ANIMATION_UNIT_ATTACK
+	ANIMATION_UNIT_ATTACK,
+	ANIMATION_UNIT_TAKE_DAMAGE
 };
 
 typedef enum ANIMATION_TYPE ANIMATION_TYPE;
@@ -47,8 +48,13 @@ public:
 	ANIMATION_TYPE type;
 	double currentFrame,duration;
 	int repeatFrame, numberFrames;
+	float value;
+	std::string valueString;
 
 	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,double,int,int);
+	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,double,int,int,float);
+	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,double,int,int,std::string);
+	Animation(ANIMATION_TYPE,BOARD_POINT, BOARD_POINT,double,int,int,float,std::string);
 	Animation();
 
 	bool hasStarted();

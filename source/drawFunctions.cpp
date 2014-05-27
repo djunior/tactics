@@ -15,6 +15,8 @@ namespace Screen {
 	bool isInitialized = false;
 	std::map<std::string,SDL_Texture*> imageMap;
 
+	TTF_Font* defaultFont;
+
 	// Carrega um sprite no mapa de SDL_Textures. O Sprite é carregado substituindo sua cor de fundo por
 	// transparente. A cor de fundo deve ser especificada nos parametros r,b,g
 	SDL_Texture* loadSprite(SDL_Renderer* renderer,std::string imageURI, int r, int g, int b){
@@ -82,6 +84,8 @@ namespace Screen {
 
 		window = win;
 		setScale();
+
+		loadFont(&defaultFont);
 
 		isInitialized = true;
 	}	
@@ -160,7 +164,7 @@ namespace Screen {
 		int w = 0;
 		int h = 0;
 		bool invert = (unit->getTeam() == TEAM_B);
-		SDL_Rect srcChar,srcHead, rectChar,destHead, srcProjectile, destProjectile;
+		SDL_Rect srcChar,srcHead, rectChar,destHead, srcProjectile, destProjectile, damageRect;
 
 		// Configurando o srcChar para o seu valor default
 		unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
@@ -198,6 +202,8 @@ namespace Screen {
 			if ((animation->endPoint.x - animation->startPoint.x) < 0){
 				if (unit->getTeam() == TEAM_A)
 					invert = true;
+			} else if ((animation->endPoint.x - animation->startPoint.x) == 0){
+				// nao precisa inverter nesse caso
 			} else {
 				if (unit->getTeam() == TEAM_B)
 					invert = false;
@@ -234,6 +240,12 @@ namespace Screen {
 
 				}
 
+			} else if (animation->type == ANIMATION_UNIT_TAKE_DAMAGE) {
+				damageRect.w = 30;
+				damageRect.h = 20;
+
+				damageRect.x = rectChar.x + rectChar.w*0.2;
+				damageRect.y = rectChar.y + rectChar.w*0.3 - (damageRect.h*0.2*index);
 			}
 
 			animation->currentFrame++;
@@ -279,6 +291,23 @@ namespace Screen {
 		SDL_SetRenderDrawColor(renderer,0,255,0,SDL_ALPHA_OPAQUE);
 
 		SDL_RenderFillRect(renderer,&healthBar);
+
+	    if (unit->isAnimating()) {
+
+	    	Animation* animation = unit->getAnimation();
+
+	    	if (animation->type == ANIMATION_UNIT_TAKE_DAMAGE){
+
+	    		std::ostringstream value;
+	    		value << animation->value;
+	    		std::string s(value.str());
+
+	    		SDL_Color text_color = {255, 255, 255};
+
+	    		write(renderer,defaultFont,s,text_color,damageRect,xScale,yScale);
+	    	}
+
+	    }
 
 	}
 
