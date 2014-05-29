@@ -29,7 +29,7 @@
 #define UNIT_MENU_MAX_X 200
 #define UNIT_MENU_MAX_Y 350
 
-#define END_GAME_DEFAULT_X 415
+#define END_GAME_DEFAULT_X 0
 #define END_GAME_DEFAULT_Y 200
 #define END_GAME_TXT_DEFAULT_X 250
 #define END_GAME_TXT_DEFAULT_Y 50
@@ -52,6 +52,7 @@ enum MENU_ENUM {
 	MENU_TOOTIP,
 	MENU_END_GAME,
 	MENU_UNIT_ACTION,
+	MENU_GAME_CONFIG,
 };
 
 enum TEXTLIST_POSITION {
@@ -87,6 +88,7 @@ class mText
 		void setColor(SDL_Color);
 		void setPosition(int,int);
 		void show();
+		SDL_Rect getRect();
 };
 
 class mButton
@@ -160,6 +162,7 @@ class mWindow
 		void mainMenu();
 		void unitActionMenu(int,int);
 		void endMenu(T_TEAM winningTeam,int turn);
+		void gameConfigMenu();
 		void statsMenu(
 			unsigned int hp, 
 			unsigned int maxHp, 

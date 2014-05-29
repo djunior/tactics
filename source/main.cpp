@@ -43,7 +43,6 @@ int main(int argc, char *argv[]){
 
     window = SDL_CreateWindow("Tactics", 100, 100, wWindow, hWindow, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
 	if (window == 0){
-		cout << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
 		SDL_Quit();
 		return 1;
 	}
@@ -52,7 +51,6 @@ int main(int argc, char *argv[]){
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED );
     if (renderer == NULL){
-        cout << SDL_GetError() << endl;
         return 1;
     }
 
@@ -85,11 +83,9 @@ int main(int argc, char *argv[]){
     gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
     gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
-    gameBoard.debug_showMap();
     // Unit create END
 
    menu.mainMenu();
-
 
    bool close;
     while (Starting)

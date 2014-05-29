@@ -164,7 +164,7 @@ namespace Screen {
 		int w = 0;
 		int h = 0;
 		bool invert = (unit->getTeam() == TEAM_B);
-		SDL_Rect srcChar,srcHead, rectChar,destHead, srcProjectile, destProjectile, damageRect;
+		SDL_Rect srcChar, rectChar, srcProjectile, destProjectile, damageRect;
 
 		// Configurando o srcChar para o seu valor default
 		unit->selectFrame(0,ANIMATION_IDLE,&srcChar);
@@ -175,14 +175,6 @@ namespace Screen {
 
 	    if (unit->getRange() > 1)
 	    	projectileTexture = loadImage(renderer,unit->getProjectileImage());
-
-	    srcHead.w = 26;
-	    srcHead.h = 24;
-	    srcHead.x = 73 - (srcHead.w/2 -1);
-	    srcHead.y = 22 - (srcHead.h/2);
-
-	    float w_percent = static_cast<float>(srcHead.w) / static_cast<float>(srcChar.w);
-	    float h_percent = static_cast<float>(srcHead.h) / static_cast<float>(srcChar.h);
 
 	    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
 	    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
@@ -209,21 +201,17 @@ namespace Screen {
 					invert = false;
 			}
 
+		    unit->selectFrame(index,animation->type,&srcChar);
+
 			if (animation->type == ANIMATION_UNIT_MOVE){
 
 				rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX )* BOARD_BLOCK_SIZE)*xScale);
 				rectChar.y = static_cast<int>((BOARD_INITIAL_Y + ( diffY )* BOARD_BLOCK_SIZE)*yScale);
-
-
 			    rectChar.w = static_cast<int>((BOARD_BLOCK_SIZE)*xScale);
 			    rectChar.h = static_cast<int>((BOARD_BLOCK_SIZE)*yScale);
 
-			    unit->selectFrame(index,animation->type,&srcChar);
-
 
 			} else if (animation->type == ANIMATION_UNIT_ATTACK){
-
-				unit->selectFrame(index,animation->type,&srcChar);
 
 				//rectChar.x = static_cast<int>((BOARD_INITIAL_X + ( diffX + 0.4)* BOARD_BLOCK_SIZE)*xScale);
 				if (unit->getRange() > 1){
@@ -259,12 +247,6 @@ namespace Screen {
 				invert = false;
 
 		}
-
-	    destHead.w = rectChar.w * w_percent * 1.2;
-	    destHead.h = rectChar.h * h_percent * 1.2;
-
-		destHead.x = rectChar.x + (rectChar.w - destHead.w)/2;
-	    destHead.y = rectChar.y - destHead.h*4/5;
 
 	    if (invert == true) {
 	    	SDL_RenderCopyEx(renderer,texture,&srcChar,&rectChar,0.0,NULL,SDL_FLIP_HORIZONTAL);

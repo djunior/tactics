@@ -475,6 +475,26 @@ void mWindow::mainMenu()
 	init(0,0);
 };
 
+void mWindow::gameConfigMenu(){
+	addText("Monte os times:");
+
+	addText("Time selecionado: ");
+	addButton("Time A");
+	addButton("Time B");
+
+	addText("Selecione classe:");
+	addButton("Knight");
+	addButton("Wizard");
+	addButton("Voltar");
+
+	setScale();
+
+	menu = MENU_GAME_CONFIG;
+	setTxtPosition();
+	setBtnPosition();
+	init(0,25);
+}
+
 void mWindow::statsMenu(
 			unsigned int hp, 
 			unsigned int maxHp, 
@@ -655,7 +675,9 @@ void mWindow::show()
 
 			for (unsigned i=0; i < buttonList.size(); i++)
 			{
-				buttonList[i].setPosition(xB,yB + (BUTTON_H + 10)*i);
+				SDL_Rect rect = buttonList[i].getRect();
+
+				buttonList[i].setPosition(bck.x + (bck.w - rect.w)/2,yB + (BUTTON_H + 10)*i);
 				buttonList[i].setScale(xScale,yScale);
 				buttonList[i].show(renderer);
 			}
@@ -700,6 +722,45 @@ void mWindow::show()
 				//buttonList[i].setFont();
 				buttonList[i].setPosition(xB + 10,yB + static_cast<int>(increment*i*0.75));
 				buttonList[i].setScale(xScale*0.75,yScale*0.75);
+				buttonList[i].show(renderer);
+			}
+		} else if (menu == MENU_GAME_CONFIG) {
+			SDL_Rect bck = {
+				END_GAME_TXT_DEFAULT_X-50,
+				END_GAME_TXT_DEFAULT_Y-30,
+				450,
+				350
+			};
+
+			SDL_Rect bckBorder = {
+				bck.x+1,
+				bck.y+1,
+				bck.w-2,
+				bck.h-2
+			};
+
+			SDL_SetRenderDrawColor(renderer,0,51,102,255);
+			SDL_RenderFillRect(renderer,&bck);
+
+			SDL_SetRenderDrawColor(renderer,58,63,78,255);
+			SDL_RenderDrawRect(renderer,&bck);
+			SDL_RenderDrawRect(renderer,&bckBorder);
+
+			SDL_Color color = MENU_BLACK;
+			for (unsigned i=0; i < textList.size(); i++)
+			{
+				textList[i].setColor(color);
+				textList[i].setPosition(xT,yT + increment*i);
+				textList[i].setScale(xScale,yScale);
+				textList[i].show();
+			}
+
+			for (unsigned i=0; i < buttonList.size(); i++)
+			{
+				SDL_Rect rect = buttonList[i].getRect();
+
+				buttonList[i].setPosition(bck.x + (bck.w - rect.w)/2,yB + (BUTTON_H + 10)*i);
+				buttonList[i].setScale(xScale,yScale);
 				buttonList[i].show(renderer);
 			}
 		}

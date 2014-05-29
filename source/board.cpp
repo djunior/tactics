@@ -38,9 +38,8 @@ T_ERROR Board::addUnit(Unit * u, unsigned int x, unsigned int y){
 }
 
 T_ERROR Board::addUnit(Unit *u){
-	std::cout << "Board::addUnit Adicionando unidade " << u << std::endl;
 	unsigned int ix = 0, iy = 0;
-	std::cout << "MAX BOARD Y: " << maxBoardY << std::endl;
+
 	if (u->getTeam() == TEAM_B)
 		ix = maxBoardX-1;
 
@@ -70,7 +69,6 @@ T_ERROR Board::moveUnit(Unit* u, unsigned int x, unsigned int y){
 
 	if ((x > maxBoardX) || (y > maxBoardY))
 		return T_ERROR_OUT_OF_BOUNDS;
-	std::cout << "BoardMap na posicao (" << y << "," << x << ") = " << boardMap[y][x] << std::endl;
 
 	if (boardMap[y][x] != 0)
 		return T_ERROR_INVALID_LOCATION;
@@ -129,8 +127,6 @@ T_ERROR Board::removeUnit(Unit * unit){
 }
 
 T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAPE shape, vector<Unit *> *targetList){
-	std::cout << "Board::checkUnitsInAOE: x=" << x << " y=" << y << " range=" << range << std::endl;
-
 	if (x < 0 || x > maxBoardX || y < 0 || y > maxBoardY)
 		return T_ERROR_OUT_OF_BOUNDS;
 
@@ -170,17 +166,13 @@ T_ERROR Board::checkUnitsInAOE(int x, int y, int range,BOARD_AXIS axis, AOE_SHAP
 
 		if (axis == BOARD_AXIS_X || axis == BOARD_AXIS_X_MINUS) {
 			for (int i=x;i<finalX;i++) {
-				std::cout << "TESTANDO POSICAO (" << i << "," << y << ")" << std::endl;
-				if (boardMap[y][i] != 0) {
-					std::cout << "(" << i << "," << y << ") = " << boardMap[y][i] << std::endl;
+				if (boardMap[y][i] != 0)
 					targetList->push_back(boardMap[y][i]);
-				}
 			}
 		} else if (axis == BOARD_AXIS_Y || axis == BOARD_AXIS_Y_MINUS) {
 			for (int i=y;i<finalY;i++) {
-				if (boardMap[i][x] != 0){
+				if (boardMap[i][x] != 0)
 					targetList->push_back(boardMap[i][x]);
-				}
 			}
 		}
 

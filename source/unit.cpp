@@ -30,7 +30,6 @@ Unit::Unit (T_TEAM t,SDL_Renderer *renderer, SDL_Window *window){
 	image = UNIT_DEFAULT_SPRITE_UNIT;
 	projectileImage = "";
 
-	std::cout << "Mais um teste!" << std::endl;
 	menu.setup(renderer,window,MENU_UNIT);
 	sprite.setup(UNIT_DEFAULT_SPRITE_UNIT, SPRITE_TYPE_1);
 	//menu.statsMenu();
@@ -51,7 +50,6 @@ unsigned int Unit::getY(){
 }
 
 void Unit::setX(unsigned int _x){
-	std::cout << "Unit(" << this << ") x= " << _x << std::endl;
 	x = _x;
 }
 
@@ -105,14 +103,12 @@ unsigned int Unit::getRange(){
 }
 
 bool Unit::takeDamage(unsigned int rawDamage){
-	std::cout << "Unidade: " << this << " com " << hp << " de hp recebendo " << rawDamage << " de dano" << std::endl;
 	// Essa formula de dano pode ser alterada caso seja implementado
 	// stats defensivos, como armor, armor class, etc
 
 	unsigned int actualDamage = rawDamage;
 
 	hp -= actualDamage;
-	std::cout << "Unidade " << this << " com " << hp << " de hp apos o combate" << std::endl;
 	if (hp <= 0)
 		kill();
 
@@ -138,9 +134,7 @@ T_ERROR Unit::combat(std::vector<Unit *> *targetList,int *bodyCount){
 
 	Unit *target = targetList->front();
 
-	std::cout << "Unidade: " << this << " atacando unidade: " << target << " com " << getAttackDamage() << " de dano" << std::endl;
-
-	if (target->getTeam() == getTeam())
+	if (target->getTeam() == getTeam() || target->isDead() == true)
 		return T_ERROR_INVALID_TARGET;
 
 	if (target->takeDamage(getAttackDamage()))
@@ -224,7 +218,6 @@ T_ERROR Unit::statsUpdate()
 {
 	if (this->menu.textList.size() == 0)
 	{
-		cout << "Erro configurando o texto no menu da Unidade " << this->getClassName() << endl;
 		exit(T_ERROR_TEXT_NOT_INITIALIZED);
 	}
 

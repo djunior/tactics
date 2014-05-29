@@ -77,6 +77,13 @@ void Wizard::selectFrameAttack(int frameIndex, SDL_Rect* rect){
 	rect->y = 516;
 }
 
+void Wizard::selectFrameTakeDamage(int frameIndex, SDL_Rect* rect){
+	rect->x = 299;
+	rect->y = 723;
+	rect->w = 136;
+	rect->h = 128;
+}
+
 void Wizard::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
 	switch(type){
 		case ANIMATION_IDLE:
@@ -88,58 +95,11 @@ void Wizard::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
 		case ANIMATION_UNIT_ATTACK:
 			selectFrameAttack(frameIndex, rect);
 			break;
+		case ANIMATION_UNIT_TAKE_DAMAGE:
+			selectFrameTakeDamage(frameIndex, rect);
+			break;
 		default:
 			selectFrameIdle(rect);
-			break;
-	};
-}
-
-
-void Wizard::positionHeadIdle(SDL_Rect* body, SDL_Rect* head){
-	head->x = body->x + (body->w - head->w)/2;
-	head->y = body->y - head->h*4/5;
-}
-
-void Wizard::positionHeadMove(int frameIndex, SDL_Rect* body, SDL_Rect* head){
-	positionHeadIdle(body,head);
-}
-
-void Wizard::positionHeadAttack(int frameIndex ,SDL_Rect* body, SDL_Rect* head){
-	switch(frameIndex){
-		case 0:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 1:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 2:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 3:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 4:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-	};
-
-}
-
-void Wizard::positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head){
-	switch(type){
-		case ANIMATION_IDLE:
-			positionHeadIdle(body,head);
-			break;
-		case ANIMATION_UNIT_MOVE:
-			positionHeadMove(frameIndex,body,head);
-			break;
-		case ANIMATION_UNIT_ATTACK:
-			positionHeadAttack(frameIndex,body,head);
 			break;
 	};
 }

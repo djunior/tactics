@@ -65,6 +65,13 @@ void Knight::selectFrameAttack(int frameIndex, SDL_Rect* rect){
 	rect->y = 733;
 }
 
+void Knight::selectFrameTakeDamage(int frameIndex, SDL_Rect* rect){
+	rect->w = 136;
+	rect->h = 112;
+	rect->x = 540;
+	rect->y = 554;
+}
+
 void Knight::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
 	switch(type){
 		case ANIMATION_IDLE:
@@ -76,56 +83,11 @@ void Knight::selectFrame(int frameIndex, ANIMATION_TYPE type, SDL_Rect* rect){
 		case ANIMATION_UNIT_ATTACK:
 			selectFrameAttack(frameIndex, rect);
 			break;
+		case ANIMATION_UNIT_TAKE_DAMAGE:
+			selectFrameTakeDamage(frameIndex,rect);
+			break;
 		default:
 			selectFrameIdle(rect);
-			break;
-	};
-}
-
-void Knight::positionHeadIdle(SDL_Rect* body, SDL_Rect* head){
-	head->x = body->x + (body->w - head->w)/2;
-	head->y = body->y - head->h*4/5;
-}
-
-void Knight::positionHeadMove(int frameIndex, SDL_Rect* body, SDL_Rect* head){
-	positionHeadIdle(body,head);
-}
-
-void Knight::positionHeadAttack(int frameIndex ,SDL_Rect* body, SDL_Rect* head){
-	switch(frameIndex){
-		case 0:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 1:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 2:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 3:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-		case 4:
-			head->x = body->x + (body->w - head->w)/2;
-			head->y = body->y - head->h/4;
-			break;
-	};
-}
-
-void Knight::positionHead(int frameIndex, ANIMATION_TYPE type, SDL_Rect* body, SDL_Rect* head){
-	switch(type){
-		case ANIMATION_IDLE:
-			positionHeadIdle(body,head);
-			break;
-		case ANIMATION_UNIT_MOVE:
-			positionHeadMove(frameIndex,body,head);
-			break;
-		case ANIMATION_UNIT_ATTACK:
-			positionHeadAttack(frameIndex,body,head);
 			break;
 	};
 }
