@@ -15,9 +15,23 @@
 
 #include "board.h"
 #include "gameManager.h"
+#include "gameConfig.h"
 #include "unit.h"
 
 #include "drawFunctions.h"
+
+void setupGame(GameManager* gameManager, GameConfig* gameConfig){
+	UNIT_LIST_VECTOR* unitList = gameConfig->getUnitList();
+
+	if (unitList->empty())
+		gameConfig->setupDefaultUnitList();
+
+	for (std::vector<UNIT_PAIR>::iterator it=unitList->begin(); it != unitList->end(); it++){
+		UNIT_PAIR p = *it;
+		gameManager->createUnit(p.second,p.first);
+	}
+
+}
 
 int main(int argc, char *argv[]){
 
@@ -38,7 +52,6 @@ int main(int argc, char *argv[]){
     int hWindow = WINDOW_INITIAL_H;
     int min_wWindow = WINDOW_MIN_W;
     int min_hWindow = WINDOW_MIN_H;
-
     // OnInit
 
     window = SDL_CreateWindow("Tactics", 100, 100, wWindow, hWindow, SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC);
@@ -58,7 +71,8 @@ int main(int argc, char *argv[]){
 
     Board gameBoard(8,4);
     GameManager gm(&gameBoard, renderer, window);
-    
+    GameConfig gc(renderer, window);
+
     //Load Content
     int x,y;
 
@@ -75,18 +89,16 @@ int main(int argc, char *argv[]){
     hold = fps.setStart();
     actual = hold;
     // FPS Setup END
-
     // Unit create BEGIN
-    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_A);
-    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
-
-    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
-    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
+//    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_A);
+//    gm.createUnit(UNIT_CLASS_WIZARD,TEAM_B);
+//
+//    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_A);
+//    gm.createUnit(UNIT_CLASS_KNIGHT,TEAM_B);
 
     // Unit create END
 
    menu.mainMenu();
-
    bool close;
     while (Starting)
     {
@@ -116,25 +128,42 @@ int main(int argc, char *argv[]){
 							switch(Event.button.button)
 							{
 								case SDL_BUTTON_LEFT:
-									switch(menu.btnHit())
-									{
-										case 0:
-											Starting = false;
-											Running = true;
-											gm.startGame();
-											break;
-										case 1:
-											Running = false;
-											Starting = false;
-											break;
-										default:
-											break;
+
+									if (gc.isOpen()){
+
+										gc.processMouseEvent(&Event);
+
+									} else {
+
+										switch(menu.btnHit())
+										{
+											case 0:
+												Starting = false;
+												Running = true;
+
+												setupGame(&gm,&gc);
+
+												gm.startGame();
+												break;
+											case 1:
+												gc.start();
+												break;
+											case 2:
+												Running = false;
+												Starting = false;
+												break;
+											default:
+												break;
+										}
+										break;
 									}
-									break;
 							}
 							break;
 				}
-				menu.show();
+				if (gc.isOpen())
+					gc.update(renderer);
+				else
+					menu.show();
 				SDL_RenderPresent(renderer);
 			}
 		}

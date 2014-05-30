@@ -35,6 +35,8 @@ namespace Screen {
 	extern SDL_Texture* loadImage (SDL_Renderer* renderer, std::string imageURI);
 	extern SDL_Texture* loadSprite(SDL_Renderer* renderer, std::string imageURI);
 	extern void setScale();
+	extern float getXScale();
+	extern float getYScale();
 	extern void init(SDL_Renderer*, SDL_Window*);
 	extern void drawBoard(SDL_Renderer*, Board*);
 	extern void drawHighlightedArea(SDL_Renderer*, Board*, BOARD_AOE*,GAMEMANAGER_CONTEXT);

@@ -13,14 +13,6 @@
 
 #define GAMEMANAGER_INITIAL_TURN 0;
 
-enum UNIT_CLASS {
-	UNIT_CLASS_WIZARD,
-	UNIT_CLASS_KNIGHT,
-	UNIT_CLASS_UNIT,
-};
-
-typedef enum UNIT_CLASS UNIT_CLASS;
-
 /*
  * Classe GameManager
  *

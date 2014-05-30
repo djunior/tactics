@@ -371,6 +371,12 @@ void mWindow::setBtnPosition()
 		y = static_cast<int>((rectWin.y + UNIT_ACTION_DEFAULT_Y)*yScale);
 		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
 	}
+	else if (menu == MENU_GAME_CONFIG)
+	{
+		x = static_cast<int>(MAIN_BTN_DEFAULT_X*xScale);
+		y = static_cast<int>(MAIN_BTN_DEFAULT_Y*yScale);
+		increment = static_cast<int>((BUTTON_H + BUTTON_SEPARATION)*yScale);
+	}
 	btnX = x;
 	btnY = y;
 };
@@ -398,8 +404,12 @@ void mWindow::setTxtPosition()
 		x = static_cast<int>((rectWin.x + UNIT_ACTION_TXT_DEFAULT_X)*xScale);
 		y = static_cast<int>((rectWin.y + UNIT_ACTION_TXT_DEFAULT_Y)*yScale);
 		//increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
-	}
 
+	} else if (menu == MENU_GAME_CONFIG) {
+		x = static_cast<int>((rectWin.x + MAIN_TXT_DEFAULT_X)*xScale);
+		y = static_cast<int>((rectWin.y + MAIN_TXT_DEFAULT_Y)*yScale);
+		increment = static_cast<int>((TEXT_H + LINE_SEPARATION)*yScale);
+	}
 	txtX = x;
 	txtY = y;
 
@@ -467,6 +477,7 @@ void mWindow::mainMenu()
 	addText("TACTICS");
 	textList[0].setFont(title);
 	addButton("Start Game");
+	addButton("Configure");
 	addButton("Quit Game");
 	setImage(MAIN_MENU_BKG);
 	setScale();
@@ -478,13 +489,14 @@ void mWindow::mainMenu()
 void mWindow::gameConfigMenu(){
 	addText("Monte os times:");
 
-	addText("Time selecionado: ");
-	addButton("Time A");
-	addButton("Time B");
-
 	addText("Selecione classe:");
-	addButton("Knight");
-	addButton("Wizard");
+
+	addButton("Time A - Knight");
+	addButton("Time A - Wizard");
+
+	addButton("Time B - Knight");
+	addButton("Time B - Wizard");
+
 	addButton("Voltar");
 
 	setScale();
@@ -492,6 +504,7 @@ void mWindow::gameConfigMenu(){
 	menu = MENU_GAME_CONFIG;
 	setTxtPosition();
 	setBtnPosition();
+	setImage(MAIN_MENU_BKG);
 	init(0,25);
 }
 
@@ -729,7 +742,7 @@ void mWindow::show()
 				END_GAME_TXT_DEFAULT_X-50,
 				END_GAME_TXT_DEFAULT_Y-30,
 				450,
-				350
+				520
 			};
 
 			SDL_Rect bckBorder = {
@@ -738,6 +751,8 @@ void mWindow::show()
 				bck.w-2,
 				bck.h-2
 			};
+
+			SDL_RenderCopy(renderer, mTexture, NULL, NULL);
 
 			SDL_SetRenderDrawColor(renderer,0,51,102,255);
 			SDL_RenderFillRect(renderer,&bck);

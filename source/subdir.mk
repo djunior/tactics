@@ -9,6 +9,7 @@ CPP_SRCS += \
 ../source/drawFunctions.cpp \
 ../source/fps.cpp \
 ../source/gameManager.cpp \
+../source/gameConfig.cpp \
 ../source/main.cpp \
 ../source/menu.cpp \
 ../source/mouse.cpp \
@@ -21,6 +22,7 @@ OBJS += \
 ./source/drawFunctions.o \
 ./source/fps.o \
 ./source/gameManager.o \
+./source/gameConfig.o \
 ./source/main.o \
 ./source/menu.o \
 ./source/mouse.o \
@@ -33,6 +35,7 @@ CPP_DEPS += \
 ./source/drawFunctions.d \
 ./source/fps.d \
 ./source/gameManager.d \
+./source/gameConfig.d \
 ./source/main.d \
 ./source/menu.d \
 ./source/mouse.d \

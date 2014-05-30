@@ -51,6 +51,14 @@ namespace Screen {
 		return loadSprite(renderer, imageURI,50,150,200);
 	}
 
+	float getXScale(){
+		return xScale;
+	}
+
+	float getYScale(){
+		return yScale;
+	}
+
 	// Carrega uma imagem no mapa de SDL_Textures sem fazer qualquer modificação no seu fundo
 	SDL_Texture* loadImage(SDL_Renderer* renderer, std::string imageURI){
 
